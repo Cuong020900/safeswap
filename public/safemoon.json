@@ -1,0 +1,42 @@
+{
+	"name": "safemoon",
+	"timestamp": "2020-08-25T15:41:29.665Z",
+	"version": {
+		"major": 0,
+		"minor": 1,
+		"patch": 0
+	},
+	"tags": {},
+	"logoURI": "http://swap.safemoon.agencywolfe.com/images/0xae13d989dac2f0debff460ac112a837c89baa7cd.svg",
+	"keywords": ["safemoon", "default"],
+	"tokens": [
+		{
+			"name": "WBNB Token",
+			"symbol": "WBNB",
+			"address": "0xae13d989dac2f0debff460ac112a837c89baa7cd",
+			"chainId": 97,
+			"decimals": 18
+		},
+		{
+			"name": "WBNB Token",
+			"symbol": "WBNB",
+			"address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+			"chainId": 56,
+			"decimals": 18
+		},
+		{
+			"name": "SafeMoon",
+			"symbol": "SFM",
+			"address": "0xDD6999Ec25948811d7c671051f5B4E44B175239e",
+			"chainId": 97,
+			"decimals": 9
+		},
+		{
+			"name": "SafeMoon",
+			"symbol": "SFM",
+			"address": "0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3",
+			"chainId": 56,
+			"decimals": 9
+		}
+	]
+}

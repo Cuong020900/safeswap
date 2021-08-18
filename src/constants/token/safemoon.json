@@ -1,0 +1,46 @@
+{
+	"name": "safemoon",
+	"timestamp": "2020-08-25T15:41:29.665Z",
+	"version": {
+		"major": 0,
+		"minor": 1,
+		"patch": 0
+	},
+	"tags": {},
+	"logoURI": "/images/coins/wbnb.png",
+	"keywords": ["safemoon", "default"],
+	"tokens": [
+		{
+			"name": "WBNB Token",
+			"symbol": "WBNB",
+			"address": "0xae13d989dac2f0debff460ac112a837c89baa7cd",
+			"chainId": 97,
+			"decimals": 18,
+			"logoURI": "https://tokens.bscswap.com/images/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c.png"
+		},
+		{
+			"name": "WBNB Token",
+			"symbol": "WBNB",
+			"address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+			"chainId": 56,
+			"decimals": 18,
+			"logoURI": "https://tokens.bscswap.com/images/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c.png"
+		},
+		{
+			"name": "SafeMoon",
+			"symbol": "SAFEMOON",
+			"address": "0xdAD4304308a9d396198A06F8C1168A71D86fa5C9",
+			"chainId": 97,
+			"decimals": 9,
+			"logoURI": "https://safemoon.net/img/174x174.png"
+		},
+		{
+			"name": "SafeMoon",
+			"symbol": "SAFEMOON",
+			"address": "0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3",
+			"chainId": 56,
+			"decimals": 9,
+			"logoURI": "https://safemoon.net/img/174x174.png"
+		}
+	]
+}
