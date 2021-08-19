@@ -5,7 +5,7 @@ import { ChainId, JSBI, Percent, Token, WETH } from '@safemoon/sdk'
 
 import { injected, binanceinjected } from '../connectors'
 
-export const ROUTER_ADDRESS = '0xc04c3408EA62778072DBc8c14AA9d52FC77EeE8a'
+export const ROUTER_ADDRESS = '0xE175d39f5ccB5850c6dc76d136c525b207bC025c'
 
 // a list of tokens by chain
 type ChainTokenList = {
