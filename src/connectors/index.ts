@@ -22,7 +22,7 @@ export const network = new NetworkConnector({
     [ChainId.BSC_TESTNET]: BSC_URL,
     [ChainId.ROPSTEN]: ETH_URL
   },
-  defaultChainId: ChainId.BSC_TESTNET
+  defaultChainId: ChainId.BSC_MAINNET
 })
 
 export const injected = new InjectedConnector({
