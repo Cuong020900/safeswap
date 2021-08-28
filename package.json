@@ -100,6 +100,8 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
+    "axios": "^0.21.1",
+    "bignumber.js": "^9.0.1",
     "react-inlinesvg": "^2.3.0"
   }
 }

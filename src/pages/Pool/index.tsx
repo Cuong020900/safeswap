@@ -72,7 +72,7 @@ export default function Pool() {
           </div>
         </RowBetween>
         <AutoColumn gap="lg" justify="center">
-          <ButtonPrimary id="join-pool-button" as={Link} style={{ padding: 16 }} to="/add/BNB">
+          <ButtonPrimary id="join-pool-button" as={Link} style={{ padding: 16 }} to="/add/ETH">
             <Text fontWeight={700} fontSize={16}>
               {t('addLiquidity')}
             </Text>

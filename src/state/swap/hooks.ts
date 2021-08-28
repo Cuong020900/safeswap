@@ -1,24 +1,24 @@
 import useENS from '../../hooks/useENS'
-import { Version } from '../../hooks/useToggledVersion'
-import { parseUnits } from '@ethersproject/units'
-import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade } from '@safemoon/sdk'
-import { ParsedQs } from 'qs'
-import { useCallback, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useV1Trade } from '../../data/V1'
-import { useActiveWeb3React } from '../../hooks'
-import { useCurrency } from '../../hooks/Tokens'
-import { useTradeExactIn, useTradeExactOut } from '../../hooks/Trades'
+import useToggledVersion, {Version} from '../../hooks/useToggledVersion'
+import {parseUnits} from '@ethersproject/units'
+import {Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade} from '@safemoon/sdk'
+import {ParsedQs} from 'qs'
+import {useCallback, useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {useV1Trade} from '../../data/V1'
+import {useActiveWeb3React} from '../../hooks'
+import {useCurrency} from '../../hooks/Tokens'
+import {useTradeExactIn, useTradeExactOut} from '../../hooks/Trades'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
-import { isAddress } from '../../utils'
-import { AppDispatch, AppState } from '../index'
-import { useCurrencyBalances } from '../wallet/hooks'
-import { Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
-import { SwapState } from './reducer'
-import useToggledVersion from '../../hooks/useToggledVersion'
-import { useUserSlippageTolerance } from '../user/hooks'
-import { computeSlippageAdjustedAmounts } from '../../utils/prices'
-import { useTranslation } from 'react-i18next'
+import {isAddress} from '../../utils'
+import {AppDispatch, AppState} from '../index'
+import {useCurrencyBalances} from '../wallet/hooks'
+import {Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput} from './actions'
+import {SwapState} from './reducer'
+import {useUserSlippageTolerance} from '../user/hooks'
+import {computeSlippageAdjustedAmounts} from '../../utils/prices'
+import {useTranslation} from 'react-i18next'
+import getTokenSymbol from "../../utils/getTokenSymbol";
 
 export function useSwapState(): AppState['swap'] {
   return useSelector<AppState, AppState['swap']>(state => state.swap)
@@ -36,7 +36,7 @@ export function useSwapActionHandlers(): {
       dispatch(
         selectCurrency({
           field,
-          currencyId: currency instanceof Token ? currency.address : currency === ETHER ? 'BNB' : ''
+          currencyId: currency instanceof Token ? currency.address : currency === ETHER ? 'ETH' : ''
         })
       )
     },
@@ -98,7 +98,7 @@ export function useDerivedSwapInfo(): {
   inputError?: string
   v1Trade: Trade | undefined
 } {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const toggledVersion = useToggledVersion()
 
@@ -180,7 +180,7 @@ export function useDerivedSwapInfo(): {
   ]
 
   if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
-    inputError = 'Insufficient ' + amountIn.currency.symbol + ' balance'
+    inputError = 'Insufficient ' + getTokenSymbol(amountIn.currency, chainId) + ' balance'
   }
 
   return {
@@ -197,10 +197,10 @@ function parseCurrencyFromURLParameter(urlParam: any): string {
   if (typeof urlParam === 'string') {
     const valid = isAddress(urlParam)
     if (valid) return valid
-    if (urlParam.toUpperCase() === 'BNB') return 'BNB'
-    if (valid === false) return 'BNB'
+    if (urlParam.toUpperCase() === 'ETH') return 'ETH'
+    if (valid === false) return 'ETH'
   }
-  return 'BNB' ?? ''
+  return 'ETH' ?? ''
 }
 
 function parseTokenAmountURLParameter(urlParam: any): string {

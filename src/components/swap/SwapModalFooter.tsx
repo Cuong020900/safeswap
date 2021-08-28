@@ -17,6 +17,8 @@ import QuestionHelper from '../QuestionHelper'
 import { AutoRow, RowBetween, RowFixed } from '../Row'
 import FormattedPriceImpact from './FormattedPriceImpact'
 import { StyledBalanceMaxMini, SwapCallbackError } from './styleds'
+import {useActiveWeb3React} from "../../hooks";
+import getTokenSymbol from "../../utils/getTokenSymbol";
 
 export default function SwapModalFooter({
   trade,
@@ -31,6 +33,7 @@ export default function SwapModalFooter({
   swapErrorMessage: string | undefined
   disabledConfirm: boolean
 }) {
+  const { chainId } = useActiveWeb3React();
   const [showInverted, setShowInverted] = useState<boolean>(false)
   const theme = useContext(ThemeContext)
   const slippageAdjustedAmounts = useMemo(() => computeSlippageAdjustedAmounts(trade, allowedSlippage), [
@@ -81,8 +84,8 @@ export default function SwapModalFooter({
             </TYPE.black>
             <TYPE.black fontSize={14} marginLeft={'4px'}>
               {trade.tradeType === TradeType.EXACT_INPUT
-                ? trade.outputAmount.currency.symbol
-                : trade.inputAmount.currency.symbol}
+                ? getTokenSymbol(trade.outputAmount.currency, chainId)
+                : getTokenSymbol(trade.inputAmount.currency, chainId)}
             </TYPE.black>
           </RowFixed>
         </RowBetween>
@@ -103,7 +106,7 @@ export default function SwapModalFooter({
             <QuestionHelper size={'sm'} text="A portion of each trade (0.30%) goes to liquidity providers as a protocol incentive." />
           </RowFixed>
           <TYPE.black fontSize={14}>
-            {realizedLPFee ? realizedLPFee?.toSignificant(6) + ' ' + trade.inputAmount.currency.symbol : '-'}
+            {realizedLPFee ? realizedLPFee?.toSignificant(6) + ' ' + getTokenSymbol(trade.inputAmount.currency, chainId) : '-'}
           </TYPE.black>
         </RowBetween>
       </AutoColumn>

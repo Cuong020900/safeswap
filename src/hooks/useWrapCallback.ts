@@ -1,10 +1,10 @@
-import { Currency, currencyEquals, ETHER, WETH } from '@safemoon/sdk'
-import { useMemo } from 'react'
-import { tryParseAmount } from '../state/swap/hooks'
-import { useTransactionAdder } from '../state/transactions/hooks'
-import { useCurrencyBalance } from '../state/wallet/hooks'
-import { useActiveWeb3React } from './index'
-import { useWETHContract } from './useContract'
+import {ChainId, Currency, currencyEquals, ETHER, WETH} from '@safemoon/sdk'
+import {useMemo} from 'react'
+import {tryParseAmount} from '../state/swap/hooks'
+import {useTransactionAdder} from '../state/transactions/hooks'
+import {useCurrencyBalance} from '../state/wallet/hooks'
+import {useActiveWeb3React} from './index'
+import {useWETHContract} from './useContract'
 
 export enum WrapType {
   NOT_APPLICABLE,
@@ -44,13 +44,13 @@ export default function useWrapCallback(
             ? async () => {
                 try {
                   const txReceipt = await wethContract.deposit({ value: `0x${inputAmount.raw.toString(16)}` })
-                  addTransaction(txReceipt, { summary: `Wrap ${inputAmount.toSignificant(6)} BNB to WBNB` })
+                  addTransaction(txReceipt, { summary: `Wrap ${inputAmount.toSignificant(6)} ${chainId === ChainId.BSC_TESTNET || chainId === ChainId.BSC_MAINNET ? "BNB" : "ETH"} to ${chainId === ChainId.BSC_TESTNET || chainId === ChainId.BSC_MAINNET ? "WBNB" : "WETH"}` })
                 } catch (error) {
                   console.error('Could not deposit', error)
                 }
               }
             : undefined,
-        inputError: sufficientBalance ? undefined : 'Insufficient BNB balance'
+        inputError: sufficientBalance ? undefined : `Insufficient ${chainId === ChainId.BSC_TESTNET || chainId === ChainId.BSC_MAINNET ? "BNB" : "ETH"} balance`
       }
     } else if (currencyEquals(WETH[chainId], inputCurrency) && outputCurrency === ETHER) {
       return {
@@ -60,13 +60,13 @@ export default function useWrapCallback(
             ? async () => {
                 try {
                   const txReceipt = await wethContract.withdraw(`0x${inputAmount.raw.toString(16)}`)
-                  addTransaction(txReceipt, { summary: `Unwrap ${inputAmount.toSignificant(6)} WBNB to BNB` })
+                  addTransaction(txReceipt, { summary: `Unwrap ${inputAmount.toSignificant(6)} ${chainId === ChainId.BSC_TESTNET || chainId === ChainId.BSC_MAINNET ? "WBNB" : "WETH"} to ${chainId === ChainId.BSC_TESTNET || chainId === ChainId.BSC_MAINNET ? "BNB" : "ETH"}` })
                 } catch (error) {
                   console.error('Could not withdraw', error)
                 }
               }
             : undefined,
-        inputError: sufficientBalance ? undefined : 'Insufficient WBNB balance'
+        inputError: sufficientBalance ? undefined : `Insufficient ${chainId === ChainId.BSC_TESTNET || chainId === ChainId.BSC_MAINNET ? "WBNB" : "WETH"} balance`
       }
     } else {
       return NOT_APPLICABLE

@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, currencyEquals, ETHER, JSBI, Token } from '@safemoon/sdk'
+import {ChainId, Currency, CurrencyAmount, currencyEquals, ETHER, JSBI, Token} from '@safemoon/sdk'
 import React, { CSSProperties, memo, useContext, useMemo } from 'react'
 import { FixedSizeList } from 'react-window'
 import { Text } from 'rebass'
@@ -68,7 +68,14 @@ export default function CurrencyList({
           <RowFixed>
             <CurrencyLogo currency={currency} size={'24px'} style={{ marginRight: '14px' }} />
             <Column>
-              <Text fontWeight={500} color={theme.text1} fontSize={14}>{currency.symbol}</Text>
+              <Text fontWeight={500} color={theme.text1} fontSize={14}>
+                {currency?.symbol !== 'ETH'
+                  ? currency?.symbol
+                  : (chainId === ChainId.BSC_MAINNET || chainId === ChainId.BSC_TESTNET)
+                    ? "BNB"
+                    : "ETH"
+                }
+              </Text>
               <FadedSpan>
                 {customAdded ? (
                   <TYPE.main fontWeight={500}>

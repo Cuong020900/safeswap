@@ -1,5 +1,5 @@
 import Modal from "../Modal";
-import {useUserDeadline, useUserSlippageTolerance} from "../../state/user/hooks";
+import {useGasPriceManager, useUserDeadline, useUserSlippageTolerance} from "../../state/user/hooks";
 import SlippageTabs from "../SlippageTabs";
 import React from "react";
 import {SettingsTab} from "../NavigationTabs";
@@ -14,6 +14,7 @@ export default function SettingsModal({
 }) {
     const [userSlippageTolerance, setUserslippageTolerance] = useUserSlippageTolerance()
     const [deadline, setDeadline] = useUserDeadline()
+    const [gasPrice, setGasPrice] = useGasPriceManager()
 
     return (
         <Modal
@@ -30,6 +31,8 @@ export default function SettingsModal({
                     setRawSlippage={setUserslippageTolerance}
                     deadline={deadline}
                     setDeadline={setDeadline}
+                    gasPrice={gasPrice}
+                    setGasPrice={setGasPrice}
                 />
             </AutoColumn>
         </Modal>

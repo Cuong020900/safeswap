@@ -1,4 +1,4 @@
-import { Currency, Pair } from '@safemoon/sdk'
+import {ChainId, Currency, Pair} from '@safemoon/sdk'
 import React, { useState, useContext, useCallback } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import { darken } from 'polished'
@@ -13,6 +13,7 @@ import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
 
 import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
+import getTokenSymbol from "../../utils/getTokenSymbol";
 
 const InputRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -176,7 +177,7 @@ export default function CurrencyInputPanel({
     showCommonBases
 }: CurrencyInputPanelProps) {
     const {t} = useTranslation()
-
+    const { chainId } = useActiveWeb3React();
     const [modalOpen, setModalOpen] = useState(false)
     const {account} = useActiveWeb3React()
     const selectedCurrencyBalance = useCurrencyBalance(account, currency)
@@ -230,7 +231,7 @@ export default function CurrencyInputPanel({
                                 ) : null}
                                 {pair ? (
                                     <StyledTokenName className="pair-name-container">
-                                        {pair?.token0.symbol}:{pair?.token1.symbol}
+                                        {getTokenSymbol(pair?.token0, chainId)}:{getTokenSymbol(pair?.token1, chainId)}
                                     </StyledTokenName>
                                 ) : (
                                     <StyledTokenName className="token-symbol-container" active={Boolean(currency && currency.symbol)}>
@@ -238,7 +239,7 @@ export default function CurrencyInputPanel({
                                             ? currency.symbol.slice(0, 4) +
                                             '...' +
                                             currency.symbol.slice(currency.symbol.length - 5, currency.symbol.length)
-                                            : currency?.symbol) || t('selectToken')}
+                                            : getTokenSymbol(currency, chainId)) || t('selectToken')}
                                     </StyledTokenName>
                                 )}
                             </CurrencyInput>

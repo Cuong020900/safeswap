@@ -3,13 +3,26 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { ChainId, JSBI, Percent, Token, WETH } from '@safemoon/sdk'
 
-import { injected, binanceinjected } from '../connectors'
+import { injected, binanceinjected, walletconnect } from '../connectors'
 
-export const ROUTER_ADDRESS = '0xE175d39f5ccB5850c6dc76d136c525b207bC025c'
 
 // a list of tokens by chain
 type ChainTokenList = {
   readonly [chainId in ChainId]: Token[]
+}
+
+type ChainAddress = {
+  [chainId in ChainId]: string
+}
+
+export const ROUTER_ADDRESS: ChainAddress = {
+  [ChainId.MAINNET]: "0xCf7d4B75b7bCcDb8B4F992Fe05970680E2EE1A02",
+  [ChainId.RINKEBY]: "",
+  [ChainId.GÖRLI]: "",
+  [ChainId.KOVAN]: "",
+  [ChainId.BSC_MAINNET]: "0xE804f3C3E6DdA8159055428848fE6f2a91c2b9AF",
+  [ChainId.ROPSTEN]: "0x713702D3fb45BC9765d3A00e0B37c33f9CE9Ec91",
+  [ChainId.BSC_TESTNET]: "0x303BD61Fb70E563BbE833fA698D3ADa22Fd2DACa"
 }
 
 export const DAI = new Token(ChainId.MAINNET, '0x6B175474E89094C44Da98b954EedeAC495271d0F', 18, 'DAI', 'Dai Stablecoin')
@@ -121,7 +134,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     color: '#E8831D'
   },
   TRUSTWALLET: {
-    connector: injected,
+    connector: process.env.REACT_APP_CHAIN_ID === ChainId.MAINNET.toString() ? walletconnect : injected,
     name: 'TrustWallet',
     iconName: 'trustwallet.svg',
     description: 'The most trusted & secure crypto wallet',
@@ -161,5 +174,5 @@ export const BLOCKED_PRICE_IMPACT_NON_EXPERT: Percent = new Percent(JSBI.BigInt(
 export const MIN_ETH: JSBI = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16)) // .01 ETH
 export const BETTER_TRADE_LINK_THRESHOLD = new Percent(JSBI.BigInt(75), JSBI.BigInt(10000))
 
-// the Uniswap Default token list lives here
-export const DEFAULT_TOKEN_LIST_URL: string = 'http://swap.safemoon.agencywolfe.com/safemoon.json';
+// the Safemoon Default token list lives here
+export const DEFAULT_TOKEN_LIST_URL: string = 'http://swap.safemoon.net/safemoon.json';

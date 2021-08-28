@@ -134,13 +134,13 @@ const StyledRowBetween = styled(RowBetween)`
 `
 
 const NETWORK_LABELS: { [chainId in ChainId]: string | null } = {
-  [ChainId.MAINNET]: 'Wrong Network',
+  [ChainId.MAINNET]: 'Ethereum',
   [ChainId.RINKEBY]: 'Wrong Network',
-  [ChainId.ROPSTEN]: 'Wrong Network',
+  [ChainId.ROPSTEN]: 'Ropsten',
   [ChainId.GÖRLI]: 'Wrong Network',
   [ChainId.KOVAN]: 'Wrong Network',
-  [ChainId.BSC_MAINNET]: null,
-  [ChainId.BSC_TESTNET]: 'Testnet'
+  [ChainId.BSC_MAINNET]: "BSC Mainnet",
+  [ChainId.BSC_TESTNET]: 'BSC Testnet'
 }
 
 export default function Header() {
@@ -160,9 +160,11 @@ export default function Header() {
         <HeaderControls>
           <HeaderElement>
             <AccountElement active={!!account} style={{ pointerEvents: 'auto' }}>
-              <NetworkStatus style={{ flexShrink: 0 }} pl="1.25rem" pr="1rem" fontWeight={500}>
-                {!isMobile && NETWORK_LABELS[chainId] && <NetworkCard>{NETWORK_LABELS[chainId]}</NetworkCard>}
-              </NetworkStatus>
+              {!isMobile && NETWORK_LABELS[chainId] &&  (
+                <NetworkStatus style={{ flexShrink: 0 }} pl="1.25rem" pr="1rem" fontWeight={500}>
+                  <NetworkCard>{NETWORK_LABELS[chainId]}</NetworkCard>
+                </NetworkStatus>
+              )}
               <Web3Status />
             </AccountElement>
           </HeaderElement>

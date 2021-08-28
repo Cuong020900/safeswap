@@ -22,6 +22,7 @@ import { AutoRow, RowBetween, RowFixed } from '../Row'
 import { Dots } from '../swap/styleds'
 import { useTranslation } from 'react-i18next'
 import {useTheme} from "../../hooks/useTheme";
+import getTokenSymbol from "../../utils/getTokenSymbol";
 
 export const FixedHeightRow = styled(RowBetween)`
   height: 24px;
@@ -42,7 +43,7 @@ interface PositionCardProps {
 }
 
 export function MinimalPositionCard({ pair, showUnwrapped = false, border, position }: PositionCardProps) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { t } = useTranslation()
   const theme = useTheme()
 
@@ -83,7 +84,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border, posit
               <RowFixed>
                 <DoubleCurrencyLogo currency0={currency0} currency1={currency1} margin={true} size={20} />
                 <Text fontWeight={400} fontSize={16}>
-                  {currency0.symbol}/{currency1.symbol}
+                  {getTokenSymbol(currency0, chainId)}/{getTokenSymbol(currency1, chainId)}
                 </Text>
               </RowFixed>
               <RowFixed>
@@ -95,7 +96,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border, posit
             <AutoColumn gap="4px">
               <FixedHeightRow>
                 <Text color={theme.text3} fontSize={16} fontWeight={400}>
-                  {currency0.symbol}:
+                  {getTokenSymbol(currency0, chainId)}:
                 </Text>
                 {token0Deposited ? (
                   <RowFixed>
@@ -109,7 +110,7 @@ export function MinimalPositionCard({ pair, showUnwrapped = false, border, posit
               </FixedHeightRow>
               <FixedHeightRow>
                 <Text color={theme.text3} fontSize={16} fontWeight={400}>
-                  {currency1.symbol}:
+                  {getTokenSymbol(currency1, chainId)}:
                 </Text>
                 {token1Deposited ? (
                   <RowFixed>
@@ -156,7 +157,7 @@ export const ButtonDanger = styled(ButtonPrimaryStyled)`
 `
 
 export default function FullPositionCard({ pair, border }: PositionCardProps) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { t } = useTranslation()
   const theme = useTheme();
 
@@ -192,7 +193,7 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
           <RowFixed>
             <DoubleCurrencyLogo currency0={currency0} currency1={currency1} margin={true} size={20} />
             <Text fontWeight={500} fontSize={16}>
-              {!currency0 || !currency1 ? <Dots>Loading</Dots> : `${currency0.symbol}/${currency1.symbol}`}
+              {!currency0 || !currency1 ? <Dots>Loading</Dots> : `${getTokenSymbol(currency0, chainId)}/${getTokenSymbol(currency1, chainId)}`}
             </Text>
           </RowFixed>
           <RowFixed>
@@ -208,7 +209,7 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
             <FixedHeightRow>
               <RowFixed>
                 <Text fontSize={16} fontWeight={400} color={theme.text3}>
-                  {t('pooled')} {currency0.symbol}:
+                  {t('pooled')} {getTokenSymbol(currency0, chainId)}:
                 </Text>
               </RowFixed>
               {token0Deposited ? (
@@ -226,7 +227,7 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
             <FixedHeightRow>
               <RowFixed>
                 <Text fontSize={16} fontWeight={400} color={theme.text3}>
-                  {t('pooled')} {currency1.symbol}:
+                  {t('pooled')} {getTokenSymbol(currency1, chainId)}:
                 </Text>
               </RowFixed>
               {token1Deposited ? (

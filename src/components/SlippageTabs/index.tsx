@@ -8,6 +8,8 @@ import { AutoColumn } from '../Column'
 import { RowBetween, RowFixed } from '../Row'
 
 import { darken } from 'polished'
+import {GAS_PRICE, GAS_PRICE_GWEI, useGasPrices} from "../../state/user/hooks";
+import {BigNumber} from "ethers";
 
 enum SlippageError {
   InvalidInput = 'InvalidInput',
@@ -63,6 +65,15 @@ const Option = styled(FancyButton)<{ active: boolean }>`
   `};
 `
 
+const GasOption = styled(Option)`
+  flex-grow: 1;
+
+
+  &:last-child {
+    margin-right: 0;
+  }
+`
+
 const Input = styled.input`
   background: ${({ theme }) => theme.bg3};
   font-size: 16px;
@@ -110,12 +121,15 @@ export interface SlippageTabsProps {
   rawSlippage: number
   setRawSlippage: (rawSlippage: number) => void
   deadline: number
-  setDeadline: (deadline: number) => void
+  setDeadline: (deadline: number) => void,
+  gasPrice: string,
+  setGasPrice: (gasPrice: string, gasPriceType: string) => void
 }
 
-export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, setDeadline }: SlippageTabsProps) {
+export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, setDeadline, gasPrice, setGasPrice }: SlippageTabsProps) {
   const theme = useContext(ThemeContext)
   const { t } = useTranslation()
+  const gasPrices = useGasPrices();
 
   const inputRef = useRef<HTMLInputElement>()
 
@@ -172,6 +186,40 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
 
   return (
     <AutoColumn gap="lg">
+      <AutoColumn gap={"sm"}>
+        <RowBetween style={{ height: 24 }}>
+          <TYPE.black fontWeight={400} fontSize={14} color={theme.text3}>
+            {t('transactionSpeed')}
+          </TYPE.black>
+          <QuestionHelper text={t('adjustYourGasPrice')} size={'sm'} />
+        </RowBetween>
+        <RowBetween style={{ flexWrap: 'wrap' }} >
+          <GasOption
+              onClick={() => {
+                setGasPrice(gasPrices.default, 'default')
+              }}
+              active={gasPrice === gasPrices.default}
+          >
+            Standard ({BigNumber.from(gasPrices.default).div(10 ** 9).toString()})
+          </GasOption>
+          <GasOption
+              onClick={() => {
+                setGasPrice(gasPrices.fast, 'fast')
+              }}
+              active={gasPrice === gasPrices.fast}
+          >
+            Fast ({BigNumber.from(gasPrices.fast).div(10 ** 9).toString()})
+          </GasOption>
+          <GasOption
+              onClick={() => {
+                setGasPrice(gasPrices.instant, 'instant')
+              }}
+              active={gasPrice === gasPrices.instant}
+          >
+            Instant ({BigNumber.from(gasPrices.instant).div(10 ** 9).toString()})
+          </GasOption>
+        </RowBetween>
+      </AutoColumn>
       <AutoColumn gap="sm">
         <RowBetween style={{ height: 24 }}>
           <TYPE.black fontWeight={400} fontSize={14} color={theme.text3}>

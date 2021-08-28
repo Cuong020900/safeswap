@@ -1,13 +1,13 @@
-import { parseBytes32String } from '@ethersproject/strings'
-import { Currency, ETHER, Token } from '@safemoon/sdk'
-import { useMemo } from 'react'
-import { useDefaultTokenList } from '../state/lists/hooks'
-import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
-import { useUserAddedTokens } from '../state/user/hooks'
-import { isAddress } from '../utils'
+import {parseBytes32String} from '@ethersproject/strings'
+import {Currency, ETHER, Token} from '@safemoon/sdk'
+import {useMemo} from 'react'
+import {useDefaultTokenList} from '../state/lists/hooks'
+import {NEVER_RELOAD, useSingleCallResult} from '../state/multicall/hooks'
+import {useUserAddedTokens} from '../state/user/hooks'
+import {isAddress} from '../utils'
 
-import { useActiveWeb3React } from './index'
-import { useBytes32TokenContract, useTokenContract } from './useContract'
+import {useActiveWeb3React} from './index'
+import {useBytes32TokenContract, useTokenContract} from './useContract'
 
 export function useAllTokens(): { [address: string]: Token } {
   const { chainId } = useActiveWeb3React()
@@ -96,7 +96,7 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
 }
 
 export function useCurrency(currencyId: string | undefined): Currency | null | undefined {
-  const isETH = currencyId?.toUpperCase() === 'BNB'
+  const isETH = currencyId?.toUpperCase() === 'ETH'
   const token = useToken(isETH ? undefined : currencyId)
   return isETH ? ETHER : token
 }

@@ -1,12 +1,12 @@
-import { ChainId, Pair, Token, Currency } from '@safemoon/sdk'
+import {ChainId, Currency, Pair, Token} from '@safemoon/sdk'
 import flatMap from 'lodash.flatmap'
-import { useCallback, useMemo } from 'react'
-import { shallowEqual, useDispatch, useSelector } from 'react-redux'
-import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from '../../constants'
+import {useCallback, useMemo} from 'react'
+import {shallowEqual, useDispatch, useSelector} from 'react-redux'
+import {BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS} from '../../constants'
 
-import { useActiveWeb3React } from '../../hooks'
-import { useAllTokens } from '../../hooks/Tokens'
-import { AppDispatch, AppState } from '../index'
+import {useActiveWeb3React} from '../../hooks'
+import {useAllTokens} from '../../hooks/Tokens'
+import {AppDispatch, AppState} from '../index'
 import {
   addSerializedPair,
   addSerializedToken,
@@ -14,13 +14,15 @@ import {
   removeSerializedToken,
   SerializedPair,
   SerializedToken,
+  updateGasPrice,
   updateUserDarkMode,
   updateUserDeadline,
   updateUserExpertMode,
   updateUserSlippageTolerance
 } from './actions'
-import { useDefaultTokenList } from '../lists/hooks'
-import { isDefaultToken } from '../../utils'
+import {useDefaultTokenList} from '../lists/hooks'
+import {isDefaultToken} from '../../utils'
+import {parseUnits} from "ethers/lib/utils";
 
 function serializeToken(token: Token): SerializedToken {
   return {
@@ -41,6 +43,22 @@ function deserializeToken(serializedToken: SerializedToken): Token {
     serializedToken.name
   )
 }
+
+
+export enum GAS_PRICE {
+  default = '5',
+  fast = '6',
+  instant = '7',
+  testnet = '10',
+}
+
+export const GAS_PRICE_GWEI = {
+  default: parseUnits(GAS_PRICE.default, 'gwei').toString(),
+  fast: parseUnits(GAS_PRICE.fast, 'gwei').toString(),
+  instant: parseUnits(GAS_PRICE.instant, 'gwei').toString(),
+  testnet: parseUnits(GAS_PRICE.testnet, 'gwei').toString(),
+}
+
 
 export function useIsDarkMode(): boolean {
   const { userDarkMode, matchesDarkMode } = useSelector<
@@ -141,7 +159,7 @@ export function useUserAddedTokens(): Token[] {
 
   return useMemo(() => {
     if (!chainId) return []
-    return Object.values(serializedTokensMap[chainId as ChainId] ?? {}).map(deserializeToken)
+    return Object.values(serializedTokensMap?.[chainId as ChainId] ?? {}).map(deserializeToken)
   }, [serializedTokensMap, chainId])
 }
 
@@ -268,4 +286,37 @@ export function useTrackedTokenPairs(): [Token, Token][] {
 
     return Object.keys(keyed).map(key => keyed[key])
   }, [combinedList])
+}
+
+
+export function useGasPrice(): string {
+  const { chainId } = useActiveWeb3React()
+  const userGas = useSelector<AppState, AppState['user']['gasPrice']>((state) => state.user.gasPrice)
+  return chainId === ChainId.MAINNET ? userGas : GAS_PRICE_GWEI.testnet
+}
+
+export function useGasPrices(): any {
+  const { chainId } = useActiveWeb3React();
+  const gasPrices = useSelector<AppState, AppState['user']['gasPrices']>((state) => state.user.gasPrices?.[chainId || ChainId.MAINNET] || state.user.gasPrices?.[ChainId.MAINNET])
+
+  return gasPrices || GAS_PRICE_GWEI;
+}
+export function useGasType(): any {
+  const gasPrices = useSelector<AppState, AppState['user']['gasPrices']>((state) => state.user.gasPriceType)
+
+  return gasPrices || 'default';
+}
+
+export function useGasPriceManager(): [string, (userGasPrice: string, gasPriceType: string) => void] {
+  const dispatch = useDispatch<AppDispatch>()
+  const userGasPrice = useGasPrice()
+
+  const setGasPrice = useCallback(
+      (gasPrice: string, gasPriceType: string = 'default') => {
+        dispatch(updateGasPrice({ gasPrice, gasPriceType: gasPriceType }))
+      },
+      [dispatch],
+  )
+
+  return [userGasPrice, setGasPrice]
 }

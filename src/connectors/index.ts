@@ -6,17 +6,23 @@ import { PortisConnector } from '@web3-react/portis-connector'
 
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
+import {ChainId} from "@safemoon/sdk";
 
-const NETWORK_URL = process.env.REACT_APP_NETWORK_URL
+const BSC_URL = process.env.REACT_APP_BSC_URL
+const ETH_URL = process.env.REACT_APP_ETH_URL
 const FORMATIC_KEY = process.env.REACT_APP_FORTMATIC_KEY
 const PORTIS_ID = process.env.REACT_APP_PORTIS_ID
 
-if (typeof NETWORK_URL === 'undefined') {
+if (typeof BSC_URL === 'undefined' || typeof ETH_URL === 'undefined') {
   throw new Error(`REACT_APP_NETWORK_URL must be a defined environment variable`)
 }
 
 export const network = new NetworkConnector({
-  urls: { [Number(process.env.REACT_APP_CHAIN_ID)]: NETWORK_URL }
+  urls: {
+    [ChainId.BSC_TESTNET]: BSC_URL,
+    [ChainId.ROPSTEN]: ETH_URL
+  },
+  defaultChainId: ChainId.BSC_TESTNET
 })
 
 export const injected = new InjectedConnector({
@@ -29,7 +35,7 @@ export const binanceinjected = new BinanceConnector({
 
 // mainnet only
 export const walletconnect = new WalletConnectConnector({
-  rpc: { 1: NETWORK_URL },
+  rpc: { 1: ETH_URL },
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
   pollingInterval: 15000
@@ -49,8 +55,8 @@ export const portis = new PortisConnector({
 
 // mainnet only
 export const walletlink = new WalletLinkConnector({
-  url: NETWORK_URL,
-  appName: 'Uniswap',
+  url: ETH_URL,
+  appName: 'SafemoonSwap',
   appLogoUrl:
     'https://mpng.pngfly.com/20181202/bex/kisspng-emoji-domain-unicorn-pin-badges-sticker-unicorn-tumblr-emoji-unicorn-iphoneemoji-5c046729264a77.5671679315437924251569.jpg'
 })

@@ -11,6 +11,267 @@
 	"keywords": ["safemoon", "default"],
 	"tokens": [
 		{
+			"name": "SushiSwap",
+			"symbol": "SUSHI",
+			"address": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+			"chainId": 1,
+			"decimals": 18
+		},
+		{
+			"name": "Tether",
+			"symbol": "USDT",
+			"address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+			"chainId": 1,
+			"decimals": 6
+		},
+		{
+			"name": "USD Coin",
+			"symbol": "USDC",
+			"address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+			"chainId": 1,
+			"decimals": 6
+		},
+		{
+			"name": "Chainlink",
+			"symbol": "LINK",
+			"address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+			"chainId": 1,
+			"decimals": 18
+		},
+		{
+			"name": "Graph",
+			"symbol": "GRT",
+			"address": "0xc944e90c64b2c07662a292be6244bdf05cda44a7",
+			"chainId": 1,
+			"decimals": 18
+		},
+		{
+			"name": "Dai",
+			"symbol": "DAI",
+			"address": "0x6b175474e89094c44da98b954eedeac495271d0f",
+			"chainId": 1,
+			"decimals": 18
+		},
+		{
+			"name": "UniSwap",
+			"symbol": "UNI",
+			"address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+			"chainId": 1,
+			"decimals": 18
+		},
+		{
+			"name": "Hex",
+			"symbol": "HEX",
+			"address": "0x2b591e99afe9f32eaa6214f7b7629768c40eeb39",
+			"chainId": 1,
+			"decimals": 8
+		},
+		{
+			"name": "Aave",
+			"symbol": "AAVE",
+			"address": "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
+			"chainId": 1,
+			"decimals": 18
+		},
+		{
+			"name": "Axie Infinity",
+			"symbol": "AXS",
+			"address": "0xbb0e17ef65f82ab018d8edd776e8dd940327b28b",
+			"chainId": 1,
+			"decimals": 18
+		},
+		{
+			"name": "Crypto.com",
+			"symbol": "CRO",
+			"address": "0xa0b73e1ff0b80914ab6fe0444e65848c4c34450b",
+			"chainId": 1,
+			"decimals": 8
+		},
+		{
+			"name": "Amp",
+			"symbol": "AMP",
+			"address": "0xff20817765cb7f73d4bde2e66e067e58d11095c2",
+			"chainId": 1,
+			"decimals": 18
+		},
+		{
+			"name": "Decentraland",
+			"symbol": "MANA",
+			"address": "0x0f5d2fb29fb7d3cfee444a200298f468908cc942",
+			"chainId": 1,
+			"decimals": 18
+		},
+		{
+			"name": "Enjin Coin",
+			"symbol": "ENJ",
+			"address": "0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c",
+			"chainId": 1,
+			"decimals": 18
+		},
+		{
+			"name": "Celsius",
+			"symbol": "CEL",
+			"address": "0xaaaebe6fe48e54f431b0c390cfaf0b017d09d42d",
+			"chainId": 1,
+			"decimals": 4
+		},
+		{
+			"name": "Polymath",
+			"symbol": "POLY",
+			"address": "0x9992ec3cf6a55b00978cddf2b27bc6882d88d1ec",
+			"chainId": 1,
+			"decimals": 18
+		},
+		{
+			"name": "Shiba Inu",
+			"symbol": "SHIB",
+			"address": "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce",
+			"chainId": 1,
+			"decimals": 18
+		},
+		{
+			"name": "pSafeMoon",
+			"symbol": "PSAFEMOON",
+			"address": "0x16631e53c20fd2670027c6d53efe2642929b285c",
+			"chainId": 1,
+			"decimals": 18
+		},
+		{
+			"name": "Wrapped Ethereum",
+			"symbol": "WETH",
+			"address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+			"chainId": 1,
+			"decimals": 18
+		},
+
+
+
+
+		{
+			"name": "Wrapped Ethereum",
+			"symbol": "WETH",
+			"address": "0xf70949Bc9B52DEFfCda63B0D15608d601e3a7C49",
+			"chainId": 3,
+			"decimals": 18
+		},
+		{
+			"name": "Faucet Token",
+			"symbol": "FAU",
+			"address": "0xFab46E002BbF0b4509813474841E0716E6730136",
+			"chainId": 3,
+			"decimals": 18
+		},
+
+
+		{
+			"name": "SafeMoon",
+			"symbol": "SFM",
+			"address": "0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3",
+			"chainId": 56,
+			"decimals": 9
+		},
+		{
+			"name": "Binance USD",
+			"symbol": "BUSD",
+			"address": "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+			"chainId": 56,
+			"decimals": 18
+		},
+		{
+			"name": "PancakeSwap",
+			"symbol": "CAKE",
+			"address": "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+			"chainId": 56,
+			"decimals": 18
+		},
+		{
+			"name": "Trust Wallet Token",
+			"symbol": "TWT",
+			"address": "0x4b0f1812e5df2a09796481ff14017e6005508003",
+			"chainId": 56,
+			"decimals": 18
+		},
+		{
+			"name": "SushiSwap",
+			"symbol": "SUSHI",
+			"address": "0x947950BcC74888a40Ffa2593C5798F11Fc9124C4",
+			"chainId": 56,
+			"decimals": 18
+		},
+		{
+			"name": "Tether",
+			"symbol": "USDT",
+			"address": "0x55d398326f99059ff775485246999027b3197955",
+			"chainId": 56,
+			"decimals": 18
+		},
+		{
+			"name": "USD Coin",
+			"symbol": "USDC",
+			"address": "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+			"chainId": 56,
+			"decimals": 18
+		},
+		{
+			"name": "Chainlink",
+			"symbol": "Link",
+			"address": "0xf8a0bf9cf54bb92f17374d9e9a321e6a111a51bd",
+			"chainId": 56,
+			"decimals": 18
+		},
+		{
+			"name": "Nobility Token",
+			"symbol": "NBL",
+			"address": "0xa67a13c9283da5aabb199da54a9cb4cd8b9b16ba",
+			"chainId": 56,
+			"decimals": 18
+		},
+		{
+			"name": "IOTA",
+			"symbol": "MIOTA",
+			"address": "0xd944f1d1e9d5f9bb90b62f9d45e447d989580782",
+			"chainId": 56,
+			"decimals": 6
+		},
+		{
+			"name": "EOS",
+			"symbol": "EOS",
+			"address": "0x56b6fb708fc5732dec1afc8d8556423a2edccbd6",
+			"chainId": 56,
+			"decimals": 18
+		},
+		{
+			"name": "Dai",
+			"symbol": "DAI",
+			"address": "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3",
+			"chainId": 56,
+			"decimals": 18
+		},
+		{
+			"name": "UniSwap",
+			"symbol": "UNI",
+			"address": "0xbf5140a22578168fd562dccf235e5d43a02ce9b1",
+			"chainId": 56,
+			"decimals": 18
+		},
+		{
+			"name": "Aave",
+			"symbol": "AAVE",
+			"address": "0xfb6115445bff7b52feb98650c87f44907e58f802",
+			"chainId": 56,
+			"decimals": 18
+		},
+		{
+			"name": "Wrapped BNB",
+			"symbol": "WBNB",
+			"address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+			"chainId": 56,
+			"decimals": 18
+		},
+
+
+
+		{
 			"name": "WBNB Token",
 			"symbol": "WBNB",
 			"address": "0xae13d989dac2f0debff460ac112a837c89baa7cd",
@@ -18,24 +279,10 @@
 			"decimals": 18
 		},
 		{
-			"name": "WBNB Token",
-			"symbol": "WBNB",
-			"address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
-			"chainId": 56,
-			"decimals": 18
-		},
-		{
 			"name": "SafeMoon",
 			"symbol": "SFM",
 			"address": "0xDD6999Ec25948811d7c671051f5B4E44B175239e",
 			"chainId": 97,
-			"decimals": 9
-		},
-		{
-			"name": "SafeMoon",
-			"symbol": "SFM",
-			"address": "0x8076C74C5e3F5852037F31Ff0093Eeb8c8ADd8D3",
-			"chainId": 56,
 			"decimals": 9
 		}
 	]

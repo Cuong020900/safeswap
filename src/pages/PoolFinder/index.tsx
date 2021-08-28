@@ -1,4 +1,4 @@
-import { Currency, ETHER, JSBI, TokenAmount } from '@safemoon/sdk'
+import {ChainId, Currency, ETHER, JSBI, TokenAmount} from '@safemoon/sdk'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Text } from 'rebass'
 import { ButtonDropdownLight } from '../../components/Button'
@@ -29,7 +29,7 @@ enum Fields {
 }
 
 export default function PoolFinder() {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { t } = useTranslation()
     const theme = useTheme();
 
@@ -96,7 +96,12 @@ export default function PoolFinder() {
             <Row>
               <CurrencyLogo currency={currency0} />
               <Text fontWeight={500} fontSize={16} marginLeft={'12px'}>
-                {currency0.symbol}
+                  {currency0?.symbol !== 'ETH'
+                      ? currency0?.symbol
+                      : (chainId === ChainId.BSC_MAINNET || chainId === ChainId.BSC_TESTNET)
+                          ? "BNB"
+                          : "ETH"
+                  }
               </Text>
             </Row>
           ) : (
@@ -125,7 +130,12 @@ export default function PoolFinder() {
             <Row>
               <CurrencyLogo currency={currency1} />
               <Text fontWeight={500} fontSize={16} marginLeft={'12px'}>
-                {currency1.symbol}
+                  {currency1?.symbol !== 'ETH'
+                      ? currency1?.symbol
+                      : (chainId === ChainId.BSC_MAINNET || chainId === ChainId.BSC_TESTNET)
+                          ? "BNB"
+                          : "ETH"
+                  }
               </Text>
             </Row>
           ) : (

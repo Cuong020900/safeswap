@@ -13,6 +13,8 @@ import { SectionBreak } from './styleds'
 import SwapRoute from './SwapRoute'
 import { useTranslation } from 'react-i18next'
 import Divider from "../Divider";
+import {useActiveWeb3React} from "../../hooks";
+import getTokenSymbol from "../../utils/getTokenSymbol";
 
 function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippage: number }) {
   const theme = useContext(ThemeContext)
@@ -20,6 +22,7 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippag
   const isExactIn = trade.tradeType === TradeType.EXACT_INPUT
   const slippageAdjustedAmounts = computeSlippageAdjustedAmounts(trade, allowedSlippage)
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React();
 
   return (
     <>
@@ -34,9 +37,9 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippag
           <RowFixed>
             <TYPE.black color={theme.secondary2} fontSize={14} fontWeight={400}>
               {isExactIn
-                ? `${slippageAdjustedAmounts[Field.OUTPUT]?.toSignificant(4)} ${trade.outputAmount.currency.symbol}` ??
+                ? `${slippageAdjustedAmounts[Field.OUTPUT]?.toSignificant(4)} ${getTokenSymbol(trade.outputAmount.currency, chainId)}` ??
                   '-'
-                : `${slippageAdjustedAmounts[Field.INPUT]?.toSignificant(4)} ${trade.inputAmount.currency.symbol}` ??
+                : `${slippageAdjustedAmounts[Field.INPUT]?.toSignificant(4)} ${getTokenSymbol(trade.inputAmount.currency, chainId)}` ??
                   '-'}
             </TYPE.black>
           </RowFixed>
@@ -59,7 +62,7 @@ function TradeSummary({ trade, allowedSlippage }: { trade: Trade; allowedSlippag
             <QuestionHelper text={t('aPortion')} size={'sm'} />
           </RowFixed>
           <TYPE.black fontSize={14} color={theme.yellow1} fontWeight={400}>
-            {realizedLPFee ? `${realizedLPFee.toSignificant(4)} ${trade.inputAmount.currency.symbol}` : '-'}
+            {realizedLPFee ? `${realizedLPFee.toSignificant(4)} ${getTokenSymbol(trade.inputAmount.currency, chainId)}` : '-'}
           </TYPE.black>
         </RowBetween>
       </AutoColumn>

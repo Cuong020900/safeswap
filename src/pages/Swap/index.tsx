@@ -48,6 +48,7 @@ import QuestionHelper from "../../components/QuestionHelper";
 // @ts-ignore
 import SettingsIcon from "../../assets/icons/candle-2.svg";
 import SettingsModal from "../../components/SettingsModal";
+import getTokenSymbol from "../../utils/getTokenSymbol";
 
 const SettingsWrapper = styled.div`
   display: flex;
@@ -399,7 +400,7 @@ export default function Swap() {
                   ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
                     'Approved'
                   ) : (
-                    'Approve ' + currencies[Field.INPUT]?.symbol
+                    'Approve ' + getTokenSymbol(currencies[Field.INPUT], chainId)
                   )}
                 </ButtonPrimary>
                 <ButtonError

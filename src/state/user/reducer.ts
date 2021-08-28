@@ -13,8 +13,11 @@ import {
   updateVersion,
   updateUserExpertMode,
   updateUserSlippageTolerance,
-  updateUserDeadline
+  updateUserDeadline, updateGasPrice, updateGasPricesList
 } from './actions'
+import {GAS_PRICE, GAS_PRICE_GWEI} from "./hooks";
+import {ChainId} from "@safemoon/sdk";
+import {parseUnits} from "ethers/lib/utils";
 
 const currentTimestamp = () => new Date().getTime()
 
@@ -54,6 +57,9 @@ export interface UserState {
   }
 
   timestamp: number
+  gasPrice: string,
+  gasPriceType: string,
+  gasPrices: any
 }
 
 function pairKey(token0Address: string, token1Address: string) {
@@ -68,7 +74,23 @@ export const initialState: UserState = {
   userDeadline: DEFAULT_DEADLINE_FROM_NOW,
   tokens: {},
   pairs: {},
-  timestamp: currentTimestamp()
+  timestamp: currentTimestamp(),
+  gasPrice: GAS_PRICE_GWEI.default,
+  gasPriceType: 'default',
+  gasPrices: {
+    [ChainId.BSC_MAINNET]: {
+      ...GAS_PRICE_GWEI
+    },
+    [ChainId.BSC_TESTNET]: {
+      ...GAS_PRICE_GWEI
+    },
+    [ChainId.MAINNET]: {
+      default: parseUnits("60", 'gwei').toString(),
+      fast: parseUnits("70", 'gwei').toString(),
+      instant: parseUnits("75", 'gwei').toString(),
+      testnet: parseUnits(GAS_PRICE.testnet, 'gwei').toString(),
+    }
+  }
 }
 
 export default createReducer(initialState, builder =>
@@ -139,5 +161,13 @@ export default createReducer(initialState, builder =>
         delete state.pairs[chainId][pairKey(tokenBAddress, tokenAAddress)]
       }
       state.timestamp = currentTimestamp()
+    })
+    .addCase(updateGasPrice, (state, action) => {
+      state.gasPrice = action.payload.gasPrice;
+      state.gasPriceType = action.payload.gasPriceType;
+    })
+    .addCase(updateGasPricesList, (state, action) => {
+      console.log(action.payload);
+      state.gasPrices[action.payload.chainId] = action.payload.gasPrices
     })
 )

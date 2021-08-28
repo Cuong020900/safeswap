@@ -1,45 +1,44 @@
-import { splitSignature } from '@ethersproject/bytes'
-import { Contract } from '@ethersproject/contracts'
-import { TransactionResponse } from '@ethersproject/providers'
-import { Currency, currencyEquals, ETHER, Percent, WETH } from '@safemoon/sdk'
-import React, { useCallback, useContext, useMemo, useState } from 'react'
-import { Plus } from 'react-feather'
+import {splitSignature} from '@ethersproject/bytes'
+import {Contract} from '@ethersproject/contracts'
+import {TransactionResponse} from '@ethersproject/providers'
+import {ChainId, Currency, currencyEquals, ETHER, Percent, WETH} from '@safemoon/sdk'
+import React, {useCallback, useContext, useMemo, useState} from 'react'
+import {Plus} from 'react-feather'
 import ReactGA from 'react-ga'
-import { RouteComponentProps } from 'react-router'
-import { Text } from 'rebass'
-import { ThemeContext } from 'styled-components'
-import { ButtonPrimary, ButtonLight, ButtonError, ButtonConfirmed } from '../../components/Button'
-import { AutoColumn } from '../../components/Column'
-import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
+import {RouteComponentProps} from 'react-router'
+import {Text} from 'rebass'
+import {ThemeContext} from 'styled-components'
+import {ButtonConfirmed, ButtonError, ButtonLight, ButtonPrimary} from '../../components/Button'
+import {AutoColumn} from '../../components/Column'
+import TransactionConfirmationModal, {ConfirmationModalContent} from '../../components/TransactionConfirmationModal'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import {RemoveTabs} from '../../components/NavigationTabs'
 import {HoverCard, MinimalPositionCard} from '../../components/PositionCard'
 import {AutoRow, RowBetween, RowFixed} from '../../components/Row'
 import CurrencyLogo from '../../components/CurrencyLogo'
-import { ROUTER_ADDRESS } from '../../constants'
-import { useActiveWeb3React } from '../../hooks'
-import { useCurrency } from '../../hooks/Tokens'
-import { usePairContract } from '../../hooks/useContract'
+import {ROUTER_ADDRESS} from '../../constants'
+import {useActiveWeb3React} from '../../hooks'
+import {useCurrency} from '../../hooks/Tokens'
+import {usePairContract} from '../../hooks/useContract'
 
-import { useTransactionAdder } from '../../state/transactions/hooks'
-import { StyledInternalLink, TYPE } from '../../theme'
-import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from '../../utils'
-import { currencyId } from '../../utils/currencyId'
-import { wrappedCurrency } from '../../utils/wrappedCurrency'
+import {useTransactionAdder} from '../../state/transactions/hooks'
+import {StyledInternalLink, TYPE} from '../../theme'
+import {calculateGasMargin, calculateSlippageAmount, getRouterContract} from '../../utils'
+import {currencyId} from '../../utils/currencyId'
+import {wrappedCurrency} from '../../utils/wrappedCurrency'
 import AppBody from '../AppBody'
-import { MaxButton, Wrapper } from '../Pool/styleds'
-import { useApproveCallback, ApprovalState } from '../../hooks/useApproveCallback'
-import { Dots } from '../../components/swap/styleds'
-import { useBurnActionHandlers } from '../../state/burn/hooks'
-import { useDerivedBurnInfo, useBurnState } from '../../state/burn/hooks'
-import { Field } from '../../state/burn/actions'
-import { useWalletModalToggle } from '../../state/application/hooks'
-import { useUserDeadline, useUserSlippageTolerance } from '../../state/user/hooks'
-import { BigNumber } from '@ethersproject/bignumber'
-import { useTranslation } from 'react-i18next'
+import {MaxButton, Wrapper} from '../Pool/styleds'
+import {ApprovalState, useApproveCallback} from '../../hooks/useApproveCallback'
+import {Dots} from '../../components/swap/styleds'
+import {useBurnActionHandlers, useBurnState, useDerivedBurnInfo} from '../../state/burn/hooks'
+import {Field} from '../../state/burn/actions'
+import {useWalletModalToggle} from '../../state/application/hooks'
+import {useGasPrice, useUserDeadline, useUserSlippageTolerance} from '../../state/user/hooks'
+import {BigNumber} from '@ethersproject/bignumber'
+import {useTranslation} from 'react-i18next'
 import Divider from "../../components/Divider";
-
+import getTokenSymbol from "../../utils/getTokenSymbol";
 
 
 export default function RemoveLiquidity({
@@ -61,6 +60,7 @@ export default function RemoveLiquidity({
 
   // toggle wallet when disconnected
   const toggleWalletModal = useWalletModalToggle()
+  const gasPrice = useGasPrice();
 
   // burn state
   const { independentField, typedValue } = useBurnState()
@@ -99,7 +99,7 @@ export default function RemoveLiquidity({
 
   // allowance handling
   const [signatureData, setSignatureData] = useState<{ v: number; r: string; s: string; deadline: number } | null>(null)
-  const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], ROUTER_ADDRESS)
+  const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], ROUTER_ADDRESS[chainId || ChainId.BSC_TESTNET])
   async function onAttemptToApprove() {
     if (!pairContract || !pair || !library) throw new Error('missing dependencies')
     const liquidityAmount = parsedAmounts[Field.LIQUIDITY]
@@ -130,7 +130,7 @@ export default function RemoveLiquidity({
     ]
     const message = {
       owner: account,
-      spender: ROUTER_ADDRESS,
+      spender: ROUTER_ADDRESS[chainId || ChainId.BSC_TESTNET],
       value: liquidityAmount.raw.toString(),
       nonce: nonce.toHexString(),
       deadline: deadlineForSignature
@@ -300,7 +300,8 @@ export default function RemoveLiquidity({
 
       setAttemptingTxn(true)
       await router[methodName](...args, {
-        gasLimit: safeGasEstimate
+        gasLimit: safeGasEstimate,
+        gasPrice,
       })
         .then((response: TransactionResponse) => {
           setAttemptingTxn(false)
@@ -310,11 +311,11 @@ export default function RemoveLiquidity({
               'Remove ' +
               parsedAmounts[Field.CURRENCY_A]?.toSignificant(3) +
               ' ' +
-              currencyA?.symbol +
+                getTokenSymbol(currencyA, chainId) +
               ' and ' +
               parsedAmounts[Field.CURRENCY_B]?.toSignificant(3) +
               ' ' +
-              currencyB?.symbol
+                getTokenSymbol(currencyB, chainId)
           })
 
           setTxHash(response.hash)
@@ -322,7 +323,7 @@ export default function RemoveLiquidity({
           ReactGA.event({
             category: 'Liquidity',
             action: 'Remove',
-            label: [currencyA?.symbol, currencyB?.symbol].join('/')
+            label: [getTokenSymbol(currencyA, chainId), getTokenSymbol(currencyB, chainId)].join('/')
           })
         })
         .catch((error: Error) => {
@@ -343,7 +344,7 @@ export default function RemoveLiquidity({
           <RowFixed gap="4px">
             <CurrencyLogo currency={currencyA} size={'24px'} />
             <Text fontSize={24} fontWeight={500} style={{ marginLeft: '10px' }}>
-              {currencyA?.symbol}
+              {getTokenSymbol(currencyA, chainId)}
             </Text>
           </RowFixed>
         </RowBetween>
@@ -357,7 +358,7 @@ export default function RemoveLiquidity({
           <RowFixed gap="4px">
             <CurrencyLogo currency={currencyB} size={'24px'} />
             <Text fontSize={24} fontWeight={500} style={{ marginLeft: '10px' }}>
-              {currencyB?.symbol}
+              {getTokenSymbol(currencyB, chainId)}
             </Text>
           </RowFixed>
         </RowBetween>
@@ -375,7 +376,7 @@ export default function RemoveLiquidity({
       <>
         <RowBetween>
           <Text color={theme.text2} fontWeight={500} fontSize={16}>
-            {'BLP ' + currencyA?.symbol + '/' + currencyB?.symbol} Burned
+            {'BLP ' + getTokenSymbol(currencyA, chainId) + '/' + getTokenSymbol(currencyB, chainId)} Burned
           </Text>
           <RowFixed>
             <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} margin={true} />
@@ -391,13 +392,13 @@ export default function RemoveLiquidity({
                 Price
               </Text>
               <Text fontWeight={500} fontSize={16} color={theme.text1}>
-                1 {currencyA?.symbol} = {tokenA ? pair.priceOf(tokenA).toSignificant(6) : '-'} {currencyB?.symbol}
+                1 {getTokenSymbol(currencyA, chainId)} = {tokenA ? pair.priceOf(tokenA).toSignificant(6) : '-'} {getTokenSymbol(currencyB, chainId)}
               </Text>
             </RowBetween>
             <RowBetween>
               <div />
               <Text fontWeight={500} fontSize={16} color={theme.text1}>
-                1 {currencyB?.symbol} = {tokenB ? pair.priceOf(tokenB).toSignificant(6) : '-'} {currencyA?.symbol}
+                1 {getTokenSymbol(currencyB, chainId)} = {tokenB ? pair.priceOf(tokenB).toSignificant(6) : '-'} {getTokenSymbol(currencyA, chainId)}
               </Text>
             </RowBetween>
           </>
@@ -412,8 +413,8 @@ export default function RemoveLiquidity({
   }
 
   const pendingText = `Removing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${
-    currencyA?.symbol
-  } and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${currencyB?.symbol}`
+      getTokenSymbol(currencyA, chainId)
+  } and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${getTokenSymbol(currencyB, chainId)}`
 
   const oneCurrencyIsETH = currencyA === ETHER || currencyB === ETHER
   const oneCurrencyIsWETH = Boolean(
@@ -503,7 +504,7 @@ export default function RemoveLiquidity({
                       </Text>
                       <RowFixed>
                         <Text fontSize={16} fontWeight={500} id="remove-liquidity-tokena-symbol">
-                          {currencyA?.symbol}
+                          {getTokenSymbol(currencyA, chainId)}
                         </Text>
                         <CurrencyLogo currency={currencyA} style={{ marginLeft: '8px' }} />
                       </RowFixed>
@@ -514,7 +515,7 @@ export default function RemoveLiquidity({
                       </Text>
                       <RowFixed>
                         <Text fontSize={16} fontWeight={500} id="remove-liquidity-tokenb-symbol">
-                          {currencyB?.symbol}
+                          {getTokenSymbol(currencyB, chainId)}
                         </Text>
                         <CurrencyLogo currency={currencyB} style={{ marginLeft: '8px' }} />
                       </RowFixed>
@@ -524,22 +525,22 @@ export default function RemoveLiquidity({
                         <>
                           <RowBetween>
                             <Text fontSize={16} fontWeight={500}>
-                              {currencyA?.symbol} Price
+                              {getTokenSymbol(currencyA, chainId)} Price
                             </Text>
                             <RowFixed>
                               <Text fontSize={16} fontWeight={500} id="remove-liquidity-tokenb-symbol">
-                                {tokenA ? pair.priceOf(tokenA).toSignificant(6) : '-'} {currencyB?.symbol}
+                                {tokenA ? pair.priceOf(tokenA).toSignificant(6) : '-'} {getTokenSymbol(currencyB, chainId)}
                               </Text>
                             </RowFixed>
                           </RowBetween>
 
                           <RowBetween>
                             <Text fontSize={16} fontWeight={500}>
-                              {currencyB?.symbol} Price
+                              {getTokenSymbol(currencyB, chainId)} Price
                             </Text>
                             <RowFixed>
                               <Text fontSize={16} fontWeight={500} id="remove-liquidity-tokenb-symbol">
-                                {tokenB ? pair.priceOf(tokenB).toSignificant(6) : '-'} {currencyA?.symbol}
+                                {tokenB ? pair.priceOf(tokenB).toSignificant(6) : '-'} {getTokenSymbol(currencyA, chainId)}
                               </Text>
                             </RowFixed>
                           </RowBetween>
@@ -553,15 +554,15 @@ export default function RemoveLiquidity({
                               currencyB === ETHER ? WETH[chainId].address : currencyIdB
                             }`}
                           >
-                            Receive WBNB
+                            Receive {chainId === ChainId.BSC_TESTNET || chainId === ChainId.BSC_MAINNET ? "WBNB" : "WETH"}
                           </StyledInternalLink>
                         ) : oneCurrencyIsWETH ? (
                           <StyledInternalLink
                             to={`/remove/${
-                              currencyA && currencyEquals(currencyA, WETH[chainId]) ? 'BNB' : currencyIdA
-                            }/${currencyB && currencyEquals(currencyB, WETH[chainId]) ? 'BNB' : currencyIdB}`}
+                              currencyA && currencyEquals(currencyA, WETH[chainId]) ? 'ETH' : currencyIdA
+                            }/${currencyB && currencyEquals(currencyB, WETH[chainId]) ? 'ETH' : currencyIdB}`}
                           >
-                            Receive BNB
+                            Receive {chainId === ChainId.BSC_TESTNET || chainId === ChainId.BSC_MAINNET ? "BNB" : "ETH"}
                           </StyledInternalLink>
                         ) : null}
                       </RowBetween>
@@ -684,22 +685,6 @@ export default function RemoveLiquidity({
                 </div>
               </>
             )}
-            {/*{pair && (*/}
-            {/*  <div style={{ padding: '10px 20px' }}>*/}
-            {/*    <RowBetween>*/}
-            {/*      Price:*/}
-            {/*      <div>*/}
-            {/*        1 {currencyA?.symbol} = {tokenA ? pair.priceOf(tokenA).toSignificant(6) : '-'} {currencyB?.symbol}*/}
-            {/*      </div>*/}
-            {/*    </RowBetween>*/}
-            {/*    <RowBetween>*/}
-            {/*      <div />*/}
-            {/*      <div>*/}
-            {/*        1 {currencyB?.symbol} = {tokenB ? pair.priceOf(tokenB).toSignificant(6) : '-'} {currencyA?.symbol}*/}
-            {/*      </div>*/}
-            {/*    </RowBetween>*/}
-            {/*  </div>*/}
-            {/*)}*/}
 
 
             {pair ? (

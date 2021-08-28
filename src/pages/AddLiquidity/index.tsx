@@ -1,46 +1,47 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import { TransactionResponse } from '@ethersproject/providers'
-import { Currency, currencyEquals, ETHER, TokenAmount, WETH } from '@safemoon/sdk'
-import React, { useCallback, useContext, useState } from 'react'
+import {BigNumber} from '@ethersproject/bignumber'
+import {TransactionResponse} from '@ethersproject/providers'
+import {ChainId, Currency, currencyEquals, ETHER, TokenAmount, WETH} from '@safemoon/sdk'
+import React, {useCallback, useContext, useState} from 'react'
 import ReactGA from 'react-ga'
-import { RouteComponentProps } from 'react-router-dom'
-import { Text } from 'rebass'
-import { ThemeContext } from 'styled-components'
-import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button'
-import { LightCard } from '../../components/Card'
-import { AutoColumn, ColumnCenter } from '../../components/Column'
-import TransactionConfirmationModal, { ConfirmationModalContent } from '../../components/TransactionConfirmationModal'
+import {RouteComponentProps} from 'react-router-dom'
+import {Text} from 'rebass'
+import {ThemeContext} from 'styled-components'
+import {ButtonError, ButtonLight, ButtonPrimary} from '../../components/Button'
+import {LightCard} from '../../components/Card'
+import {AutoColumn, ColumnCenter} from '../../components/Column'
+import TransactionConfirmationModal, {ConfirmationModalContent} from '../../components/TransactionConfirmationModal'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import {AddTabs} from '../../components/NavigationTabs'
-import { MinimalPositionCard } from '../../components/PositionCard'
-import Row, { RowBetween, RowFlat } from '../../components/Row'
+import {MinimalPositionCard} from '../../components/PositionCard'
+import Row, {RowBetween, RowFlat} from '../../components/Row'
 
-import { ROUTER_ADDRESS } from '../../constants'
-import { PairState } from '../../data/Reserves'
-import { useActiveWeb3React } from '../../hooks'
-import { useCurrency } from '../../hooks/Tokens'
-import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { useWalletModalToggle } from '../../state/application/hooks'
-import { Field } from '../../state/mint/actions'
-import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
+import {ROUTER_ADDRESS} from '../../constants'
+import {PairState} from '../../data/Reserves'
+import {useActiveWeb3React} from '../../hooks'
+import {useCurrency} from '../../hooks/Tokens'
+import {ApprovalState, useApproveCallback} from '../../hooks/useApproveCallback'
+import {useWalletModalToggle} from '../../state/application/hooks'
+import {Field} from '../../state/mint/actions'
+import {useDerivedMintInfo, useMintActionHandlers, useMintState} from '../../state/mint/hooks'
 
-import { useTransactionAdder } from '../../state/transactions/hooks'
-import { useIsExpertMode, useUserDeadline, useUserSlippageTolerance } from '../../state/user/hooks'
-import { TYPE } from '../../theme'
-import { calculateGasMargin, calculateSlippageAmount, getRouterContract } from '../../utils'
-import { maxAmountSpend } from '../../utils/maxAmountSpend'
-import { wrappedCurrency } from '../../utils/wrappedCurrency'
+import {useTransactionAdder} from '../../state/transactions/hooks'
+import {useGasPrice, useIsExpertMode, useUserDeadline, useUserSlippageTolerance} from '../../state/user/hooks'
+import {TYPE} from '../../theme'
+import {calculateGasMargin, calculateSlippageAmount, getRouterContract} from '../../utils'
+import {maxAmountSpend} from '../../utils/maxAmountSpend'
+import {wrappedCurrency} from '../../utils/wrappedCurrency'
 import AppBody from '../AppBody'
-import { Dots, Wrapper } from '../Pool/styleds'
-import { ConfirmAddModalBottom } from './ConfirmAddModalBottom'
-import { currencyId } from '../../utils/currencyId'
-import { PoolPriceBar } from './PoolPriceBar'
-import { useTranslation } from 'react-i18next'
+import {Dots, Wrapper} from '../Pool/styleds'
+import {ConfirmAddModalBottom} from './ConfirmAddModalBottom'
+import {currencyId} from '../../utils/currencyId'
+import {PoolPriceBar} from './PoolPriceBar'
+import {useTranslation} from 'react-i18next'
 import Divider from "../../components/Divider";
 import SVG from "react-inlinesvg";
 // @ts-ignore
 import PlusSquare from '../../assets/icons/add-square.svg';
+import getTokenSymbol from "../../utils/getTokenSymbol";
 
 export default function AddLiquidity({
   match: {
@@ -51,6 +52,7 @@ export default function AddLiquidity({
   const { t } = useTranslation()
   const { account, chainId, library } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
+  const gasPrice = useGasPrice()
 
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
@@ -121,8 +123,8 @@ export default function AddLiquidity({
   )
 
   // check whether the user has approved the router on the tokens
-  const [approvalA, approveACallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_A], ROUTER_ADDRESS)
-  const [approvalB, approveBCallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_B], ROUTER_ADDRESS)
+  const [approvalA, approveACallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_A], ROUTER_ADDRESS[chainId || ChainId.BSC_TESTNET])
+  const [approvalB, approveBCallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_B], ROUTER_ADDRESS[chainId || ChainId.BSC_TESTNET])
 
   const addTransaction = useTransactionAdder()
 
@@ -134,8 +136,6 @@ export default function AddLiquidity({
     if (!parsedAmountA || !parsedAmountB || !currencyA || !currencyB) {
       return
     }
-
-    console.log(router);
 
     const amountsMin = {
       [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, noLiquidity ? 0 : allowedSlippage)[0],
@@ -177,14 +177,13 @@ export default function AddLiquidity({
       value = null
     }
 
-    console.log(estimate);
-
     setAttemptingTxn(true)
     await estimate(...args, value ? { value } : {})
       .then(estimatedGasLimit =>
         method(...args, {
           ...(value ? { value } : {}),
-          gasLimit: calculateGasMargin(estimatedGasLimit)
+          gasLimit: calculateGasMargin(estimatedGasLimit),
+          gasPrice
         }).then(response => {
           setAttemptingTxn(false)
 
@@ -193,11 +192,11 @@ export default function AddLiquidity({
               t('add') + ' ' +
               parsedAmounts[Field.CURRENCY_A]?.toSignificant(3) +
               ' ' +
-              currencies[Field.CURRENCY_A]?.symbol +
+              getTokenSymbol(currencies[Field.CURRENCY_A], chainId) +
               ' ' + t('and') + ' ' +
               parsedAmounts[Field.CURRENCY_B]?.toSignificant(3) +
               ' ' +
-              currencies[Field.CURRENCY_B]?.symbol
+              getTokenSymbol(currencies[Field.CURRENCY_B], chainId)
           })
 
           setTxHash(response.hash)
@@ -218,13 +217,14 @@ export default function AddLiquidity({
       })
   }
 
+
   const modalHeader = () => {
     return noLiquidity ? (
       <AutoColumn gap="20px">
         <LightCard mt="20px" borderRadius="20px">
           <RowFlat>
             <Text fontSize="48px" fontWeight={500} lineHeight="42px" marginRight={10}>
-              {currencies[Field.CURRENCY_A]?.symbol + '/' + currencies[Field.CURRENCY_B]?.symbol}
+              {getTokenSymbol(currencies[Field.CURRENCY_A], chainId) + '/' + getTokenSymbol(currencies[Field.CURRENCY_B], chainId)}
             </Text>
             <DoubleCurrencyLogo
               currency0={currencies[Field.CURRENCY_A]}
@@ -248,7 +248,7 @@ export default function AddLiquidity({
         </RowFlat>
         <Row>
           <Text fontSize="24px">
-            {currencies[Field.CURRENCY_A]?.symbol + '/' + currencies[Field.CURRENCY_B]?.symbol + ' Pool Tokens'}
+            {getTokenSymbol(currencies[Field.CURRENCY_A], chainId) + '/' + getTokenSymbol(currencies[Field.CURRENCY_B], chainId) + ' Pool Tokens'}
           </Text>
         </Row>
         <TYPE.italic fontSize={12} textAlign="left" padding={'8px 0 0 0 '}>
@@ -272,8 +272,8 @@ export default function AddLiquidity({
   }
 
   const pendingText = `Supplying ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${
-    currencies[Field.CURRENCY_A]?.symbol
-  } and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${currencies[Field.CURRENCY_B]?.symbol}`
+      getTokenSymbol(currencies[Field.CURRENCY_A], chainId)
+  } and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)} ${getTokenSymbol(currencies[Field.CURRENCY_B], chainId)}`
 
   const handleCurrencyASelect = useCallback(
     (currencyA: Currency) => {
@@ -296,7 +296,7 @@ export default function AddLiquidity({
           history.push(`/add/${newCurrencyIdB}`)
         }
       } else {
-        history.push(`/add/${currencyIdA ? currencyIdA : 'BNB'}/${newCurrencyIdB}`)
+        history.push(`/add/${currencyIdA ? currencyIdA : 'ETH'}/${newCurrencyIdB}`)
       }
     },
     [currencyIdA, history, currencyIdB]
@@ -401,9 +401,9 @@ export default function AddLiquidity({
                           width={approvalB !== ApprovalState.APPROVED ? '48%' : '100%'}
                         >
                           {approvalA === ApprovalState.PENDING ? (
-                            <Dots>Approving {currencies[Field.CURRENCY_A]?.symbol}</Dots>
+                            <Dots>Approving {getTokenSymbol(currencies[Field.CURRENCY_A], chainId)}</Dots>
                           ) : (
-                            t('approve') + ' ' + currencies[Field.CURRENCY_A]?.symbol
+                            t('approve') + ' ' + getTokenSymbol(currencies[Field.CURRENCY_A], chainId)
                           )}
                         </ButtonPrimary>
                       )}
@@ -414,9 +414,9 @@ export default function AddLiquidity({
                           width={approvalA !== ApprovalState.APPROVED ? '48%' : '100%'}
                         >
                           {approvalB === ApprovalState.PENDING ? (
-                            <Dots>Approving {currencies[Field.CURRENCY_B]?.symbol}</Dots>
+                            <Dots>Approving {getTokenSymbol(currencies[Field.CURRENCY_B], chainId)}</Dots>
                           ) : (
-                            t('approve') + ' ' + currencies[Field.CURRENCY_B]?.symbol
+                            t('approve') + ' ' + getTokenSymbol(currencies[Field.CURRENCY_B], chainId)
                           )}
                         </ButtonPrimary>
                       )}

@@ -1,14 +1,15 @@
 import React from 'react'
-import { Text } from 'rebass'
-import { ChainId, Currency, currencyEquals, ETHER, Token } from '@safemoon/sdk'
+import {Text} from 'rebass'
+import {ChainId, Currency, currencyEquals, ETHER, Token} from '@safemoon/sdk'
 import styled from 'styled-components'
 
-import { SUGGESTED_BASES } from '../../constants'
-import { AutoColumn } from '../Column'
+import {SUGGESTED_BASES} from '../../constants'
+import {AutoColumn} from '../Column'
 import QuestionHelper from '../QuestionHelper'
-import { AutoRow } from '../Row'
+import {AutoRow} from '../Row'
 import CurrencyLogo from '../CurrencyLogo'
-import { useTranslation } from 'react-i18next'
+import {useTranslation} from 'react-i18next'
+import getTokenSymbol from "../../utils/getTokenSymbol";
 
 const BaseWrapper = styled.div<{ disable?: boolean }>`
   border: 1px solid ${({ theme, disable }) => (disable ? 'transparent' : theme.bg3)};
@@ -51,7 +52,7 @@ export default function CommonBases({
         >
           <CurrencyLogo currency={ETHER} style={{ marginRight: 8 }} />
           <Text fontWeight={500} fontSize={16}>
-            BNB
+            {chainId === ChainId.BSC_TESTNET || chainId === ChainId.BSC_MAINNET ? "BNB" : "ETH"}
           </Text>
         </BaseWrapper>
         {(chainId ? SUGGESTED_BASES[chainId] : []).map((token: Token) => {
@@ -60,7 +61,7 @@ export default function CommonBases({
             <BaseWrapper onClick={() => !selected && onSelect(token)} disable={selected} key={token.address}>
               <CurrencyLogo currency={token} style={{ marginRight: 8 }} />
               <Text fontWeight={500} fontSize={16}>
-                {token.symbol}
+                {getTokenSymbol(token, chainId)}
               </Text>
             </BaseWrapper>
           )
