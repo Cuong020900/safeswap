@@ -84,13 +84,17 @@ export default function App() {
   }, [dispatch])
 
   useEffect(() => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    provider.on("network", (newNetwork, oldNetwork) => {
-      if (oldNetwork) {
-        dispatch(updateGasPrice({ gasPrice: gasPrices[gasType], gasPriceType: gasType }))
-        window.location.reload();
-      }
-    });
+    if(window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+      provider.on("network", (newNetwork, oldNetwork) => {
+        if (oldNetwork) {
+          dispatch(updateGasPrice({ gasPrice: gasPrices[gasType], gasPriceType: gasType }))
+          window.location.reload();
+        }
+      });
+    }
+
+
   }, [])
 
   useEffect(() => {

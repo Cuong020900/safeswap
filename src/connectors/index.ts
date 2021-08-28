@@ -8,6 +8,8 @@ import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
 import {ChainId} from "@safemoon/sdk";
 
+const BSC_TESTNET_URL = process.env.REACT_APP_BSC_TESTNET_URL
+const ETH_TESTNET_URL = process.env.REACT_APP_ETH_TESTNET_URL
 const BSC_URL = process.env.REACT_APP_BSC_URL
 const ETH_URL = process.env.REACT_APP_ETH_URL
 const FORMATIC_KEY = process.env.REACT_APP_FORTMATIC_KEY
@@ -19,8 +21,10 @@ if (typeof BSC_URL === 'undefined' || typeof ETH_URL === 'undefined') {
 
 export const network = new NetworkConnector({
   urls: {
-    [ChainId.BSC_TESTNET]: BSC_URL,
-    [ChainId.ROPSTEN]: ETH_URL
+    [ChainId.BSC_TESTNET]: BSC_TESTNET_URL,
+    [ChainId.ROPSTEN]: ETH_TESTNET_URL,
+    [ChainId.MAINNET]: ETH_URL,
+    [ChainId.BSC_MAINNET]: BSC_URL
   },
   defaultChainId: ChainId.BSC_MAINNET
 })
