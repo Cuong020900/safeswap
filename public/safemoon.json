@@ -1,10 +1,10 @@
 {
 	"name": "safemoon",
-	"timestamp": "2020-08-25T15:41:29.665Z",
+	"timestamp": "2021-08-29T15:41:29.665Z",
 	"version": {
 		"major": 0,
-		"minor": 1,
-		"patch": 0
+		"minor": 2,
+		"patch": 1
 	},
 	"tags": {},
 	"logoURI": "http://swap.safemoon.agencywolfe.com/images/0xae13d989dac2f0debff460ac112a837c89baa7cd.svg",

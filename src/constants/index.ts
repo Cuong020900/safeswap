@@ -3,7 +3,7 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { ChainId, JSBI, Percent, Token, WETH } from '@safemoon/sdk'
 
-import { injected, binanceinjected, walletconnect } from '../connectors'
+import { injected, binanceinjected, walletconnect, walletconnectBSC } from '../connectors'
 
 
 // a list of tokens by chain
@@ -104,7 +104,8 @@ export interface WalletInfo {
   color: string
   primary?: true
   mobile?: true
-  mobileOnly?: true
+  mobileOnly?: true,
+  chainIds: number[]
 }
 
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
@@ -115,7 +116,8 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     description: 'Injected web3 provider.',
     href: null,
     color: '#010101',
-    primary: true
+    primary: true,
+    chainIds: [1, 3, 56, 97]
   },
   BINANCE: {
     connector: binanceinjected,
@@ -123,7 +125,8 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     iconName: 'bnb.svg',
     description: 'A Crypto Wallet for Binance Smart Chain',
     href: null,
-    color: '#F9A825'
+    color: '#F9A825',
+    chainIds: [56, 97]
   },
   METAMASK: {
     connector: injected,
@@ -131,15 +134,35 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     iconName: 'metamask.png',
     description: 'Easy-to-use browser extension.',
     href: null,
-    color: '#E8831D'
+    color: '#E8831D',
+    chainIds: [1, 3, 56, 97]
   },
   TRUSTWALLET: {
-    connector: process.env.REACT_APP_CHAIN_ID === ChainId.MAINNET.toString() ? walletconnect : injected,
+    connector: walletconnect,
     name: 'TrustWallet',
     iconName: 'trustwallet.svg',
     description: 'The most trusted & secure crypto wallet',
     href: null,
-    color: '#3375BB'
+    color: '#3375BB',
+    chainIds: [1]
+  },
+  TRUSTWALLET_TESTNET: {
+    connector: injected,
+    name: 'TrustWallet',
+    iconName: 'trustwallet.svg',
+    description: 'The most trusted & secure crypto wallet',
+    href: null,
+    color: '#3375BB',
+    chainIds: [3, 97]
+  },
+  TRUSTWALLET_BSC: {
+    connector: walletconnectBSC,
+    name: 'TrustWallet',
+    iconName: 'trustwallet.svg',
+    description: 'The most trusted & secure crypto wallet',
+    href: null,
+    color: '#3375BB',
+    chainIds: [56]
   },
   MATHWALLET: {
     connector: injected,
@@ -147,11 +170,14 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     iconName: 'mathwallet.svg',
     description: 'Your Gateway to the World of Blockchain',
     href: null,
-    color: '#000000'
+    color: '#000000',
+    chainIds: [1, 3, 56, 97]
   }
 }
 
 export const NetworkContextName = 'NETWORK'
+
+export const appEnv: string = process.env.REACT_APP_ENV || 'development'
 
 // default allowed slippage, in bips
 export const INITIAL_ALLOWED_SLIPPAGE = 50
@@ -175,4 +201,4 @@ export const MIN_ETH: JSBI = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16))
 export const BETTER_TRADE_LINK_THRESHOLD = new Percent(JSBI.BigInt(75), JSBI.BigInt(10000))
 
 // the Safemoon Default token list lives here
-export const DEFAULT_TOKEN_LIST_URL: string = 'https://swap.safemoon.net/safemoon.json';
+export const DEFAULT_TOKEN_LIST_URL: string = 'https://swap.safemoon.net/safemoon.json'

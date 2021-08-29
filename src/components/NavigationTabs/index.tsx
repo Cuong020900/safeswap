@@ -3,12 +3,13 @@ import styled from 'styled-components'
 import { darken } from 'polished'
 import { useTranslation } from 'react-i18next'
 import { NavLink, Link } from 'react-router-dom'
-import SVG from 'react-inlinesvg';
+import SVG from 'react-inlinesvg'
 
-import ArrowLeft from '../../assets/icons/arrow-left-3.svg';
+import ArrowLeft from '../../assets/icons/arrow-left-3.svg'
 import Row, { RowBetween } from '../Row'
 import QuestionHelper from '../QuestionHelper'
-import {ButtonGray} from "../Button";
+import { ButtonGray } from '../Button'
+import { NETWORK_TYPE } from '../WalletModal'
 
 const Tabs = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -23,8 +24,11 @@ const LimitedTabs = styled(Tabs)`
   background-color: ${({ theme }) => theme.bg1};
 `
 
-const activeClassName = 'ACTIVE'
+const WalletTabs = styled(Tabs)`
+  background-color: ${({ theme }) => theme.bg1};
+`
 
+const activeClassName = 'ACTIVE'
 
 const StyledNavLink = styled(NavLink).attrs({
   activeClassName
@@ -33,7 +37,7 @@ const StyledNavLink = styled(NavLink).attrs({
   align-items: center;
   justify-content: center;
   height: 40px;
-  border-radius: .75rem;
+  border-radius: 0.75rem;
   outline: none;
   cursor: pointer;
   text-decoration: none;
@@ -55,19 +59,40 @@ const StyledNavLink = styled(NavLink).attrs({
   }
 `
 
+const WalletButton = styled.button<{ active?: boolean }>`
+  ${({ theme }) => theme.flexRowNoWrap}
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-radius: 0.75rem;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: ${({ theme, active }) => (active ? theme.text1 : theme.text3)};
+  background-color: ${({ theme, active }) => (active ? theme.bg3 : 'transparent')};
+  border: none;
+  font-size: 0.875rem;
+  width: 50%;
+  transition: all ease 0.3s;
+
+  :hover,
+  :focus {
+    color: ${({ theme }) => darken(0.1, theme.text1)};
+    outline: none;
+  }
+`
+
 const ActiveText = styled.div`
   font-weight: 500;
   font-size: 20px;
   margin-left: 8px;
 `
 
-
-
 const StyledArrowLeft = styled(SVG).attrs(props => ({
-    ...props,
-    src: ArrowLeft,
-    width: 24,
-    height: 24
+  ...props,
+  src: ArrowLeft,
+  width: 24,
+  height: 24
 }))`
   color: ${({ theme }) => theme.text1};
   width: 24px;
@@ -111,17 +136,38 @@ export function SwapPoolTabs({ active }: { active: 'swap' | 'pool' }) {
   )
 }
 
+export function ConnectWalletTabs({ active, onChangeProviders }: { active: string; onChangeProviders: (newNetwork: string) => void }) {
+  return (
+    <WalletTabs style={{ marginBottom: '20px' }}>
+      <WalletButton
+        id={`bsc-network`}
+        active={active === NETWORK_TYPE.BSC}
+        onClick={onChangeProviders.bind(this, NETWORK_TYPE.BSC)}
+      >
+        BSC
+      </WalletButton>
+      <WalletButton 
+        id={`ethereum-network`} 
+        active={active === NETWORK_TYPE.ETH}
+        onClick={onChangeProviders.bind(this, NETWORK_TYPE.ETH)}
+      >
+        Etheurem
+      </WalletButton>
+    </WalletTabs>
+  )
+}
+
 export function FindPoolTabs() {
   const { t } = useTranslation()
   return (
     <Tabs>
       <RowBetween>
-          <Row align={'center'}>
-              <HistoryLink to="/pool">
-                  <StyledArrowLeft />
-              </HistoryLink>
-              <ActiveText>{t('importpool')}</ActiveText>
-          </Row>
+        <Row align={'center'}>
+          <HistoryLink to="/pool">
+            <StyledArrowLeft />
+          </HistoryLink>
+          <ActiveText>{t('importpool')}</ActiveText>
+        </Row>
         <QuestionHelper text={t('usethistool')} />
       </RowBetween>
     </Tabs>
@@ -133,16 +179,13 @@ export function AddTabs() {
   return (
     <Tabs>
       <RowBetween>
-          <Row align={'center'}>
-              <HistoryLink to="/pool">
-                  <StyledArrowLeft />
-              </HistoryLink>
-              <ActiveText>{t('addLiquidity')}</ActiveText>
-          </Row>
-        <QuestionHelper
-          text={t('whenyouaddliquidity')
-          }
-        />
+        <Row align={'center'}>
+          <HistoryLink to="/pool">
+            <StyledArrowLeft />
+          </HistoryLink>
+          <ActiveText>{t('addLiquidity')}</ActiveText>
+        </Row>
+        <QuestionHelper text={t('whenyouaddliquidity')} />
       </RowBetween>
     </Tabs>
   )
@@ -153,36 +196,30 @@ export function RemoveTabs({ onChangeDetails, detailed }: any) {
   return (
     <Tabs>
       <RowBetween>
-          <Row align={'center'}>
-              <HistoryLink to="/pool">
-                  <StyledArrowLeft />
-              </HistoryLink>
-              <ActiveText>{t('removeLiquidity')}</ActiveText>
-          </Row>
-          <StyledGrayButton onClick={onChangeDetails}>
-              {detailed ? 'Simple' : 'Detailed'}
-          </StyledGrayButton>
+        <Row align={'center'}>
+          <HistoryLink to="/pool">
+            <StyledArrowLeft />
+          </HistoryLink>
+          <ActiveText>{t('removeLiquidity')}</ActiveText>
+        </Row>
+        <StyledGrayButton onClick={onChangeDetails}>{detailed ? 'Simple' : 'Detailed'}</StyledGrayButton>
       </RowBetween>
     </Tabs>
   )
 }
 
-
-export function SelectToken({ onDismiss, tooltipOpen }: { tooltipOpen: boolean, onDismiss: () => void }) {
+export function SelectToken({ onDismiss, tooltipOpen }: { tooltipOpen: boolean; onDismiss: () => void }) {
   const { t } = useTranslation()
   return (
-    <Tabs style={{ marginBottom: '0.625rem'}}>
+    <Tabs style={{ marginBottom: '0.625rem' }}>
       <RowBetween>
-          <Row align={'center'}>
-              <HistoryLinkButton onClick={onDismiss} >
-                  <StyledArrowLeft />
-              </HistoryLinkButton>
-              <ActiveText>{t('selectToken')}</ActiveText>
-          </Row>
-        <QuestionHelper
-            disabled={tooltipOpen}
-            text={t('findAToken')}
-        />
+        <Row align={'center'}>
+          <HistoryLinkButton onClick={onDismiss}>
+            <StyledArrowLeft />
+          </HistoryLinkButton>
+          <ActiveText>{t('selectToken')}</ActiveText>
+        </Row>
+        <QuestionHelper disabled={tooltipOpen} text={t('findAToken')} />
       </RowBetween>
     </Tabs>
   )
@@ -191,14 +228,14 @@ export function SelectToken({ onDismiss, tooltipOpen }: { tooltipOpen: boolean, 
 export function SettingsTab({ onDismiss }: { onDismiss: any }) {
   const { t } = useTranslation()
   return (
-    <Tabs style={{ marginBottom: '0.625rem'}}>
+    <Tabs style={{ marginBottom: '0.625rem' }}>
       <RowBetween>
-          <Row align={'center'}>
-              <HistoryLinkButton onClick={onDismiss} >
-                  <StyledArrowLeft />
-              </HistoryLinkButton>
-              <ActiveText>Settings</ActiveText>
-          </Row>
+        <Row align={'center'}>
+          <HistoryLinkButton onClick={onDismiss}>
+            <StyledArrowLeft />
+          </HistoryLinkButton>
+          <ActiveText>Settings</ActiveText>
+        </Row>
       </RowBetween>
     </Tabs>
   )

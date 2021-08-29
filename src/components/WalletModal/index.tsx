@@ -10,7 +10,7 @@ import Modal from '../Modal'
 import AccountDetails from '../AccountDetails'
 import PendingView from './PendingView'
 import Option from './Option'
-import { SUPPORTED_WALLETS } from '../../constants'
+import { appEnv, SUPPORTED_WALLETS } from '../../constants'
 import { ExternalLink } from '../../theme'
 import MetamaskIcon from '../../assets/images/metamask.png'
 import TrustWalletIcon from '../../assets/images/trustwallet.svg'
@@ -21,9 +21,11 @@ import { injected, binanceinjected, fortmatic, portis } from '../../connectors'
 import { OVERLAY_READY } from '../../connectors/Fortmatic'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { useTranslation } from 'react-i18next'
-import Row from "../Row";
-import SVG from "react-inlinesvg";
-import ArrowLeft from "../../assets/icons/arrow-left-3.svg";
+import Row from '../Row'
+import SVG from 'react-inlinesvg'
+import ArrowLeft from '../../assets/icons/arrow-left-3.svg'
+import { AutoColumn } from '../Column'
+import { ConnectWalletTabs } from '../NavigationTabs'
 
 const CloseIcon = styled.div`
   position: absolute;
@@ -113,7 +115,6 @@ const HoverText = styled.div`
   }
 `
 
-
 const ActiveText = styled.div`
   font-weight: 500;
   font-size: 20px;
@@ -147,6 +148,11 @@ const WALLET_VIEWS = {
   PENDING: 'pending'
 }
 
+export const NETWORK_TYPE = {
+  ETH: 'ethereum',
+  BSC: 'binanceSmartChain'
+}
+
 export default function WalletModal({
   pendingTransactions,
   confirmedTransactions,
@@ -157,7 +163,8 @@ export default function WalletModal({
   ENSName?: string
 }) {
   // important that these are destructed from the account-specific web3-react context
-  const { active, account, connector, activate, error } = useWeb3React()
+  const { active, account, connector, activate, error, chainId } = useWeb3React()
+  const [selectedNetwork, setSelectedNetwork] = useState(NETWORK_TYPE.BSC)
 
   const { t } = useTranslation()
 
@@ -171,6 +178,16 @@ export default function WalletModal({
   const toggleWalletModal = useWalletModalToggle()
 
   const previousAccount = usePrevious(account)
+
+  useEffect(() => {
+    if (chainId) {
+      if (chainId === 56 || chainId === 97) {
+        setSelectedNetwork(NETWORK_TYPE.BSC)
+      } else {
+        setSelectedNetwork(NETWORK_TYPE.ETH)
+      }
+    }
+  }, [chainId])
 
   // close on connection, when logged out before
   useEffect(() => {
@@ -239,6 +256,27 @@ export default function WalletModal({
     const isMetamask = window.ethereum && window.ethereum.isMetaMask
     return Object.keys(SUPPORTED_WALLETS).map(key => {
       const option = SUPPORTED_WALLETS[key]
+
+      let isValid = true
+      console.log(appEnv, option)
+      if (selectedNetwork === NETWORK_TYPE.BSC) {
+        if (
+          (appEnv === 'production' && !option.chainIds.includes(56)) ||
+          (appEnv !== 'production' && !option.chainIds.includes(97))
+        ) {
+          isValid = false
+        }
+      } else {
+        if (
+          (appEnv === 'production' && !option.chainIds.includes(1)) ||
+          (appEnv !== 'production' && !option.chainIds.includes(3))
+        ) {
+          isValid = false
+        }
+      }
+      if (!isValid) {
+        return null
+      }
       // check for mobile options
       if (isMobile) {
         //disable portis on mobile for now
@@ -428,7 +466,10 @@ export default function WalletModal({
               tryActivation={tryActivation}
             />
           ) : (
-            <OptionGrid>{getOptions()}</OptionGrid>
+            <AutoColumn gap={'sm'}>
+              <ConnectWalletTabs active={selectedNetwork} onChangeProviders={(newNetwork) => {setSelectedNetwork(newNetwork)}}/>
+              <OptionGrid>{getOptions()}</OptionGrid>
+            </AutoColumn>
           )}
           {walletView !== WALLET_VIEWS.PENDING && (
             <Blurb>
