@@ -8,7 +8,7 @@ import { AutoColumn } from '../Column'
 import { RowBetween, RowFixed } from '../Row'
 
 import { darken } from 'polished'
-import {GAS_PRICE, GAS_PRICE_GWEI, useGasPrices} from "../../state/user/hooks";
+import { GAS_PRICE, GAS_PRICE_GWEI, useGasPrices, useGasType } from '../../state/user/hooks'
 import {BigNumber} from "ethers";
 
 enum SlippageError {
@@ -130,6 +130,7 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
   const theme = useContext(ThemeContext)
   const { t } = useTranslation()
   const gasPrices = useGasPrices();
+  const gasType = useGasType();
 
   const inputRef = useRef<HTMLInputElement>()
 
@@ -198,7 +199,7 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
               onClick={() => {
                 setGasPrice(gasPrices.default, 'default')
               }}
-              active={gasPrice === gasPrices.default}
+              active={gasType === 'default'}
           >
             Standard ({BigNumber.from(gasPrices.default).div(10 ** 9).toString()})
           </GasOption>
@@ -206,7 +207,7 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
               onClick={() => {
                 setGasPrice(gasPrices.fast, 'fast')
               }}
-              active={gasPrice === gasPrices.fast}
+              active={gasType === 'fast'}
           >
             Fast ({BigNumber.from(gasPrices.fast).div(10 ** 9).toString()})
           </GasOption>
@@ -214,7 +215,7 @@ export default function SlippageTabs({ rawSlippage, setRawSlippage, deadline, se
               onClick={() => {
                 setGasPrice(gasPrices.instant, 'instant')
               }}
-              active={gasPrice === gasPrices.instant}
+              active={gasType === 'instant'}
           >
             Instant ({BigNumber.from(gasPrices.instant).div(10 ** 9).toString()})
           </GasOption>

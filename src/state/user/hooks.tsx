@@ -292,7 +292,7 @@ export function useTrackedTokenPairs(): [Token, Token][] {
 export function useGasPrice(): string {
   const { chainId } = useActiveWeb3React()
   const userGas = useSelector<AppState, AppState['user']['gasPrice']>((state) => state.user.gasPrice)
-  return chainId === ChainId.MAINNET ? userGas : GAS_PRICE_GWEI.testnet
+  return chainId === ChainId.BSC_TESTNET ? GAS_PRICE_GWEI.testnet : userGas;
 }
 
 export function useGasPrices(): any {

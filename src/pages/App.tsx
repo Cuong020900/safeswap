@@ -66,6 +66,7 @@ export default function App() {
   const gasPrices = useGasPrices();
   const gasType = useGasType();
   const dispatch = useDispatch();
+  const { chainId } = useActiveWeb3React();
 
   const getEthGasPrice = useCallback(async () => {
     try {
@@ -88,14 +89,15 @@ export default function App() {
       const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
       provider.on("network", (newNetwork, oldNetwork) => {
         if (oldNetwork) {
-          dispatch(updateGasPrice({ gasPrice: gasPrices[gasType], gasPriceType: gasType }))
           window.location.reload();
         }
       });
     }
-
-
   }, [])
+
+  useEffect(() => {
+    dispatch(updateGasPrice({ gasPrice: gasPrices[gasType], gasPriceType: gasType }))
+  }, [gasPrices, gasType, chainId, dispatch])
 
   useEffect(() => {
     getEthGasPrice();

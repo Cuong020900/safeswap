@@ -167,6 +167,12 @@ export default createReducer(initialState, builder =>
       state.gasPriceType = action.payload.gasPriceType;
     })
     .addCase(updateGasPricesList, (state, action) => {
-      state.gasPrices[action.payload.chainId] = action.payload.gasPrices
+      if(state.gasPrices) {
+        state.gasPrices[action.payload.chainId] = action.payload.gasPrices
+      } else {
+        state.gasPrices = initialState.gasPrices;
+        state.gasPrices[action.payload.chainId] = action.payload.gasPrices;
+
+      }
     })
 )
