@@ -1,4 +1,4 @@
-import {ChainId, Currency, CurrencyAmount, currencyEquals, ETHER, JSBI, Token} from '@safemoon/sdk'
+import { ChainId, Currency, CurrencyAmount, currencyEquals, ETHER, JSBI, Token } from '@safemoon/sdk'
 import React, { CSSProperties, memo, useContext, useMemo } from 'react'
 import { FixedSizeList } from 'react-window'
 import { Text } from 'rebass'
@@ -46,7 +46,7 @@ export default function CurrencyList({
 
   const CurrencyRow = useMemo(() => {
     return memo(function CurrencyRow({ index, style }: { index: number; style: CSSProperties }) {
-      const currency = index === 0 ? Currency.ETHER : currencies[index - 1]
+      const currency = currencies[index]
       const key = currencyKey(currency)
       const isDefault = isDefaultToken(defaultTokens, currency)
       const customAdded = Boolean(!isDefault && currency instanceof Token && allTokens[currency.address])
@@ -151,7 +151,7 @@ export default function CurrencyList({
     <FixedSizeList
       width="100%"
       height={500}
-      itemCount={currencies.length + 1}
+      itemCount={currencies.length}
       itemSize={56}
       style={{ flex: '1' }}
       itemKey={index => currencyKey(currencies[index])}

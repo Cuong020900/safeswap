@@ -1,4 +1,4 @@
-import { Currency, Token } from '@safemoon/sdk'
+import { Currency, ETHER, Token } from '@safemoon/sdk'
 import React, { KeyboardEvent, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from 'react-i18next'
@@ -19,10 +19,10 @@ import Tooltip from '../Tooltip'
 import CommonBases from './CommonBases'
 import { filterTokens } from './filtering'
 import { useTokenComparator } from './sorting'
-import {InputContainer, PaddedColumn, SearchInput} from './styleds'
+import { InputContainer, PaddedColumn, SearchInput } from './styleds'
 import CurrencyList from './CurrencyList'
 import SortButton from './SortButton'
-import {SelectToken} from "../NavigationTabs";
+import { SelectToken } from '../NavigationTabs'
 import SVG from 'react-inlinesvg';
 import SearchIcon from '../../assets/icons/search-normal.svg';
 
@@ -98,6 +98,17 @@ export default function CurrencySearchModal({
       ...sorted.filter(token => token.symbol.toLowerCase() !== symbolMatch[0])
     ]
   }, [filteredTokens, searchQuery, searchToken, tokenComparator])
+
+  const currencies: Currency[] = useMemo(() => {
+    if("eth".includes(searchQuery.toLowerCase()) || "ethereum".includes(searchQuery.toLowerCase())) {
+      return [
+        ETHER,
+        ...filteredSortedTokens
+      ]
+    }
+
+    return filteredSortedTokens;
+  }, [searchQuery, filteredSortedTokens])
 
   const handleCurrencySelect = useCallback(
     (currency: Currency) => {
@@ -184,7 +195,7 @@ export default function CurrencySearchModal({
           </Tooltip>
         </PaddedColumn>
         <CurrencyList
-          currencies={filteredSortedTokens}
+          currencies={currencies}
           allBalances={allTokenBalances}
           onCurrencySelect={handleCurrencySelect}
           otherCurrency={otherSelectedCurrency}
