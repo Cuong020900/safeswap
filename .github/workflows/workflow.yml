@@ -56,13 +56,13 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ REGION.ENV }}
+          aws-region: us-east-2
           
       - name: deploy to s3 Production
         if: github.ref == 'refs/heads/main'
-        run: echo " Deploying to Production " && aws s3 sync ./build s3://${{ PRODUCTION.ENV }} --acl public-read
+        run: echo " Deploying to Production " && aws s3 sync ./build s3://swap-safemoon --acl public-read
         
                   
       - name: deploy to s3 Staging
         if: github.ref == 'refs/heads/staging'
-        run: echo " Deploying to Staging " && aws s3 sync ./build s3://${{ STAGING.ENV }} --acl public-read
+        run: echo " Deploying to Staging " && aws s3 sync ./build s3://stage-swapsafemoon --acl public-read
