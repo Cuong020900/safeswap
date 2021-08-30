@@ -24,11 +24,11 @@ jobs:
       with:
         node-version: "15"
         
-    - name: npm Install
-      run: npm install
+    - name: Install packages
+      run: yarn install
 
     - name: Build
-      run: npm run-script build
+      run: yarn cache clean && yarn build
 
     - name: zip build result
       run: tar -czvf build.tar.gz build 
