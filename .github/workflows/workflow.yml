@@ -13,7 +13,7 @@ jobs:
   # This workflow contains two jobs ( build and deploy )
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
  
 
