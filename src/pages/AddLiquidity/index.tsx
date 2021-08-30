@@ -252,7 +252,7 @@ export default function AddLiquidity({
           </Text>
         </Row>
         <TYPE.italic fontSize={12} textAlign="left" padding={'8px 0 0 0 '}>
-          {t('outputIsEstimated') + ' ${allowedSlippage / 100}% ' + t('yourTransactionWill')}
+          {t('outputIsEstimated')} {allowedSlippage / 100}% {t('yourTransactionWill')}
         </TYPE.italic>
       </AutoColumn>
     )
@@ -362,7 +362,6 @@ export default function AddLiquidity({
               showMaxButton={!atMaxAmounts[Field.CURRENCY_A]}
               currency={currencies[Field.CURRENCY_A]}
               id="add-liquidity-input-tokena"
-              showCommonBases
             />
             <ColumnCenter>
               <SVG
@@ -382,7 +381,6 @@ export default function AddLiquidity({
               showMaxButton={!atMaxAmounts[Field.CURRENCY_B]}
               currency={currencies[Field.CURRENCY_B]}
               id="add-liquidity-input-tokenb"
-              showCommonBases
             />
             {!account ? (
               <ButtonLight onClick={toggleWalletModal}>{t('connectWallet')}</ButtonLight>

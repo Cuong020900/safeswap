@@ -22,7 +22,6 @@ import Identicon from '../Identicon'
 import { ButtonSecondary } from '../Button'
 import { ExternalLink as LinkIcon } from 'react-feather'
 import { ExternalLink, LinkStyledButton, TYPE } from '../../theme'
-import { disconnect } from 'cluster'
 
 const HeaderRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap};

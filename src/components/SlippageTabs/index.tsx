@@ -8,7 +8,7 @@ import { AutoColumn } from '../Column'
 import { RowBetween, RowFixed } from '../Row'
 
 import { darken } from 'polished'
-import { GAS_PRICE, GAS_PRICE_GWEI, useGasPrices, useGasType } from '../../state/user/hooks'
+import { useGasPrices, useGasType } from '../../state/user/hooks'
 import {BigNumber} from "ethers";
 
 enum SlippageError {

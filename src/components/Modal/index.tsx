@@ -4,7 +4,6 @@ import { animated, useTransition, useSpring } from 'react-spring'
 import { DialogOverlay, DialogContent } from '@reach/dialog'
 import { isMobile } from 'react-device-detect'
 import '@reach/dialog/styles.css'
-import { transparentize } from 'polished'
 import { useGesture } from 'react-use-gesture'
 import BodyBG from '../../assets/images/body-bg.jpg';
 

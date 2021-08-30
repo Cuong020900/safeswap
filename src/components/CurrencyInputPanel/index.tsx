@@ -1,4 +1,4 @@
-import {ChainId, Currency, Pair} from '@safemoon/sdk'
+import {Currency, Pair} from '@safemoon/sdk'
 import React, { useState, useContext, useCallback } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import { darken } from 'polished'
@@ -156,7 +156,6 @@ interface CurrencyInputPanelProps {
     showSendWithSwap?: boolean
     otherCurrency?: Currency | null
     id: string
-    showCommonBases?: boolean
 }
 
 export default function CurrencyInputPanel({
@@ -173,8 +172,7 @@ export default function CurrencyInputPanel({
     hideInput = false,
     showSendWithSwap = false,
     otherCurrency = null,
-    id,
-    showCommonBases
+    id
 }: CurrencyInputPanelProps) {
     const {t} = useTranslation()
     const { chainId } = useActiveWeb3React();
@@ -270,7 +268,6 @@ export default function CurrencyInputPanel({
                     showSendWithSwap={showSendWithSwap}
                     hiddenCurrency={currency}
                     otherSelectedCurrency={otherCurrency}
-                    showCommonBases={showCommonBases}
                 />
             )}
         </InputPanel>

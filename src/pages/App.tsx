@@ -101,7 +101,8 @@ export default function App() {
 
   useEffect(() => {
     getEthGasPrice();
-  }, [])
+  }, [getEthGasPrice])
+
   return (
     <Suspense fallback={null}>
       <HashRouter>

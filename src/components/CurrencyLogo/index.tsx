@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import BNBLogo from '../../assets/images/bnb.svg'
 import EthereumLogo from '../../assets/images/Ethereum.svg'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
-import uriToHttp from '../../utils/uriToHttp'
 import {useActiveWeb3React} from "../../hooks";
 
 const getTokenLogoURL = address =>

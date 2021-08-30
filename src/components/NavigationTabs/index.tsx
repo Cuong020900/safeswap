@@ -226,7 +226,6 @@ export function SelectToken({ onDismiss, tooltipOpen }: { tooltipOpen: boolean; 
 }
 
 export function SettingsTab({ onDismiss }: { onDismiss: any }) {
-  const { t } = useTranslation()
   return (
     <Tabs style={{ marginBottom: '0.625rem' }}>
       <RowBetween>

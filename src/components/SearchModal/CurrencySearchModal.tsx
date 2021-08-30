@@ -1,27 +1,20 @@
 import { Currency, ETHER, Token } from '@safemoon/sdk'
-import React, { KeyboardEvent, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import React, { KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from 'react-i18next'
-import { Text } from 'rebass'
-import styled, { ThemeContext } from 'styled-components'
-import Card from '../../components/Card'
+import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
 import { useAllTokens, useToken } from '../../hooks/Tokens'
 import useInterval from '../../hooks/useInterval'
 import { useAllTokenBalances, useTokenBalance } from '../../state/wallet/hooks'
-import { CloseIcon, LinkStyledButton } from '../../theme'
 import { isAddress } from '../../utils'
 import Column from '../Column'
 import Modal from '../Modal'
-import QuestionHelper from '../QuestionHelper'
-import { AutoRow, RowBetween } from '../Row'
 import Tooltip from '../Tooltip'
-import CommonBases from './CommonBases'
 import { filterTokens } from './filtering'
 import { useTokenComparator } from './sorting'
 import { InputContainer, PaddedColumn, SearchInput } from './styleds'
 import CurrencyList from './CurrencyList'
-import SortButton from './SortButton'
 import { SelectToken } from '../NavigationTabs'
 import SVG from 'react-inlinesvg';
 import SearchIcon from '../../assets/icons/search-normal.svg';
@@ -44,7 +37,6 @@ interface CurrencySearchModalProps {
   showSendWithSwap?: boolean
   onCurrencySelect?: (currency: Currency) => void
   otherSelectedCurrency?: Currency
-  showCommonBases?: boolean
 }
 
 export default function CurrencySearchModal({
@@ -53,16 +45,14 @@ export default function CurrencySearchModal({
   onCurrencySelect,
   hiddenCurrency,
   showSendWithSwap,
-  otherSelectedCurrency,
-  showCommonBases = false
+  otherSelectedCurrency
 }: CurrencySearchModalProps) {
   const { t } = useTranslation()
-  const { account, chainId } = useActiveWeb3React()
-  const theme = useContext(ThemeContext)
+  const { account } = useActiveWeb3React()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false)
-  const [invertSearchOrder, setInvertSearchOrder] = useState<boolean>(false)
+  const [invertSearchOrder] = useState<boolean>(false)
   const allTokens = useAllTokens()
 
   // if the current input is an address, and we don't have the token in context, try to fetch it and import
@@ -132,9 +122,6 @@ export default function CurrencySearchModal({
     setTooltipOpen(false)
   }, [])
 
-  const openTooltip = useCallback(() => {
-    setTooltipOpen(true)
-  }, [setTooltipOpen])
   const closeTooltip = useCallback(() => setTooltipOpen(false), [setTooltipOpen])
 
   useInterval(
