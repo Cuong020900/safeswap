@@ -28,7 +28,7 @@ jobs:
       run: npm install
 
     - name: Build
-      run: npm build
+      run: npm run-script build
 
     - name: zip build result
       run: tar -czvf build.tar.gz build 
