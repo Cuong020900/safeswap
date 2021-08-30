@@ -28,7 +28,7 @@ jobs:
       run: yarn install
 
     - name: Build
-      run: sudo gatsby clean && sudo gatsby build
+      run: yarn build
 
     - name: zip build result
       run: tar -czvf build.tar.gz build 
