@@ -73,4 +73,5 @@ export const MenuItem = styled(RowBetween)`
 
 export const SearchInput = styled(Input)`
   color: ${({ theme }) => theme.text1};
+  flex: 1;
 `
