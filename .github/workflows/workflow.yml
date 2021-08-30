@@ -1,4 +1,4 @@
-name: Swap deploy flow
+name: Swap deploy flow Init
 
 # This workflow recognizes the branch and pushes to the appropriate s3 bucket as defined in your Secrets. The workflow can be scaled almost infinitely
 
