@@ -35,6 +35,11 @@ const CloseIcon = styled.div`
     cursor: pointer;
     opacity: 0.6;
   }
+
+  ${({ theme }) => theme.mediaWidth.upToMedium`
+    right: 1rem;
+    top: 1rem;
+  `};
 `
 
 const CloseColor = styled(Close)`
@@ -258,7 +263,6 @@ export default function WalletModal({
       const option = SUPPORTED_WALLETS[key]
 
       let isValid = true
-      console.log(appEnv, option)
       if (selectedNetwork === NETWORK_TYPE.BSC) {
         if (
           (appEnv === 'production' && !option.chainIds.includes(56)) ||

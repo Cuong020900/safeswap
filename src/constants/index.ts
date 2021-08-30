@@ -144,7 +144,8 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     description: 'The most trusted & secure crypto wallet',
     href: null,
     color: '#3375BB',
-    chainIds: [1]
+    chainIds: [1],
+    mobile: true
   },
   TRUSTWALLET_TESTNET: {
     connector: injected,
@@ -162,7 +163,8 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     description: 'The most trusted & secure crypto wallet',
     href: null,
     color: '#3375BB',
-    chainIds: [56]
+    chainIds: [56],
+    mobile: true
   },
   MATHWALLET: {
     connector: injected,
