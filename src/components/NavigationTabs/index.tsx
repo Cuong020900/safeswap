@@ -151,7 +151,7 @@ export function ConnectWalletTabs({ active, onChangeProviders }: { active: strin
         active={active === NETWORK_TYPE.ETH}
         onClick={onChangeProviders.bind(this, NETWORK_TYPE.ETH)}
       >
-        Etheurem
+        Ethereum
       </WalletButton>
     </WalletTabs>
   )
