@@ -1,5 +1,4 @@
-import { Currency, Token } from '@safemoon/sdk'
-import { transparentize } from 'polished'
+import { ChainId, Currency, Token } from '@safemoon/sdk'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
@@ -15,22 +14,18 @@ import { AutoColumn } from '../Column'
 import { AlertTriangle } from 'react-feather'
 import { ButtonError } from '../Button'
 import { useTokenWarningDismissal } from '../../state/user/hooks'
+import Modal from '../Modal'
 
 const Wrapper = styled.div<{ error: boolean }>`
-  background: ${({ theme }) => transparentize(0.6, theme.white)};
+  background: ${({ theme }) => theme.bg1};
+  border: 1px solid ${({ theme }) => theme.text4};
   padding: 0.75rem;
   border-radius: 20px;
 `
 
-const WarningContainer = styled.div`
-  max-width: 420px;
-  width: 100%;
-  padding: 1rem;
-  background: rgba(242, 150, 2, 0.05);
-  border: 1px solid #f3841e;
+const ModalWrapper = styled.div`
+  padding: 1.5rem;
   box-sizing: border-box;
-  border-radius: 20px;
-  margin-bottom: 2rem;
 `
 
 const StyledWarningIcon = styled(AlertTriangle)`
@@ -79,7 +74,9 @@ export default function TokenWarningCard({ token, ...rest }: TokenWarningCardPro
               : token.name || token.symbol}
           </TYPE.main>
           <ExternalLink style={{ fontWeight: 400 }} href={getEtherscanLink(chainId, token.address, 'token')}>
-            <TYPE.blue> (View on BscScan)</TYPE.blue>
+            <TYPE.blue>
+              (View on {chainId === ChainId.MAINNET || chainId === ChainId.ROPSTEN ? 'Etherscan' : 'BscScan'})
+            </TYPE.blue>
           </ExternalLink>
         </AutoColumn>
       </AutoRow>
@@ -87,53 +84,68 @@ export default function TokenWarningCard({ token, ...rest }: TokenWarningCardPro
   )
 }
 
-export function TokenWarningCards({ currencies }: { currencies: { [field in Field]?: Currency } }) {
+export function TokenWarningCards({
+  currencies,
+  open,
+  onDismiss
+}: {
+  currencies: { [field in Field]?: Currency }
+  open: boolean
+  onDismiss: () => void
+}) {
   const { chainId } = useActiveWeb3React()
   const [dismissedToken0, dismissToken0] = useTokenWarningDismissal(chainId, currencies[Field.INPUT])
   const [dismissedToken1, dismissToken1] = useTokenWarningDismissal(chainId, currencies[Field.OUTPUT])
 
   return (
-    <WarningContainer className="token-warning-container">
-      <AutoColumn gap="lg">
-        <AutoRow gap="6px">
-          <StyledWarningIcon />
-          <TYPE.main color={'red2'}>Token imported</TYPE.main>
-        </AutoRow>
-        <TYPE.body color={'red2'}>
-          Anyone can create and name any BEP20 token on Binance Smart Chain, including creating fake versions of existing tokens
-          and tokens that claim to represent projects that do not have a token.
-        </TYPE.body>
-        <TYPE.body color={'red2'}>
-          Similar to BscScan, this site can load arbitrary tokens via token addresses. Please do your own research
-          before interacting with any BEP20 token.
-        </TYPE.body>
-        {Object.keys(currencies).map(field => {
-          const dismissed = field === Field.INPUT ? dismissedToken0 : dismissedToken1
-          return currencies[field] instanceof Token && !dismissed ? (
-            <TokenWarningCard key={field} token={currencies[field]} />
-          ) : null
-        })}
-        <RowBetween>
-          <div />
-          <ButtonError
-            error={true}
-            width={'140px'}
-            padding="0.5rem 1rem"
-            style={{
-              borderRadius: '10px'
-            }}
-            onClick={() => {
-              dismissToken0 && dismissToken0()
-              dismissToken1 && dismissToken1()
-            }}
-          >
-            <TYPE.body color="white" className="token-dismiss-button">
-              I understand
-            </TYPE.body>
-          </ButtonError>
-          <div />
-        </RowBetween>
-      </AutoColumn>
-    </WarningContainer>
+    <Modal isOpen={open} onDismiss={onDismiss}>
+      <ModalWrapper>
+        <AutoColumn gap="lg">
+          <AutoRow gap="6px">
+            <StyledWarningIcon />
+            <TYPE.main color={'red2'}>Token imported</TYPE.main>
+          </AutoRow>
+          <TYPE.body color={'text3'} lineHeight={'1.6'}>
+            Anyone can create and name any{' '}
+            {chainId === ChainId.MAINNET || chainId === ChainId.ROPSTEN ? 'ERC20' : 'BEP20'} token on{' '}
+            {chainId === ChainId.MAINNET || chainId === ChainId.ROPSTEN ? 'Ethereum' : 'Binance Smart Chain'}, including
+            creating fake versions of existing tokens and tokens that claim to represent projects that do not have a
+            token.
+          </TYPE.body>
+          <TYPE.body color={'text3'} lineHeight={'1.6'}>
+            Similar to {chainId === ChainId.MAINNET || chainId === ChainId.ROPSTEN ? 'Etherscan' : 'BscScan'}, this site
+            can load arbitrary tokens via token addresses. Please do your own research before interacting with any{' '}
+            {chainId === ChainId.MAINNET || chainId === ChainId.ROPSTEN ? 'ERC20' : 'BEP20'}
+            token.
+          </TYPE.body>
+          {Object.keys(currencies).map(field => {
+            const dismissed = field === Field.INPUT ? dismissedToken0 : dismissedToken1
+            return currencies[field] instanceof Token && !dismissed ? (
+              <TokenWarningCard key={field} token={currencies[field]} />
+            ) : null
+          })}
+          <RowBetween>
+            <div />
+            <ButtonError
+              error={true}
+              width={'100%'}
+              style={{
+                borderRadius: '10px',
+                height: 48
+              }}
+              onClick={() => {
+                dismissToken0 && dismissToken0()
+                dismissToken1 && dismissToken1()
+              }}
+            >
+              <TYPE.body color="white" className="token-dismiss-button">
+                I understand
+              </TYPE.body>
+            </ButtonError>
+            <div />
+          </RowBetween>
+        </AutoColumn>
+      </ModalWrapper>
+    </Modal>
   )
 }
