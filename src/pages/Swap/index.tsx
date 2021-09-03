@@ -1,6 +1,6 @@
 import { CurrencyAmount, JSBI, Trade } from '@safemoon/sdk'
-import React, {useCallback, useContext, useEffect, useRef, useState} from 'react'
-import SVG from 'react-inlinesvg';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import SVG from 'react-inlinesvg'
 import ReactGA from 'react-ga'
 import { Text } from 'rebass'
 import { useTranslation } from 'react-i18next'
@@ -24,7 +24,7 @@ import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useAppro
 import useENSAddress from '../../hooks/useENSAddress'
 import { useSwapCallback } from '../../hooks/useSwapCallback'
 import useWrapCallback, { WrapType } from '../../hooks/useWrapCallback'
-import {useSettingsMenuOpen, useToggleSettingsMenu, useWalletModalToggle} from '../../state/application/hooks'
+import { useSettingsMenuOpen, useToggleSettingsMenu, useWalletModalToggle } from '../../state/application/hooks'
 import { Field } from '../../state/swap/actions'
 import {
   useDefaultsFromURLSearch,
@@ -43,12 +43,14 @@ import { maxAmountSpend } from '../../utils/maxAmountSpend'
 import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import AppBody from '../AppBody'
 // @ts-ignore
-import TradeIcon from '../../assets/icons/trade.svg';
-import QuestionHelper from "../../components/QuestionHelper";
+import TradeIcon from '../../assets/icons/trade.svg'
+import QuestionHelper from '../../components/QuestionHelper'
 // @ts-ignore
-import SettingsIcon from "../../assets/icons/candle-2.svg";
-import SettingsModal from "../../components/SettingsModal";
-import getTokenSymbol from "../../utils/getTokenSymbol";
+import SettingsIcon from '../../assets/icons/candle-2.svg'
+import SettingsModal from '../../components/SettingsModal'
+import getTokenSymbol from '../../utils/getTokenSymbol'
+import { shouldShowSwapWarning } from '../../utils/shouldShowSwapWarning'
+import { SlippageWarning } from '../../components/SlippageWarning/SlippageWarning'
 
 const SettingsWrapper = styled.div`
   display: flex;
@@ -63,7 +65,6 @@ const SettingsWrapper = styled.div`
   background-color: ${({ theme }) => theme.bg3};
   color: ${({ theme }) => theme.text1};
   margin-right: 8px;
-  
 
   :hover,
   :focus {
@@ -88,13 +89,11 @@ export default function Swap() {
 
   const handleClickOutside = (e: any) => {
     if (node.current?.contains(e.target) ?? false) {
-      console.log("")
+      console.log('')
     } else {
       toggle()
-
     }
   }
-
 
   const { account, chainId } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
@@ -111,13 +110,7 @@ export default function Swap() {
 
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
-  const {
-    v2Trade,
-    currencyBalances,
-    parsedAmount,
-    currencies,
-    inputError: swapInputError
-  } = useDerivedSwapInfo()
+  const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo()
   const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
     currencies[Field.INPUT],
     currencies[Field.OUTPUT],
@@ -125,9 +118,7 @@ export default function Swap() {
   )
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
   const { address: recipientAddress } = useENSAddress(recipient)
-  const trade = showWrap
-    ? undefined
-    : v2Trade
+  const trade = showWrap ? undefined : v2Trade
 
   const parsedAmounts = showWrap
     ? {
@@ -280,23 +271,53 @@ export default function Swap() {
     setSwapState({ tradeToConfirm: trade, swapErrorMessage, txHash, attemptingTxn, showConfirm })
   }, [attemptingTxn, showConfirm, swapErrorMessage, trade, txHash])
 
+  const [swapWarningCurrency, setSwapWarningCurrency] = useState(null)
+
+  const handleInputSelect = useCallback(
+    inputCurrency => {
+      setApprovalSubmitted(false) // reset 2 step UI for approvals
+      onCurrencySelection(Field.INPUT, inputCurrency)
+      const showSwapWarning = shouldShowSwapWarning(inputCurrency)
+      if (showSwapWarning) {
+        setSwapWarningCurrency(inputCurrency)
+      } else {
+        setSwapWarningCurrency(null)
+      }
+    },
+    [onCurrencySelection]
+  )
+
+  const handleOutputSelect = useCallback(
+    outputCurrency => {
+      onCurrencySelection(Field.OUTPUT, outputCurrency)
+      const showSwapWarning = shouldShowSwapWarning(outputCurrency)
+      if (showSwapWarning) {
+        setSwapWarningCurrency(outputCurrency)
+      } else {
+        setSwapWarningCurrency(null)
+      }
+    },
+    [onCurrencySelection]
+  )
+
   return (
     <>
-      {showWarning && <TokenWarningCards currencies={currencies} />}
+      {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
+      <TokenWarningCards currencies={currencies} open={showWarning} onDismiss={() => {}} />
+      <SlippageWarning
+        onDismiss={() => setSwapWarningCurrency(null)}
+        open={swapWarningCurrency !== null}
+        token={swapWarningCurrency}
+      />
       <AppBody disabled={showWarning}>
         <RowBetween>
           <SwapPoolTabs active={'swap'} />
           <HeaderWrapper>
             <SettingsWrapper onClick={toggle}>
-              <SVG
-                  src={SettingsIcon}
-                  width={24}
-                  height={24}
-                  color={theme.text1}
-              />
+              <SVG src={SettingsIcon} width={24} height={24} color={theme.text1} />
             </SettingsWrapper>
             <SettingsModal open={open} onDismiss={handleClickOutside} />
-            <QuestionHelper text={t("swapDescription")}/>
+            <QuestionHelper text={t('swapDescription')} />
           </HeaderWrapper>
         </RowBetween>
         <Wrapper id="swap-page">
@@ -324,10 +345,7 @@ export default function Swap() {
               onMax={() => {
                 maxAmountInput && onUserInput(Field.INPUT, maxAmountInput.toExact())
               }}
-              onCurrencySelect={currency => {
-                setApprovalSubmitted(false) // reset 2 step UI for approvals
-                onCurrencySelection(Field.INPUT, currency)
-              }}
+              onCurrencySelect={handleInputSelect}
               otherCurrency={currencies[Field.OUTPUT]}
               id="swap-currency-input"
             />
@@ -335,18 +353,13 @@ export default function Swap() {
             <AutoColumn justify="space-between">
               <AutoRow justify="center" style={{ padding: '0 1rem' }}>
                 <ArrowWrapper
-                    clickable
-                    onClick={() => {
-                      setApprovalSubmitted(false) // reset 2 step UI for approvals
-                      onSwitchTokens()
-                    }}
+                  clickable
+                  onClick={() => {
+                    setApprovalSubmitted(false) // reset 2 step UI for approvals
+                    onSwitchTokens()
+                  }}
                 >
-                  <SVG
-                      src={TradeIcon}
-                      width={32}
-                      height={32}
-                      stroke={theme.text1}
-                  />
+                  <SVG src={TradeIcon} width={32} height={32} stroke={theme.text1} />
                 </ArrowWrapper>
               </AutoRow>
             </AutoColumn>
@@ -356,7 +369,7 @@ export default function Swap() {
               label={independentField === Field.INPUT && !showWrap ? t('toestimated') : t('toCapitalized')}
               showMaxButton={false}
               currency={currencies[Field.OUTPUT]}
-              onCurrencySelect={address => onCurrencySelection(Field.OUTPUT, address)}
+              onCurrencySelect={handleOutputSelect}
               otherCurrency={currencies[Field.INPUT]}
               id="swap-currency-output"
             />
@@ -364,13 +377,13 @@ export default function Swap() {
             {showWrap ? null : (
               <Card borderRadius={'20px'} padding={'0'}>
                 <AutoColumn gap="4px" justify={'center'}>
-                    <TradePrice
-                      inputCurrency={currencies[Field.INPUT]}
-                      outputCurrency={currencies[Field.OUTPUT]}
-                      price={trade?.executionPrice}
-                      showInverted={showInverted}
-                      setShowInverted={setShowInverted}
-                    />
+                  <TradePrice
+                    inputCurrency={currencies[Field.INPUT]}
+                    outputCurrency={currencies[Field.OUTPUT]}
+                    price={trade?.executionPrice}
+                    showInverted={showInverted}
+                    setShowInverted={setShowInverted}
+                  />
                 </AutoColumn>
               </Card>
             )}
