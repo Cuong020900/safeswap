@@ -46,7 +46,7 @@ export const walletconnect = new WalletConnectConnector({
 })
 
 export const walletconnectBSC = new WalletConnectConnector({
-  rpc: { [ChainId.MAINNET]: BSC_URL },
+  rpc: { [ChainId.BSC_MAINNET]: BSC_URL },
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
   pollingInterval: 15000
