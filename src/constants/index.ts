@@ -5,7 +5,6 @@ import { ChainId, JSBI, Percent, Token, WETH } from '@safemoon/sdk'
 
 import { injected, binanceinjected, walletconnect, walletconnectBSC } from '../connectors'
 
-
 // a list of tokens by chain
 type ChainTokenList = {
   readonly [chainId in ChainId]: Token[]
@@ -16,13 +15,13 @@ type ChainAddress = {
 }
 
 export const ROUTER_ADDRESS: ChainAddress = {
-  [ChainId.MAINNET]: "0xCf7d4B75b7bCcDb8B4F992Fe05970680E2EE1A02",
-  [ChainId.RINKEBY]: "",
-  [ChainId.GÖRLI]: "",
-  [ChainId.KOVAN]: "",
-  [ChainId.BSC_MAINNET]: "0xE804f3C3E6DdA8159055428848fE6f2a91c2b9AF",
-  [ChainId.ROPSTEN]: "0x713702D3fb45BC9765d3A00e0B37c33f9CE9Ec91",
-  [ChainId.BSC_TESTNET]: "0x303BD61Fb70E563BbE833fA698D3ADa22Fd2DACa"
+  [ChainId.MAINNET]: '0xCf7d4B75b7bCcDb8B4F992Fe05970680E2EE1A02',
+  [ChainId.RINKEBY]: '',
+  [ChainId.GÖRLI]: '',
+  [ChainId.KOVAN]: '',
+  [ChainId.BSC_MAINNET]: '0xE804f3C3E6DdA8159055428848fE6f2a91c2b9AF',
+  [ChainId.ROPSTEN]: '0x713702D3fb45BC9765d3A00e0B37c33f9CE9Ec91',
+  [ChainId.BSC_TESTNET]: '0x303BD61Fb70E563BbE833fA698D3ADa22Fd2DACa'
 }
 
 export const DAI = new Token(ChainId.MAINNET, '0x6B175474E89094C44Da98b954EedeAC495271d0F', 18, 'DAI', 'Dai Stablecoin')
@@ -32,14 +31,56 @@ export const COMP = new Token(ChainId.MAINNET, '0xc00e94Cb662C3520282E6f57172140
 export const MKR = new Token(ChainId.MAINNET, '0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2', 18, 'MKR', 'Maker')
 export const AMPL = new Token(ChainId.MAINNET, '0xD46bA6D942050d489DBd938a2C909A5d5039A161', 9, 'AMPL', 'Ampleforth')
 
-export const BAI = new Token(ChainId.BSC_MAINNET, '0xaA8012a0Ea627767545a8E435C2A2BD51f60173D', 18, 'BAI', 'BAI Stablecoin')
-export const B_DAI = new Token(ChainId.BSC_MAINNET, '0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3', 18, 'DAI', 'Dai Token')
-export const BUSD = new Token(ChainId.BSC_MAINNET, '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56', 18, 'BUSD', 'BUSD Token')
-export const B_USDT = new Token(ChainId.BSC_MAINNET, '0x55d398326f99059fF775485246999027B3197955', 18, 'USDT', 'Tether USD')
+export const BAI = new Token(
+  ChainId.BSC_MAINNET,
+  '0xaA8012a0Ea627767545a8E435C2A2BD51f60173D',
+  18,
+  'BAI',
+  'BAI Stablecoin'
+)
+export const B_DAI = new Token(
+  ChainId.BSC_MAINNET,
+  '0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3',
+  18,
+  'DAI',
+  'Dai Token'
+)
+export const BUSD = new Token(
+  ChainId.BSC_MAINNET,
+  '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+  18,
+  'BUSD',
+  'BUSD Token'
+)
+export const B_USDT = new Token(
+  ChainId.BSC_MAINNET,
+  '0x55d398326f99059fF775485246999027B3197955',
+  18,
+  'USDT',
+  'Tether USD'
+)
 
-export const T_DAI = new Token(ChainId.BSC_TESTNET, '0xEC5dCb5Dbf4B114C9d0F65BcCAb49EC54F6A0867', 18, 'DAI', 'Dai Token')
-export const T_BUSD = new Token(ChainId.BSC_TESTNET, '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee', 6, 'BUSD', 'BUSD Token')
-export const T_USDT = new Token(ChainId.BSC_TESTNET, '0x337610d27c682E347C9cD60BD4b3b107C9d34dDd', 6, 'USDT', 'Tether USD')
+export const T_DAI = new Token(
+  ChainId.BSC_TESTNET,
+  '0xEC5dCb5Dbf4B114C9d0F65BcCAb49EC54F6A0867',
+  18,
+  'DAI',
+  'Dai Token'
+)
+export const T_BUSD = new Token(
+  ChainId.BSC_TESTNET,
+  '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee',
+  6,
+  'BUSD',
+  'BUSD Token'
+)
+export const T_USDT = new Token(
+  ChainId.BSC_TESTNET,
+  '0x337610d27c682E347C9cD60BD4b3b107C9d34dDd',
+  6,
+  'USDT',
+  'Tether USD'
+)
 
 const WETH_ONLY: ChainTokenList = {
   [ChainId.MAINNET]: [WETH[ChainId.MAINNET]],
@@ -104,7 +145,7 @@ export interface WalletInfo {
   color: string
   primary?: true
   mobile?: true
-  mobileOnly?: true,
+  mobileOnly?: true
   chainIds: number[]
 }
 
@@ -203,4 +244,5 @@ export const MIN_ETH: JSBI = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16))
 export const BETTER_TRADE_LINK_THRESHOLD = new Percent(JSBI.BigInt(75), JSBI.BigInt(10000))
 
 // the Safemoon Default token list lives here
-export const DEFAULT_TOKEN_LIST_URL = 'https://swap.safemoon.net/safemoon.json'
+export const DEFAULT_TOKEN_LIST_URL: string =
+  process.env.REACT_APP_DEFAULT_TOKEN_LIST_URL || 'https://swap.safemoon.net/safemoon.json'
