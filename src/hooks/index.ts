@@ -77,7 +77,6 @@ export function useInactiveListener(suppress = false) {
       const handleChainChanged = () => {
         // eat errors
         activate(injected, undefined, true).catch(error => {
-          console.error('Failed to activate after chain changed', error)
         })
       }
 
@@ -85,7 +84,6 @@ export function useInactiveListener(suppress = false) {
         if (accounts.length > 0) {
           // eat errors
           activate(injected, undefined, true).catch(error => {
-            console.error('Failed to activate after accounts changed', error)
           })
         }
       }

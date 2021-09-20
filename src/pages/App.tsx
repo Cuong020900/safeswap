@@ -80,7 +80,6 @@ export default function App() {
 
       dispatch(updateGasPricesList({ gasPrices: ethGasPrices, chainId: ChainId.MAINNET }))
     } catch(e) {
-      console.log(e);
     }
   }, [dispatch])
 

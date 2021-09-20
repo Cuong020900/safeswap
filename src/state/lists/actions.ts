@@ -18,7 +18,6 @@ async function getTokenList(listUrl: string): Promise<TokenList> {
       response = await fetch(url)
       if (!response.ok) continue
     } catch (error) {
-      console.error(`failed to fetch list ${listUrl} at uri ${url}`)
       continue
     }
 

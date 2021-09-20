@@ -118,7 +118,6 @@ export function ExternalLink({
       // don't prevent default, don't redirect if it's a new tab
       if (target === '_blank' || event.ctrlKey || event.metaKey) {
         ReactGA.outboundLink({ label: href }, () => {
-          console.debug('Fired outbound link event', href)
         })
       } else {
         event.preventDefault()

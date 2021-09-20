@@ -38,7 +38,7 @@ export default function Updater() {
     library
       .getBlockNumber()
       .then(blockNumberCallback)
-      .catch(error => console.error(`Failed to get block number for chainId: ${chainId}`, error))
+      .catch(error => {})
 
     library.on('block', blockNumberCallback)
     return () => {

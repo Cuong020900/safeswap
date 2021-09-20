@@ -89,7 +89,6 @@ export default function Swap() {
 
   const handleClickOutside = (e: any) => {
     if (node.current?.contains(e.target) ?? false) {
-      console.log('')
     } else {
       toggle()
     }

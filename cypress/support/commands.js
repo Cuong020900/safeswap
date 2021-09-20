@@ -18,11 +18,9 @@ export const TEST_ADDRESS_NEVER_USE_SHORTENED = '0x0fF2...F4a5'
 
 class CustomizedBridge extends _Eip1193Bridge {
   async sendAsync(...args) {
-    console.debug('sendAsync called', ...args)
     return this.send(...args)
   }
   async send(...args) {
-    console.debug('send called', ...args)
     const isCallbackForm = typeof args[0] === 'object' && typeof args[1] === 'function'
     let callback
     let method
@@ -51,7 +49,6 @@ class CustomizedBridge extends _Eip1193Bridge {
     }
     try {
       const result = await super.send(method, params)
-      console.debug('result received', method, params, result)
       if (isCallbackForm) {
         callback(null, { result })
       } else {
