@@ -1990,8 +1990,9 @@
     redux-thunk "^2.3.0"
     reselect "^4.0.0"
 
-"@safemoon/sdk@../safemoon-sdk":
+"@safemoon/sdk@https://github.com/agencywolfe/safemoon-sdk":
   version "3.1.22"
+  resolved "https://github.com/agencywolfe/safemoon-sdk#92a775ca6d977a18535ff8ddc1d8e8beae61ad56"
   dependencies:
     big.js "^5.2.2"
     decimal.js-light "^2.5.0"
