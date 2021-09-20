@@ -16,14 +16,15 @@ i18next
     react: {
       useSuspense: true
     },
-    fallbackLng: 'en',
-    preload: ['en'],
+    //fallbackLng: 'en',
+    //preload: ['en'],
     keySeparator: false,
     interpolation: { escapeValue: false }
   })
 
 localStorage.setItem('i18nextLng', locale);
 window.addEventListener('storage', () => {
+  if(!localStorage.getItem('i18nextLng')) localStorage.setItem('i18nextLng', locale);
   let storageLng = localStorage.getItem('i18nextLng');
   let result = lngList.find(l => l === storageLng.split('-')[0]);
   if(!result) {
