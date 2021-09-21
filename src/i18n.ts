@@ -36,7 +36,6 @@ i18next
 
 localStorage.setItem('i18nextLng', lng)
 window.addEventListener('storage', () => {
-  console.log('addEventListener', localStorage.getItem('i18nextLng'))
   if(!localStorage.getItem('i18nextLng')) localStorage.setItem('i18nextLng', lng);
   lng = searchLng();
   if(!lng) {
