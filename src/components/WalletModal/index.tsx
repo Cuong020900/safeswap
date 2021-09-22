@@ -26,6 +26,7 @@ import SVG from 'react-inlinesvg'
 import ArrowLeft from '../../assets/icons/arrow-left-3.svg'
 import { AutoColumn } from '../Column'
 import { ConnectWalletTabs } from '../NavigationTabs'
+// import de from "@walletconnect/qrcode-modal/dist/cjs/browser/languages/de";
 
 const CloseIcon = styled.div`
   position: absolute;
@@ -219,6 +220,7 @@ export default function WalletModal({
   }, [setWalletView, active, error, connector, walletModalOpen, activePrevious, connectorPrevious])
 
   const tryActivation = async connector => {
+    // debugger
     let name = ''
     Object.keys(SUPPORTED_WALLETS).map(key => {
       if (connector === SUPPORTED_WALLETS[key].connector) {
@@ -243,8 +245,11 @@ export default function WalletModal({
     activate(connector, undefined, true).catch(error => {
       if (error instanceof UnsupportedChainIdError) {
         activate(connector) // a little janky...can't use setError because the connector isn't set
+        debugger
       } else {
         setPendingError(true)
+        connector.walletConnectProvider.wc.transportClose()
+        console.log('connector 2', connector)
       }
     })
   }
@@ -391,9 +396,12 @@ export default function WalletModal({
           <Option
             id={`connect-${key}`}
             onClick={() => {
-              option.connector === connector
-                ? setWalletView(WALLET_VIEWS.ACCOUNT)
-                : !option.href && tryActivation(option.connector)
+              if(option.connector === connector) {
+                setWalletView(WALLET_VIEWS.ACCOUNT)
+              } else {
+                console.log('option', option.connector)
+                !option.href && tryActivation(option.connector)
+              }
             }}
             key={key}
             active={option.connector === connector}
