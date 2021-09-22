@@ -71,5 +71,6 @@
 	"tokenAddress": "Dirección de Token",
 	"label": "Etiqueta",
 	"decimals": "Decimales",
-	"enterTokenCont": "Ingrese una dirección de token para continuar"
+	"enterTokenCont": "Ingrese una dirección de token para continuar",
+    "pageNotFound": "página no encontrada"
 }

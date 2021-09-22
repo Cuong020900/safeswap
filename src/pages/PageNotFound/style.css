@@ -1,0 +1,140 @@
+.container > div {
+    width: 180px;
+    height:130px;
+    border-radius: 25px;
+    z-index:120;
+}
+.night {
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+
+    background: linear-gradient( to bottom right,rgba(63,81,181,1) 0%, rgb(0 0 0) 70%);
+}
+.moon {
+    position: absolute;
+    top:-10%;
+    left:65%;
+    width:70px;
+    height: 70px;
+    border-radius: 100%;
+    background:rgba(255,241,118 ,1);
+    box-shadow: 1px 1px 30px rgba(224,224,224 ,1);
+}
+.spot1 {
+    position: absolute;
+    top:0%;
+    left:85%;
+    width:10px;
+    height: 10px;
+    border-radius: 100%;
+    background-color: #777;
+}
+.spot2 {
+    position: absolute;
+    top:30%;
+    left:75%;
+    width:5px;
+    height: 5px;
+    border-radius: 100%;
+    background-color: #777;
+}
+.night li {
+    position: absolute;
+    list-style: none;
+    width: 3px;
+    height: 3px;
+    border-radius: 100%;
+    background-color:#fff;
+    transform: rotate(45deg);
+}
+.night li:nth-child(1) {
+    top:30%;
+    left:65%;
+}
+.night li:nth-child(2) {
+    top:35%;
+    left:53%;
+}
+.night li:nth-child(3) {
+    opacity: 0;
+    top:20%;
+    left:75%;
+    width:2px;
+    height: 2px;
+    animation: meteor 1.5s infinite linear;
+    animation-delay: 0.6s;
+}
+.night li:nth-child(4) {
+    top:5%;
+    left:50%;
+}
+.night li:nth-child(5) {
+    opacity: 0;
+    top:20%;
+    left:55%;
+    width:1px;
+    height: 15px;
+    animation: meteor 1.5s infinite linear;
+}
+.text {
+    position: absolute;
+    top: 50%;
+    text-align: center;
+}
+.text > span{
+    font-size: 104px;
+    text-shadow: 3px 2px #ffffff8a;
+}
+
+@keyframes inex {
+    50% {
+        opacity: 0.4;
+    }
+    60% {
+        opacity: 1;
+    }
+}
+@keyframes move {
+    50% {
+        transform: translateX(-10px);
+    }
+}
+@keyframes fall {
+    10% {
+        opacity:0.8;
+    }
+    50% {
+        opacity:1;
+        transform: translate(-10px,30px);
+    }
+    100% {
+        transform: translate(-25px,70px);
+    }
+}
+@keyframes flash {
+    48% {
+        background-color: rgba(96,125,139 ,1);
+    }
+    50% {
+        background-color: #fff;
+    }
+    55% {
+        background-color: rgba(96,125,139 ,1);
+    }
+    57% {
+        background-color: #fff;
+    }
+}
+@keyframes meteor {
+    10% {
+        opacity: 1;
+    }
+    80% {
+        left:10%;
+        top:75%;
+        opacity: 0;
+    }
+}
+

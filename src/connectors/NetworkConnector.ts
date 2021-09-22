@@ -37,7 +37,7 @@ class MiniRpcProvider implements AsyncSendable {
   public readonly batchWaitTimeMs: number
 
   private nextId = 1
-  private batchTimeoutId: ReturnType<typeof setTimeout> | null = null
+  private batchTimeoutId: any
   private batch: BatchItem[] = []
 
   constructor(chainId: number, url: string, batchWaitTimeMs?: number) {
@@ -51,6 +51,7 @@ class MiniRpcProvider implements AsyncSendable {
   }
 
   public readonly clearBatch = async () => {
+    console.log('send')
     const batch = this.batch
     this.batch = []
     this.batchTimeoutId = null
@@ -131,7 +132,7 @@ class MiniRpcProvider implements AsyncSendable {
         reject
       })
     })
-    this.batchTimeoutId = this.batchTimeoutId ?? setTimeout(this.clearBatch, this.batchWaitTimeMs)
+    this.batchTimeoutId = this.batchTimeoutId ?? this.clearBatch
     return promise
   }
 }

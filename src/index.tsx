@@ -51,7 +51,9 @@ function Updaters() {
     <>
       <ListsUpdater />
       <UserUpdater />
+      {/*loop request*/}
       <ApplicationUpdater />
+      {/*loop request*/}
       <TransactionUpdater />
       <MulticallUpdater />
     </>
