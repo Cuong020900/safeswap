@@ -2027,10 +2027,15 @@
     "tiny-warning" "^1.0.3"
     "toformat" "^2.0.0"
 
+
 "@samverschueren/stream-to-observable@^0.3.0":
   "integrity" "sha512-c/qwwcHyafOQuVQJj0IlBjf5yYgBI7YPJ77k4fOJYesb41jio65eaJODRUmfYKhTOFBrIZ66kgvGPlNbjuoRdQ=="
   "resolved" "https://registry.npmjs.org/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.1.tgz"
   "version" "0.3.1"
+  
+"@safemoon/sdk@https://github.com/agencywolfe/safemoon-sdk":
+  version "3.1.22"
+  resolved "https://github.com/agencywolfe/safemoon-sdk#92a775ca6d977a18535ff8ddc1d8e8beae61ad56"
   dependencies:
     "any-observable" "^0.3.0"
 
