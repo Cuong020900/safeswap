@@ -249,7 +249,6 @@ export default function WalletModal({
       } else {
         setPendingError(true)
         connector.walletConnectProvider.wc.transportClose()
-        console.log('connector 2', connector)
       }
     })
   }
@@ -399,7 +398,6 @@ export default function WalletModal({
               if(option.connector === connector) {
                 setWalletView(WALLET_VIEWS.ACCOUNT)
               } else {
-                console.log('option', option.connector)
                 !option.href && tryActivation(option.connector)
               }
             }}
