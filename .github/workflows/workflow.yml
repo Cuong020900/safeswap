@@ -1,4 +1,4 @@
-name: Swap deploy flow
+name: Swap deploy flow Init
 
 # This workflow recognizes the branch and pushes to the appropriate s3 bucket as defined in your Secrets. The workflow can be scaled almost infinitely
 
@@ -60,7 +60,7 @@ jobs:
           
       - name: deploy to s3 Production
         if: github.ref == 'refs/heads/main'
-        run: echo " Deploying to Production " && aws s3 sync ./build s3://swap-safemoon --acl public-read
+        run: echo " Deploying to Production " && aws s3 sync ./build s3://swap-safemoon 
         
                   
       - name: deploy to s3 Staging
