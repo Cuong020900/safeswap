@@ -4,6 +4,8 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 import { ChainId, JSBI, Percent, Token, WETH } from '@safemoon/sdk'
 
 import { injected, binanceinjected, walletconnect, walletconnectBSC } from '../connectors'
+import { BigNumber } from '@ethersproject/bignumber'
+import { BigNumberish } from 'ethers'
 
 // a list of tokens by chain
 type ChainTokenList = {
@@ -242,6 +244,10 @@ export const BLOCKED_PRICE_IMPACT_NON_EXPERT: Percent = new Percent(JSBI.BigInt(
 // used to ensure the user doesn't send so much ETH so they end up with <.01
 export const MIN_ETH: JSBI = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16)) // .01 ETH
 export const BETTER_TRADE_LINK_THRESHOLD = new Percent(JSBI.BigInt(75), JSBI.BigInt(10000))
+
+export const MAX_PRIORITY_FEE: BigNumberish = BigNumber.from(2).mul(10 ** 9)
+
+export const ETHERSCAN_API_KEY: string = process.env.REACT_APP_ETHERSCAN_API_KEY || ''
 
 // the Safemoon Default token list lives here
 export const DEFAULT_TOKEN_LIST_URL: string =

@@ -1,5 +1,5 @@
-import React, {Suspense, useCallback, useEffect} from 'react'
-import {HashRouter, Route, Switch} from 'react-router-dom'
+import React, { Suspense, useCallback, useEffect } from 'react'
+import { HashRouter, Route, Switch } from 'react-router-dom'
 import styled from 'styled-components'
 import GoogleAnalyticsReporter from '../components/analytics/GoogleAnalyticsReporter'
 import Header from '../components/Header'
@@ -15,17 +15,18 @@ import {
 import Pool from './Pool'
 import PoolFinder from './PoolFinder'
 import RemoveLiquidity from './RemoveLiquidity'
-import {RedirectOldRemoveLiquidityPathStructure} from './RemoveLiquidity/redirects'
+import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
 import Swap from './Swap'
-import {RedirectPathToSwapOnly, RedirectToSwap} from './Swap/redirects'
-import {ethers} from "ethers";
-import {useGasPrices, useGasType} from "../state/user/hooks";
-import {useDispatch} from "react-redux";
-import {updateGasPrice, updateGasPricesList} from "../state/user/actions";
-import axios from 'axios';
-import {useActiveWeb3React} from "../hooks";
-import {BigNumber} from "@ethersproject/bignumber";
-import {ChainId} from "@safemoon/sdk";
+import { RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
+import { ethers } from 'ethers'
+import { useGasPrices, useGasType } from '../state/user/hooks'
+import { useDispatch } from 'react-redux'
+import { updateGasPrice, updateGasPricesList } from '../state/user/actions'
+import axios from 'axios'
+import { useActiveWeb3React } from '../hooks'
+import { BigNumber } from '@ethersproject/bignumber'
+import { ChainId } from '@safemoon/sdk'
+import { ETHERSCAN_API_KEY } from '../constants'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -62,36 +63,47 @@ const Marginer = styled.div`
   margin-top: 5rem;
 `
 
+let gasPriceInterval
 export default function App() {
-  const gasPrices = useGasPrices();
-  const gasType = useGasType();
-  const dispatch = useDispatch();
-  const { chainId } = useActiveWeb3React();
+  const gasPrices = useGasPrices()
+  const gasType = useGasType()
+  const dispatch = useDispatch()
+  const { chainId } = useActiveWeb3React()
 
   const getEthGasPrice = useCallback(async () => {
     try {
-      const res = await axios.get('https://ethgasstation.info/api/ethgasAPI.json')
+      const res = await axios.get(
+        `https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${ETHERSCAN_API_KEY}`
+      )
       const ethGasPrices = {
-        default: BigNumber.from(res?.data?.average).mul(10 ** 8).toString(),
-        fast: BigNumber.from(res?.data?.fast).mul(10 ** 8).toString(),
-        instant: BigNumber.from(res?.data?.fastest).mul(10 ** 8).toString(),
-        testnet: BigNumber.from(res?.data?.safeLow).mul(10 ** 8).toString(),
+        default: BigNumber.from(res?.data?.result?.SafeGasPrice)
+          .mul(10 ** 9)
+          .toString(),
+        fast: BigNumber.from(res?.data?.result?.ProposeGasPrice)
+          .mul(10 ** 9)
+          .toString(),
+        instant: BigNumber.from(res?.data?.result?.FastGasPrice)
+          .mul(10 ** 9)
+          .toString(),
+        testnet: BigNumber.from(res?.data?.result?.SafeGasPrice)
+          .mul(10 ** 9)
+          .toString()
       }
 
       dispatch(updateGasPricesList({ gasPrices: ethGasPrices, chainId: ChainId.MAINNET }))
-    } catch(e) {
-      console.log(e);
+    } catch (e) {
+      console.log(e)
     }
   }, [dispatch])
 
   useEffect(() => {
-    if(window.ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-      provider.on("network", (newNetwork, oldNetwork) => {
+    if (window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+      provider.on('network', (newNetwork, oldNetwork) => {
         if (oldNetwork) {
-          window.location.reload();
+          window.location.reload()
         }
-      });
+      })
     }
   }, [])
 
@@ -100,7 +112,11 @@ export default function App() {
   }, [gasPrices, gasType, chainId, dispatch])
 
   useEffect(() => {
-    getEthGasPrice();
+    gasPriceInterval = setInterval(getEthGasPrice, 30000)
+
+    return () => {
+      clearInterval(gasPriceInterval)
+    }
   }, [getEthGasPrice])
 
   return (
@@ -135,6 +151,5 @@ export default function App() {
         </AppWrapper>
       </HashRouter>
     </Suspense>
-
   )
 }
