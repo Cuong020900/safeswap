@@ -63,6 +63,7 @@ const Marginer = styled.div`
   margin-top: 5rem;
 `
 
+let gasPriceInterval
 export default function App() {
   const gasPrices = useGasPrices()
   const gasType = useGasType()
@@ -111,7 +112,11 @@ export default function App() {
   }, [gasPrices, gasType, chainId, dispatch])
 
   useEffect(() => {
-    getEthGasPrice()
+    gasPriceInterval = setInterval(getEthGasPrice, 30000)
+
+    return () => {
+      clearInterval(gasPriceInterval)
+    }
   }, [getEthGasPrice])
 
   return (
