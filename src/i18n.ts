@@ -3,13 +3,13 @@ import { initReactI18next } from 'react-i18next'
 import resourcesToBackend from 'i18next-resources-to-backend'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
-const lngList = ['de', 'en', 'es-AR', 'es-US', 'it-IT', 'iw', 'jp', 'ko', 'ro', 'ru-RU', 'vu', 'zh-CN', 'zh-TW' ]
-const locale = navigator.language
+const lngList = ['de', 'en', 'es-AR', 'es-US', 'it-IT', 'iw', 'jp', 'ko', 'ro', 'ru-RU', 'vu', 'zh-CN', 'zh-TW' ];
+const locale = navigator.language;
 
 const searchLng = () => lngList.find(item => item === locale || item === locale.split('-')[0]);
 let lng = searchLng();
 if(!lng) {
-  lng = 'en-EN'
+  lng = 'en-EN';
   localStorage.setItem('i18nextLng', 'en-EN')
 }
 
@@ -32,9 +32,9 @@ i18next
     keySeparator: false,
     partialBundledLanguages: true,
     interpolation: { escapeValue: false }
-  })
+  });
 
-localStorage.setItem('i18nextLng', lng)
+localStorage.setItem('i18nextLng', lng);
 window.addEventListener('storage', () => {
   if(!localStorage.getItem('i18nextLng')) localStorage.setItem('i18nextLng', lng);
   lng = searchLng();
