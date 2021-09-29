@@ -1,6 +1,6 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { save, load } from 'redux-localstorage-simple'
-import { checkStorage } from '../localStorageProtection';
+import { checkStorage } from '../utils/localStorageProtection';
 
 import application from './application/reducer'
 import user from './user/reducer'
