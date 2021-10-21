@@ -7,11 +7,11 @@ import PopupItem from './PopupItem'
 const MobilePopupWrapper = styled.div<{ height: string | number }>`
   position: relative;
   max-width: 100%;
+  display: none;
   height: ${({ height }) => height};
   margin: ${({ height }) => (height ? '0 auto;' : 0)};
   margin-bottom: ${({ height }) => (height ? '20px' : 0)}};
 
-  display: none;
   ${({ theme }) => theme.mediaWidth.upToSmall`
     display: block;
   `};

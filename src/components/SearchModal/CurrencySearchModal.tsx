@@ -16,14 +16,14 @@ import { useTokenComparator } from './sorting'
 import { InputContainer, PaddedColumn, SearchInput } from './styleds'
 import CurrencyList from './CurrencyList'
 import { SelectToken } from '../NavigationTabs'
-import SVG from 'react-inlinesvg';
-import SearchIcon from '../../assets/icons/search-normal.svg';
+import SVG from 'react-inlinesvg'
+import SearchIcon from '../../assets/icons/search-normal.svg'
 
 const SearchBarIcon = styled(SVG).attrs(props => ({
   ...props,
   src: SearchIcon,
   width: 24,
-  height: 24,
+  height: 24
 }))`
   color: ${({ theme }) => theme.text1};
   position: absolute;
@@ -90,14 +90,11 @@ export default function CurrencySearchModal({
   }, [filteredTokens, searchQuery, searchToken, tokenComparator])
 
   const currencies: Currency[] = useMemo(() => {
-    if("eth".includes(searchQuery.toLowerCase()) || "ethereum".includes(searchQuery.toLowerCase())) {
-      return [
-        ETHER,
-        ...filteredSortedTokens
-      ]
+    if ('eth'.includes(searchQuery.toLowerCase()) || 'ethereum'.includes(searchQuery.toLowerCase())) {
+      return [ETHER, ...filteredSortedTokens]
     }
 
-    return filteredSortedTokens;
+    return filteredSortedTokens
   }, [searchQuery, filteredSortedTokens])
 
   const handleCurrencySelect = useCallback(
@@ -156,27 +153,20 @@ export default function CurrencySearchModal({
     >
       <Column style={{ width: '100%' }}>
         <PaddedColumn gap="24px">
-          <SelectToken
-              onDismiss={onDismiss}
-              tooltipOpen={tooltipOpen}
-          />
-          <Tooltip
-            text={t('importAnyToken')}
-            show={tooltipOpen}
-            placement="bottom"
-          >
+          <SelectToken onDismiss={onDismiss} tooltipOpen={tooltipOpen} />
+          <Tooltip text={t('importAnyToken')} show={tooltipOpen} placement="bottom">
             <InputContainer>
-              <SearchBarIcon/>
+              <SearchBarIcon />
               <SearchInput
-                  type="text"
-                  id="token-search-input"
-                  placeholder={t('tokenSearchPlaceholder')}
-                  value={searchQuery}
-                  ref={inputRef}
-                  onChange={handleInput}
-                  onFocus={closeTooltip}
-                  onBlur={closeTooltip}
-                  onKeyDown={handleEnter}
+                type="text"
+                id="token-search-input"
+                placeholder={t('tokenSearchPlaceholder')}
+                value={searchQuery}
+                ref={inputRef}
+                onChange={handleInput}
+                onFocus={closeTooltip}
+                onBlur={closeTooltip}
+                onKeyDown={handleEnter}
               />
             </InputContainer>
           </Tooltip>

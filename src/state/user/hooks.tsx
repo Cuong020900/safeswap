@@ -1,12 +1,12 @@
-import {ChainId, Currency, Pair, Token} from '@safemoon/sdk'
+import { ChainId, Currency, Pair, Token } from '@safemoon/sdk'
 import flatMap from 'lodash.flatmap'
-import {useCallback, useMemo} from 'react'
-import {shallowEqual, useDispatch, useSelector} from 'react-redux'
-import {BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS} from '../../constants'
+import { useCallback, useMemo } from 'react'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
+import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS, popupEmitter, PopupTypes } from '../../constants'
 
-import {useActiveWeb3React} from '../../hooks'
-import {useAllTokens} from '../../hooks/Tokens'
-import {AppDispatch, AppState} from '../index'
+import { useActiveWeb3React } from '../../hooks'
+import { useAllTokens } from '../../hooks/Tokens'
+import { AppDispatch, AppState } from '../index'
 import {
   addSerializedPair,
   addSerializedToken,
@@ -20,9 +20,9 @@ import {
   updateUserExpertMode,
   updateUserSlippageTolerance
 } from './actions'
-import {useDefaultTokenList} from '../lists/hooks'
-import {isDefaultToken} from '../../utils'
-import {parseUnits} from "ethers/lib/utils";
+import { useDefaultTokenList } from '../lists/hooks'
+import { isDefaultToken } from '../../utils'
+import { parseUnits } from 'ethers/lib/utils'
 
 function serializeToken(token: Token): SerializedToken {
   return {
@@ -44,21 +44,19 @@ function deserializeToken(serializedToken: SerializedToken): Token {
   )
 }
 
-
 export enum GAS_PRICE {
   default = '5',
   fast = '6',
   instant = '7',
-  testnet = '10',
+  testnet = '10'
 }
 
 export const GAS_PRICE_GWEI = {
   default: parseUnits(GAS_PRICE.default, 'gwei').toString(),
   fast: parseUnits(GAS_PRICE.fast, 'gwei').toString(),
   instant: parseUnits(GAS_PRICE.instant, 'gwei').toString(),
-  testnet: parseUnits(GAS_PRICE.testnet, 'gwei').toString(),
+  testnet: parseUnits(GAS_PRICE.testnet, 'gwei').toString()
 }
-
 
 export function useIsDarkMode(): boolean {
   const { userDarkMode, matchesDarkMode } = useSelector<
@@ -135,11 +133,18 @@ export function useUserDeadline(): [number, (slippage: number) => void] {
 
 export function useAddUserToken(): (token: Token) => void {
   const dispatch = useDispatch<AppDispatch>()
+  const blacklistTokens: string[] = useSelector((state: AppState) => state.blacklists.tokenAddresses)
+
   return useCallback(
     (token: Token) => {
-      dispatch(addSerializedToken({ serializedToken: serializeToken(token) }))
+      const isBadToken = blacklistTokens?.includes(token.address)
+      if (isBadToken) {
+        popupEmitter.emit(PopupTypes.BLACKLIST_TOKEN)
+      } else {
+        dispatch(addSerializedToken({ serializedToken: serializeToken(token) }))
+      }
     },
-    [dispatch]
+    [dispatch, blacklistTokens]
   )
 }
 
@@ -288,23 +293,24 @@ export function useTrackedTokenPairs(): [Token, Token][] {
   }, [combinedList])
 }
 
-
 export function useGasPrice(): string {
   const { chainId } = useActiveWeb3React()
-  const userGas = useSelector<AppState, AppState['user']['gasPrice']>((state) => state.user.gasPrice)
-  return chainId === ChainId.BSC_TESTNET ? GAS_PRICE_GWEI.testnet : userGas;
+  const userGas = useSelector<AppState, AppState['user']['gasPrice']>(state => state.user.gasPrice)
+  return chainId === ChainId.BSC_TESTNET ? GAS_PRICE_GWEI.testnet : userGas
 }
 
 export function useGasPrices(): any {
-  const { chainId } = useActiveWeb3React();
-  const gasPrices = useSelector<AppState, AppState['user']['gasPrices']>((state) => state.user.gasPrices?.[chainId || ChainId.MAINNET] || state.user.gasPrices?.[ChainId.MAINNET])
+  const { chainId } = useActiveWeb3React()
+  const gasPrices = useSelector<AppState, AppState['user']['gasPrices']>(
+    state => state.user.gasPrices?.[chainId || ChainId.MAINNET] || state.user.gasPrices?.[ChainId.MAINNET]
+  )
 
-  return gasPrices || GAS_PRICE_GWEI;
+  return gasPrices || GAS_PRICE_GWEI
 }
 export function useGasType(): any {
-  const gasPrices = useSelector<AppState, AppState['user']['gasPrices']>((state) => state.user.gasPriceType)
+  const gasPrices = useSelector<AppState, AppState['user']['gasPrices']>(state => state.user.gasPriceType)
 
-  return gasPrices || 'default';
+  return gasPrices || 'default'
 }
 
 export function useGasPriceManager(): [string, (userGasPrice: string, gasPriceType: string) => void] {
@@ -312,10 +318,10 @@ export function useGasPriceManager(): [string, (userGasPrice: string, gasPriceTy
   const userGasPrice = useGasPrice()
 
   const setGasPrice = useCallback(
-      (gasPrice: string, gasPriceType: string = 'default') => {
-        dispatch(updateGasPrice({ gasPrice, gasPriceType: gasPriceType }))
-      },
-      [dispatch],
+    (gasPrice: string, gasPriceType = 'default') => {
+      dispatch(updateGasPrice({ gasPrice, gasPriceType: gasPriceType }))
+    },
+    [dispatch]
   )
 
   return [userGasPrice, setGasPrice]

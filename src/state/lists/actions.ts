@@ -23,13 +23,27 @@ async function getTokenList(listUrl: string): Promise<TokenList> {
     }
 
     const json = await response.json()
-    if (!tokenListValidator(json)) {
-      throw new Error(
-        tokenListValidator.errors?.reduce<string>((memo, error) => {
-          const add = `${error.dataPath} ${error.message ?? ''}`
-          return memo.length > 0 ? `${memo}; ${add}` : `${add}`
-        }, '') ?? 'Token list failed validation'
-      )
+    if ('data' in json) {
+      if (!tokenListValidator(json?.data)) {
+        throw new Error(
+          tokenListValidator.errors?.reduce<string>((memo, error) => {
+            const add = `${error.dataPath} ${error.message ?? ''}`
+            return memo.length > 0 ? `${memo}; ${add}` : `${add}`
+          }, '') ?? 'Token list failed validation'
+        )
+      }
+    } else {
+      if (!tokenListValidator(json)) {
+        throw new Error(
+          tokenListValidator.errors?.reduce<string>((memo, error) => {
+            const add = `${error.dataPath} ${error.message ?? ''}`
+            return memo.length > 0 ? `${memo}; ${add}` : `${add}`
+          }, '') ?? 'Token list failed validation'
+        )
+      }
+    }
+    if ('data' in json) {
+      return json?.data
     }
     return json
   }
