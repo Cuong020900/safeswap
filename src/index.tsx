@@ -14,6 +14,7 @@ import TransactionUpdater from './state/transactions/updater'
 import ListsUpdater from './state/lists/updater'
 import UserUpdater from './state/user/updater'
 import MulticallUpdater from './state/multicall/updater'
+import BlacklistUpdater from './state/blacklists/updater'
 import ThemeProvider, { FixedGlobalStyle, ThemedGlobalStyle } from './theme'
 import './assets/iconsax/style.css';
 
@@ -49,6 +50,7 @@ window.addEventListener('error', error => {
 function Updaters() {
   return (
     <>
+      <BlacklistUpdater />
       <ListsUpdater />
       <UserUpdater />
       <ApplicationUpdater />
