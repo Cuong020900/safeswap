@@ -6,7 +6,7 @@ import { PortisConnector } from '@web3-react/portis-connector'
 
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
-import {ChainId} from "@safemoon/sdk";
+import { ChainId } from '@safemoon/sdk'
 
 const BSC_TESTNET_URL = process.env.REACT_APP_BSC_TESTNET_URL
 const ETH_TESTNET_URL = process.env.REACT_APP_ETH_TESTNET_URL
