@@ -6,6 +6,14 @@ import { ChainId, JSBI, Percent, Token, WETH } from '@safemoon/sdk'
 import { injected, binanceinjected, walletconnect, walletconnectBSC } from '../connectors'
 import { BigNumber } from '@ethersproject/bignumber'
 import { BigNumberish } from 'ethers'
+import mitt from 'mitt'
+
+export enum PopupTypes {
+  BLACKLIST_WALLET = 'BLACKLIST_WALLET',
+  BLACKLIST_TOKEN = 'BLACKLIST_TOKEN'
+}
+
+export const popupEmitter = mitt()
 
 // a list of tokens by chain
 type ChainTokenList = {
@@ -251,4 +259,11 @@ export const ETHERSCAN_API_KEY: string = process.env.REACT_APP_ETHERSCAN_API_KEY
 
 // the Safemoon Default token list lives here
 export const DEFAULT_TOKEN_LIST_URL: string =
-  process.env.REACT_APP_DEFAULT_TOKEN_LIST_URL || 'https://swap.safemoon.net/safemoon.json'
+  process.env.REACT_APP_DEFAULT_TOKEN_LIST_URL || 'https://marketdata.safemoon.net/api/swap/tokens'
+
+export const DEFAULT_TOKEN_BLACK_LIST: string =
+  process.env.REACT_APP_DEFAULT_TOKEN_BLACK_LIST_URL || 'https://marketdata.safemoon.net/api/swap/token-blacklist'
+
+export const DEFAULT_WALLET_BLACK_LIST_URL: string =
+  process.env.REACT_APP_DEFAULT_WALLET_BLACK_LIST_URL ||
+  'https://marketdata.safemoon.net/api/swap/walletaddress-blacklist'

@@ -1,6 +1,5 @@
-
-import React, {Suspense, useCallback, useEffect} from 'react'
 import {HashRouter, Route, Switch, Redirect} from 'react-router-dom'
+import React, { Suspense, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import GoogleAnalyticsReporter from '../components/analytics/GoogleAnalyticsReporter'
 import Header from '../components/Header'
@@ -28,7 +27,9 @@ import axios from 'axios'
 import { useActiveWeb3React } from '../hooks'
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId } from '@safemoon/sdk'
-import { ETHERSCAN_API_KEY } from '../constants'
+import { ETHERSCAN_API_KEY, popupEmitter, PopupTypes } from '../constants'
+import { BlacklistWalletPopup } from '../components/BlacklistWalletPopup'
+import { BlacklistTokenPopup } from '../components/BlacklistTokenPopup'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -71,6 +72,8 @@ export default function App() {
   const gasType = useGasType()
   const dispatch = useDispatch()
   const { chainId } = useActiveWeb3React()
+  const [showBlacklistWallet, setShowBlacklistWallet] = useState(false)
+  const [showBlacklistToken, setShowBlacklistToken] = useState(false)
 
   const getEthGasPrice = useCallback(async () => {
     try {
@@ -97,6 +100,22 @@ export default function App() {
       console.log(e)
     }
   }, [dispatch])
+
+  useEffect(() => {
+    const showBlacklistWalletPopup = () => {
+      setShowBlacklistWallet(true)
+    }
+    const showBlacklistTokenPopup = () => {
+      setShowBlacklistToken(true)
+    }
+    popupEmitter.on(PopupTypes.BLACKLIST_WALLET, showBlacklistWalletPopup)
+    popupEmitter.on(PopupTypes.BLACKLIST_TOKEN, showBlacklistTokenPopup)
+
+    return () => {
+      popupEmitter.off(PopupTypes.BLACKLIST_WALLET, showBlacklistWalletPopup)
+      popupEmitter.off(PopupTypes.BLACKLIST_TOKEN, showBlacklistTokenPopup)
+    }
+  }, [setShowBlacklistWallet, setShowBlacklistToken])
 
   useEffect(() => {
     if (window.ethereum) {
@@ -131,6 +150,8 @@ export default function App() {
             <Header />
           </HeaderWrapper>
           <BodyWrapper>
+            <BlacklistWalletPopup open={showBlacklistWallet} onDismiss={() => setShowBlacklistWallet(false)} />
+            <BlacklistTokenPopup open={showBlacklistToken} onDismiss={() => setShowBlacklistToken(false)} />
             <Popups />
             <Web3ReactManager>
               <Switch>

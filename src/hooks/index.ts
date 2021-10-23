@@ -5,7 +5,9 @@ import { Web3ReactContextInterface } from '@web3-react/core/dist/types'
 import { useEffect, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { injected, binanceinjected } from '../connectors'
-import { NetworkContextName } from '../constants'
+import { NetworkContextName, popupEmitter, PopupTypes } from '../constants'
+import { useSelector } from 'react-redux'
+import { AppState } from '../state'
 
 export function useActiveWeb3React(): Web3ReactContextInterface<Web3Provider> & { chainId?: ChainId } {
   const context = useWeb3ReactCore<Web3Provider>()
@@ -14,8 +16,19 @@ export function useActiveWeb3React(): Web3ReactContextInterface<Web3Provider> & 
 }
 
 export function useEagerConnect() {
-  const { activate, active } = useWeb3ReactCore() // specifically using useWeb3ReactCore because of what this hook does
+  const { activate, active, account, deactivate } = useWeb3ReactCore() // specifically using useWeb3ReactCore because of what this hook does
   const [tried, setTried] = useState(false)
+  const blacklistWallets: string[] = useSelector((state: AppState) => state.blacklists.walletAddresses)
+
+  useEffect(() => {
+    if (typeof account === 'string' && blacklistWallets) {
+      const isBadAccount = blacklistWallets?.includes(account)
+      if (isBadAccount) {
+        popupEmitter.emit(PopupTypes.BLACKLIST_WALLET)
+        deactivate()
+      }
+    }
+  }, [account, blacklistWallets, deactivate])
 
   useEffect(() => {
     injected.isAuthorized().then(isAuthorized => {
@@ -68,7 +81,8 @@ export function useEagerConnect() {
  * and out after checking what network theyre on
  */
 export function useInactiveListener(suppress = false) {
-  const { active, error, activate } = useWeb3ReactCore() // specifically using useWeb3React because of what this hook does
+  const { active, error, activate, deactivate } = useWeb3ReactCore() // specifically using useWeb3React because of what this hook does
+  const blacklistWallets: string[] = useSelector((state: AppState) => state.blacklists.walletAddresses)
 
   useEffect(() => {
     const { ethereum } = window
@@ -82,9 +96,19 @@ export function useInactiveListener(suppress = false) {
 
       const handleAccountsChanged = (accounts: string[]) => {
         if (accounts.length > 0) {
-          // eat errors
-          activate(injected, undefined, true).catch(error => {
+          const badAccountIndex = accounts.findIndex(account => {
+            return blacklistWallets && blacklistWallets?.includes(account)
           })
+
+          if (badAccountIndex > -1) {
+            popupEmitter.emit(PopupTypes.BLACKLIST_WALLET)
+            deactivate()
+          } else {
+            // eat errors
+            activate(injected, undefined, true).catch(error => {
+              console.error('Failed to activate after accounts changed', error)
+            })
+          }
         }
       }
 
@@ -99,5 +123,5 @@ export function useInactiveListener(suppress = false) {
       }
     }
     return
-  }, [active, error, suppress, activate])
+  }, [active, error, suppress, activate, blacklistWallets, deactivate])
 }
