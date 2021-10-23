@@ -281,7 +281,6 @@ export default function RemoveLiquidity({
         router.estimateGas[methodName](...args)
           .then(calculateGasMargin)
           .catch(error => {
-            console.error(`estimateGas failed`, methodName, args, error)
             return undefined
           })
       )
@@ -293,7 +292,6 @@ export default function RemoveLiquidity({
 
     // all estimations failed...
     if (indexOfSuccessfulEstimation === -1) {
-      console.error('This transaction would fail. Please contact support.')
     } else {
       const methodName = methodNames[indexOfSuccessfulEstimation]
       const safeGasEstimate = safeGasEstimates[indexOfSuccessfulEstimation]
@@ -329,7 +327,6 @@ export default function RemoveLiquidity({
         .catch((error: Error) => {
           setAttemptingTxn(false)
           // we only care if the error is something _other_ than the user rejected the tx
-          console.error(error)
         })
     }
   }

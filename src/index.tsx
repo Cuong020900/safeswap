@@ -7,6 +7,7 @@ import ReactGA from 'react-ga'
 import { Provider } from 'react-redux'
 import { NetworkContextName } from './constants'
 import './i18n'
+// import './localStorageProtection'
 import App from './pages/App'
 import store from './state'
 import ApplicationUpdater from './state/application/updater'
@@ -37,7 +38,7 @@ if (typeof GOOGLE_ANALYTICS_ID === 'string') {
     customBrowserType: !isMobile ? 'desktop' : 'web3' in window || 'ethereum' in window ? 'mobileWeb3' : 'mobileRegular'
   })
 } else {
-  ReactGA.initialize('test', { testMode: true, debug: true })
+  ReactGA.initialize('test', { testMode: true })
 }
 
 window.addEventListener('error', error => {

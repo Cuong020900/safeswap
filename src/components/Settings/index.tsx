@@ -71,7 +71,6 @@ export default function SettingsTab() {
 
   const handleClickOutside = e => {
     if (node.current?.contains(e.target) ?? false) {
-      console.log("")
     } else {
       toggle()
 
