@@ -172,5 +172,6 @@
   "yourTXMayFail": "Your transaction may fail",
   "yourTXMayFront": "Your transaction may be frontrun",
   "route": "Route",
-  "priceImpact": "Price Impact"
+  "priceImpact": "Price Impact",
+  "pageNotFound": "shafi ba a samu ba"
 }

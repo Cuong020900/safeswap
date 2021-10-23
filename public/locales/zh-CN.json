@@ -1,6 +1,5 @@
 {
   "noWallet": "找不到钱包",
-  "wrongNetwork": "网络不正确",
   "switchNetwork": "请转到{{correctNetwork}}",
   "installWeb3MobileBrowser": "请使用支持Web3的浏览器（例如Trust Wallet或Coinbase Wallet）打开.",
   "installMetamask": "请在装有Metamask扩展程序的Chrome或Brave中打开.",
@@ -13,7 +12,7 @@
   "output": "退出",
   "estimated": "估计值",
   "balance": "余额：{{balanceInput}}",
-  "unlock": "解除封锁"
+  "unlock": "解除封锁",
   "pending": "等待",
   "selectToken": "请选择一个令牌",
   "searchOrPaste": "搜索令牌或插入令牌地址",
@@ -38,7 +37,7 @@
   "recipientAddress": "收件人地址",
   "youAreSending": "您正在传送",
   "willReceive": "至少会收到",
-  "to": "您将收到最多”,
+  "to": "您将收到最多",
   "addLiquidity": "增加流水",
   "deposit": "存款",
   "currentPoolSize": "当前池大小",
@@ -159,5 +158,6 @@
   "yourTXMayFail": "您的交易可能失败",
   "yourTXMayFront": "您的交易可以提前",
   "route": "路线",
-  "priceImpact": "对价格的影响"
+  "priceImpact": "对价格的影响",
+  "pageNotFound": "找不到网页"
 }

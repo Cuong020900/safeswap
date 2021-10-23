@@ -62,7 +62,6 @@ export default function Updater(): null {
                 })
               )
             //} else {
-            //  console.error(
             //    `List at url ${listUrl} could not automatically update because the version bump was only PATCH/MINOR while the update had breaking changes and should have been MAJOR`
             //  )
             //}

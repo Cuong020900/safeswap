@@ -1,5 +1,6 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { save, load } from 'redux-localstorage-simple'
+import { checkStorage } from '../utils/localStorageProtection';
 
 import application from './application/reducer'
 import user from './user/reducer'
@@ -12,7 +13,6 @@ import multicall from './multicall/reducer'
 import blacklists from './blacklists/reducer'
 
 import { updateVersion } from './user/actions'
-
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists', 'blacklists']
 
 const store = configureStore({
@@ -27,11 +27,11 @@ const store = configureStore({
     lists,
     blacklists
   },
-  middleware: [...getDefaultMiddleware(), save({ states: PERSISTED_KEYS })],
-  preloadedState: load({ states: PERSISTED_KEYS })
-})
+  middleware: [...getDefaultMiddleware(), save({ states: PERSISTED_KEYS }), checkStorage({ states: PERSISTED_KEYS })],
+  preloadedState: load({ states: PERSISTED_KEYS }),
+});
 
-store.dispatch(updateVersion())
+store.dispatch(updateVersion());
 
 export default store
 

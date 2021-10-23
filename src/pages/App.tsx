@@ -1,9 +1,10 @@
+import {HashRouter, Route, Switch, Redirect} from 'react-router-dom'
 import React, { Suspense, useCallback, useEffect, useState } from 'react'
-import { HashRouter, Route, Switch } from 'react-router-dom'
 import styled from 'styled-components'
 import GoogleAnalyticsReporter from '../components/analytics/GoogleAnalyticsReporter'
 import Header from '../components/Header'
 import Popups from '../components/Popups'
+import PageNotFound from './PageNotFound'
 import Web3ReactManager from '../components/Web3ReactManager'
 import DarkModeQueryParamReader from '../theme/DarkModeQueryParamReader'
 import AddLiquidity from './AddLiquidity'
@@ -154,6 +155,7 @@ export default function App() {
             <Popups />
             <Web3ReactManager>
               <Switch>
+                <Route exact strict path="/" render={() => (<Redirect to="/swap" />)} />
                 <Route exact strict path="/swap" component={Swap} />
                 <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
                 <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
@@ -165,7 +167,7 @@ export default function App() {
                 <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
                 <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
                 <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
-                <Route component={RedirectPathToSwapOnly} />
+                <Route component={PageNotFound} />
               </Switch>
             </Web3ReactManager>
             <Marginer />
