@@ -1,14 +1,18 @@
-import {ChainId, Currency, ETHER, Token} from '@safemoon/sdk'
-import React, {useState} from 'react'
+import { ChainId, Currency, ETHER, Token } from '@safemoon/sdk'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import BNBLogo from '../../assets/images/bnb.svg'
 import EthereumLogo from '../../assets/images/Ethereum.svg'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
-import {useActiveWeb3React} from "../../hooks";
+import { useActiveWeb3React } from '../../hooks'
 
-const getTokenLogoURL = address =>
-  `/images/${address}.svg`
+const getTokenLogoURL = (token: WrappedTokenInfo | string) => {
+  if (token instanceof WrappedTokenInfo) {
+    return token.logoURI
+  }
+  return `/images/${token}.svg`
+}
 const BAD_URIS: { [tokenAddress: string]: true } = {}
 
 const Image = styled.img<{ size: string }>`
@@ -44,18 +48,24 @@ export default function CurrencyLogo({
   size?: string
   style?: React.CSSProperties
 }) {
-  const { chainId } = useActiveWeb3React();
+  const { chainId } = useActiveWeb3React()
   const [, refresh] = useState<number>(0)
 
   if (currency === ETHER) {
-    return <StyledEthereumLogo src={chainId === ChainId.BSC_MAINNET || chainId === ChainId.BSC_TESTNET ? BNBLogo : EthereumLogo} size={size} {...rest} />
+    return (
+      <StyledEthereumLogo
+        src={chainId === ChainId.BSC_MAINNET || chainId === ChainId.BSC_TESTNET ? BNBLogo : EthereumLogo}
+        size={size}
+        {...rest}
+      />
+    )
   }
 
   if (currency instanceof Token) {
     let uri: string | undefined
 
     if (currency instanceof WrappedTokenInfo) {
-        uri = getTokenLogoURL(currency.symbol)
+      uri = getTokenLogoURL(currency)
     }
 
     if (!uri) {
