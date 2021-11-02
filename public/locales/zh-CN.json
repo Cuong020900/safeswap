@@ -13,7 +13,7 @@
   "output": "退出",
   "estimated": "估计值",
   "balance": "余额：{{balanceInput}}",
-  "unlock": "解除封锁"
+  "unlock": "解除封锁",
   "pending": "等待",
   "selectToken": "请选择一个令牌",
   "searchOrPaste": "搜索令牌或插入令牌地址",
@@ -38,7 +38,7 @@
   "recipientAddress": "收件人地址",
   "youAreSending": "您正在传送",
   "willReceive": "至少会收到",
-  "to": "您将收到最多”,
+  "to": "您将收到最多",
   "addLiquidity": "增加流水",
   "deposit": "存款",
   "currentPoolSize": "当前池大小",
