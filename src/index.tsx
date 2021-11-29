@@ -17,7 +17,7 @@ import UserUpdater from './state/user/updater'
 import MulticallUpdater from './state/multicall/updater'
 import BlacklistUpdater from './state/blacklists/updater'
 import ThemeProvider, { FixedGlobalStyle, ThemedGlobalStyle } from './theme'
-import './assets/iconsax/style.css';
+import './assets/iconsax/style.css'
 
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 

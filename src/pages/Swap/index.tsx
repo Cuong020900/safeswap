@@ -1,11 +1,12 @@
 import { CurrencyAmount, JSBI, Trade } from '@safemoon/sdk'
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState, useMemo } from 'react'
 import SVG from 'react-inlinesvg'
 import ReactGA from 'react-ga'
 import { Text } from 'rebass'
 import { useTranslation } from 'react-i18next'
 import styled, { ThemeContext } from 'styled-components'
 import { RouteComponentProps } from 'react-router-dom'
+import infoIcon from '../../assets/images/info.svg'
 import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button'
 import Card, { GreyCard } from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
@@ -54,6 +55,7 @@ import { shouldShowSwapWarning } from '../../utils/shouldShowSwapWarning'
 import { SlippageWarning } from '../../components/SlippageWarning/SlippageWarning'
 import './Swap.css'
 import { useCurrency } from '../../hooks/Tokens'
+import ConsolidateV2Intro from './ConsolidateV2Intro'
 
 const SettingsWrapper = styled.div`
   display: flex;
@@ -90,6 +92,7 @@ export default function Swap({
 }: RouteComponentProps<{ currencyIdA?: string; currencyIdB?: string }>) {
   useDefaultsFromURLSearch()
   const { t } = useTranslation()
+  const [showConsolidateV2Intro, setShowConsolidateV2Intro] = useState(false)
 
   const node = useRef<HTMLDivElement>()
   const open = useSettingsMenuOpen()
@@ -126,8 +129,6 @@ export default function Swap({
     currencies[Field.OUTPUT],
     typedValue
   )
-
-  console.log('currencies', currencies)
 
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
   const { address: recipientAddress } = useENSAddress(recipient)
@@ -313,6 +314,28 @@ export default function Swap({
     [onCurrencySelection]
   )
 
+  useEffect(() => {
+    if (currencyA) {
+      handleInputSelect(currencyA)
+    }
+    if (currencyB) {
+      handleOutputSelect(currencyB)
+    }
+  }, [currencyA, currencyB])
+
+  const handleConvertV1ToV2 = () => {
+    history.replace(`/swap/${process.env.REACT_APP_SAFEMOON_TOKEN}/${process.env.REACT_APP_SAFEMOONV2_TOKEN}`)
+  }
+
+  const disabledConsolidate = useMemo(
+    () =>
+      (currencies[Field.INPUT] as any)?.address?.toUpperCase() ===
+        process.env.REACT_APP_SAFEMOON_TOKEN?.toUpperCase() &&
+      (currencies[Field.OUTPUT] as any)?.address.toUpperCase() ===
+        process.env.REACT_APP_SAFEMOONV2_TOKEN?.toUpperCase(),
+    [currencies]
+  )
+
   return (
     <>
       {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
@@ -323,7 +346,17 @@ export default function Swap({
         token={swapWarningCurrency}
       />
       <div className="row">
-        <a className="btn">Consolidate to V2 SafeMoon</a>
+        <a className={`btn ${disabledConsolidate ? 'disabed' : ''}`} onClick={handleConvertV1ToV2}>
+          <span>Consolidate to V2 SafeMoon</span>
+        </a>
+        <a
+          className="btnInfo"
+          onClick={() => {
+            setShowConsolidateV2Intro(true)
+          }}
+        >
+          <img src={infoIcon} className="infoIcon" alt="info" />
+        </a>
       </div>
       <AppBody disabled={showWarning}>
         <RowBetween>
@@ -492,6 +525,14 @@ export default function Swap({
           <AdvancedSwapDetailsDropdown trade={trade} />
         </Wrapper>
       </AppBody>
+
+      <ConsolidateV2Intro
+        show={showConsolidateV2Intro}
+        handleClose={() => {
+          setShowConsolidateV2Intro(false)
+        }}
+        handleConvertV1ToV2={handleConvertV1ToV2}
+      />
     </>
   )
 }

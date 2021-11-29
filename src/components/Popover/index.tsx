@@ -15,9 +15,8 @@ const PopoverContainer = styled.div<{ show: boolean }>`
   background: ${({ theme }) => theme.bg3};
   color: ${({ theme }) => theme.text5};
   line-height: 24px;
-  font-size: .875rem;
+  font-size: 0.875rem;
   border-radius: 12px;
-
 
   @supports ((-webkit-backdrop-filter: blur(2em)) or (backdrop-filter: blur(2em))) {
     background: rgba(52, 58, 63, 0.5);
@@ -43,9 +42,7 @@ export default function Popover({ content, show, children, placement = 'right' }
   const { styles, update, attributes } = usePopper(referenceElement, popperElement, {
     placement,
     strategy: 'fixed',
-    modifiers: [
-      { name: 'offset', options: { offset: [32, 32] } },
-    ]
+    modifiers: [{ name: 'offset', options: { offset: [32, 32] } }]
   })
   useInterval(update, show ? 100 : null)
 

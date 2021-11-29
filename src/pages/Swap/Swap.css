@@ -2,7 +2,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
   margin-bottom: 20px;
+  position: relative;
+  width: 100%;
+  max-width: 451px;
 }
 
 @keyframes pulse-info {
@@ -17,6 +21,24 @@
   }
 }
 
+.btnInfo {
+  background-color: #008a81;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.infoIcon {
+  width: 16px;
+}
 
 
 .btn {
@@ -26,14 +48,29 @@
   text-shadow: none!important;
   border-radius: 6px;
   text-decoration: none!important;
-  color: #ffffff;
   padding: 0 24px;
   transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
   border: 1px solid transparent;
-  font-size: 16px;
   cursor: pointer;
   height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
+  
+}
+
+.btn span {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.disabed {
+  pointer-events: none;
+  animation: none;
+  background-color: #012A27;
+}
+
+.disabed span {
+  color: #6D7B7A;
 }
