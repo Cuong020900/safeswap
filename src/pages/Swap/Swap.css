@@ -1,0 +1,39 @@
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+@keyframes pulse-info {
+  0% {
+    box-shadow: 0 0 0 0 #008a81;
+  }
+  70% {
+    box-shadow: 0 0 0 13px #fb634000;
+  }
+  100% {
+    box-shadow: 0 0 0 0 #fb634000;
+  }
+}
+
+
+
+.btn {
+  animation: pulse-info 2s infinite;
+  background-color: #008a81;
+  border-color: #008a81;
+  text-shadow: none!important;
+  border-radius: 6px;
+  text-decoration: none!important;
+  color: #ffffff;
+  padding: 0 24px;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  border: 1px solid transparent;
+  font-size: 16px;
+  cursor: pointer;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

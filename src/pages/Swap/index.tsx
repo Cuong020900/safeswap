@@ -5,6 +5,7 @@ import ReactGA from 'react-ga'
 import { Text } from 'rebass'
 import { useTranslation } from 'react-i18next'
 import styled, { ThemeContext } from 'styled-components'
+import { RouteComponentProps } from 'react-router-dom'
 import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button'
 import Card, { GreyCard } from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
@@ -51,6 +52,8 @@ import SettingsModal from '../../components/SettingsModal'
 import getTokenSymbol from '../../utils/getTokenSymbol'
 import { shouldShowSwapWarning } from '../../utils/shouldShowSwapWarning'
 import { SlippageWarning } from '../../components/SlippageWarning/SlippageWarning'
+import './Swap.css'
+import { useCurrency } from '../../hooks/Tokens'
 
 const SettingsWrapper = styled.div`
   display: flex;
@@ -79,7 +82,12 @@ const HeaderWrapper = styled.div`
   margin-bottom: 20px;
 `
 
-export default function Swap() {
+export default function Swap({
+  match: {
+    params: { currencyIdA, currencyIdB }
+  },
+  history
+}: RouteComponentProps<{ currencyIdA?: string; currencyIdB?: string }>) {
   useDefaultsFromURLSearch()
   const { t } = useTranslation()
 
@@ -93,6 +101,9 @@ export default function Swap() {
       toggle()
     }
   }
+
+  const currencyA = useCurrency(currencyIdA)
+  const currencyB = useCurrency(currencyIdB)
 
   const { account, chainId } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
@@ -115,6 +126,9 @@ export default function Swap() {
     currencies[Field.OUTPUT],
     typedValue
   )
+
+  console.log('currencies', currencies)
+
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
   const { address: recipientAddress } = useENSAddress(recipient)
   const trade = showWrap ? undefined : v2Trade
@@ -308,6 +322,9 @@ export default function Swap() {
         open={swapWarningCurrency !== null}
         token={swapWarningCurrency}
       />
+      <div className="row">
+        <a className="btn">Consolidate to V2 SafeMoon</a>
+      </div>
       <AppBody disabled={showWarning}>
         <RowBetween>
           <SwapPoolTabs active={'swap'} />
