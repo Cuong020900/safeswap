@@ -325,13 +325,14 @@ export default function Swap({
 
   const handleConvertV1ToV2 = () => {
     history.replace(`/swap/${process.env.REACT_APP_SAFEMOON_TOKEN}/${process.env.REACT_APP_SAFEMOONV2_TOKEN}`)
+    window.location.reload()
   }
 
   const disabledConsolidate = useMemo(
     () =>
       (currencies[Field.INPUT] as any)?.address?.toUpperCase() ===
         process.env.REACT_APP_SAFEMOON_TOKEN?.toUpperCase() &&
-      (currencies[Field.OUTPUT] as any)?.address.toUpperCase() ===
+      (currencies[Field.OUTPUT] as any)?.address?.toUpperCase() ===
         process.env.REACT_APP_SAFEMOONV2_TOKEN?.toUpperCase(),
     [currencies]
   )
