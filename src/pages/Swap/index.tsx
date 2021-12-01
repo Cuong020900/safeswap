@@ -1,5 +1,5 @@
-import { CurrencyAmount, JSBI, Trade } from '@safemoon/sdk'
-import React, { useCallback, useContext, useEffect, useRef, useState, useMemo } from 'react'
+import { ChainId, CurrencyAmount, JSBI, TokenAmount, Trade } from '@safemoon/sdk'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import SVG from 'react-inlinesvg'
 import ReactGA from 'react-ga'
 import { Text } from 'rebass'
@@ -22,7 +22,11 @@ import { TokenWarningCards } from '../../components/TokenWarningCard'
 
 import { getTradeVersion } from '../../data/V1'
 import { useActiveWeb3React } from '../../hooks'
-import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
+import {
+  ApprovalState,
+  useApproveCallbackFromMigrate,
+  useApproveCallbackFromTrade
+} from '../../hooks/useApproveCallback'
 import useENSAddress from '../../hooks/useENSAddress'
 import { useSwapCallback } from '../../hooks/useSwapCallback'
 import useWrapCallback, { WrapType } from '../../hooks/useWrapCallback'
@@ -56,6 +60,9 @@ import { SlippageWarning } from '../../components/SlippageWarning/SlippageWarnin
 import './Swap.css'
 import { useCurrency } from '../../hooks/Tokens'
 import ConsolidateV2Intro from './ConsolidateV2Intro'
+import { consolidation } from '../../constants'
+import useMigrationCallback, { MigrateType } from '../../hooks/useMigrationCallback'
+import BigNumber from 'bignumber.js'
 
 const SettingsWrapper = styled.div`
   display: flex;
@@ -130,6 +137,13 @@ export default function Swap({
     typedValue
   )
 
+  const { migrateType, execute: onMigrate, inputError: migrateInputError } = useMigrationCallback(
+    currencies[Field.INPUT],
+    currencies[Field.OUTPUT],
+    typedValue
+  )
+
+  const showMigrate: boolean = migrateType !== MigrateType.NOT_APPLICABLE
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
   const { address: recipientAddress } = useENSAddress(recipient)
   const trade = showWrap ? undefined : v2Trade
@@ -178,7 +192,11 @@ export default function Swap({
 
   const formattedAmounts = {
     [independentField]: typedValue,
-    [dependentField]: showWrap
+    [dependentField]: showMigrate
+      ? parsedAmounts[independentField]
+        ? new BigNumber(parsedAmounts[independentField]?.toExact() ?? 0)?.dividedBy(1000).toString(10)
+        : ''
+      : showWrap
       ? parsedAmounts[independentField]?.toExact() ?? ''
       : parsedAmounts[dependentField]?.toSignificant(6) ?? ''
   }
@@ -201,6 +219,23 @@ export default function Swap({
       setApprovalSubmitted(true)
     }
   }, [approval, approvalSubmitted])
+
+  const [migrationApproval, migrationApprovalCallback] = useApproveCallbackFromMigrate(
+    typedValue
+      ? new TokenAmount(
+          consolidation.tokens.v1[chainId as ChainId],
+          new BigNumber(typedValue).times(new BigNumber(10).pow(9)).toString()
+        )
+      : new TokenAmount(consolidation.tokens.v1[chainId as ChainId], '0')
+  )
+
+  const [migrationApprovalSubmitted, setMigrationApprovalSubmitted] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (migrationApproval === ApprovalState.PENDING) {
+      setMigrationApprovalSubmitted(true)
+    }
+  }, [migrationApproval, migrationApprovalSubmitted])
 
   const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(currencyBalances[Field.INPUT])
   const atMaxAmountInput = Boolean(maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput))
@@ -268,6 +303,10 @@ export default function Swap({
       (approvalSubmitted && approval === ApprovalState.APPROVED)) &&
     !(priceImpactSeverity > 3 && !isExpertMode)
 
+  const showMigrateApproveFlow =
+    migrationApproval === ApprovalState.NOT_APPROVED ||
+    migrationApproval === ApprovalState.PENDING ||
+    (migrationApprovalSubmitted && migrationApproval === ApprovalState.APPROVED)
   const [dismissedToken0] = useTokenWarningDismissal(chainId, currencies[Field.INPUT])
   const [dismissedToken1] = useTokenWarningDismissal(chainId, currencies[Field.OUTPUT])
   const showWarning =
@@ -323,18 +362,28 @@ export default function Swap({
     }
   }, [currencyA, currencyB])
 
-  const handleConvertV1ToV2 = () => {
-    history.replace(`/swap/${process.env.REACT_APP_SAFEMOON_TOKEN}/${process.env.REACT_APP_SAFEMOONV2_TOKEN}`)
-    window.location.reload()
-  }
+  const handleConvertV1ToV2 = useCallback(() => {
+    if (!(chainId === ChainId.BSC_TESTNET || chainId === ChainId.BSC_MAINNET)) {
+      return
+    }
+    setMigrationApprovalSubmitted(false)
+    onCurrencySelection(Field.INPUT, consolidation.tokens.v1[chainId as ChainId])
+    onCurrencySelection(Field.OUTPUT, consolidation.tokens.v2[chainId as ChainId])
+    history.push(
+      `/swap?inputCurrency=${consolidation.addresses.v1[chainId as ChainId]}&outputCurrency=${
+        consolidation.addresses.v2[chainId as ChainId]
+      }`
+    )
+  }, [chainId, history, onCurrencySelection])
 
   const disabledConsolidate = useMemo(
     () =>
-      (currencies[Field.INPUT] as any)?.address?.toUpperCase() ===
-        process.env.REACT_APP_SAFEMOON_TOKEN?.toUpperCase() &&
-      (currencies[Field.OUTPUT] as any)?.address?.toUpperCase() ===
-        process.env.REACT_APP_SAFEMOONV2_TOKEN?.toUpperCase(),
-    [currencies]
+      !(chainId === ChainId.BSC_TESTNET || chainId === ChainId.BSC_MAINNET) ||
+      ((currencies[Field.INPUT] as any)?.address?.toUpperCase() ===
+        consolidation.addresses.v1[chainId as ChainId]?.toUpperCase() &&
+        (currencies[Field.OUTPUT] as any)?.address?.toUpperCase() ===
+          consolidation.addresses.v2[chainId as ChainId]?.toUpperCase()),
+    [currencies, chainId]
   )
 
   return (
@@ -387,7 +436,11 @@ export default function Swap({
 
           <AutoColumn gap={'lg'}>
             <CurrencyInputPanel
-              label={independentField === Field.OUTPUT && !showWrap ? t('fromestimated') : t('fromCapitalized')}
+              label={
+                independentField === Field.OUTPUT && !(showWrap || showMigrate)
+                  ? t('fromestimated')
+                  : t('fromCapitalized')
+              }
               value={formattedAmounts[Field.INPUT]}
               showMaxButton={!atMaxAmountInput}
               currency={currencies[Field.INPUT]}
@@ -406,6 +459,7 @@ export default function Swap({
                   clickable
                   onClick={() => {
                     setApprovalSubmitted(false) // reset 2 step UI for approvals
+                    setMigrationApprovalSubmitted(false)
                     onSwitchTokens()
                   }}
                 >
@@ -416,7 +470,9 @@ export default function Swap({
             <CurrencyInputPanel
               value={formattedAmounts[Field.OUTPUT]}
               onUserInput={handleTypeOutput}
-              label={independentField === Field.INPUT && !showWrap ? t('toestimated') : t('toCapitalized')}
+              label={
+                independentField === Field.INPUT && !(showWrap || showMigrate) ? t('toestimated') : t('toCapitalized')
+              }
               showMaxButton={false}
               currency={currencies[Field.OUTPUT]}
               onCurrencySelect={handleOutputSelect}
@@ -424,7 +480,7 @@ export default function Swap({
               id="swap-currency-output"
             />
 
-            {showWrap ? null : (
+            {showWrap || showMigrate ? null : (
               <Card borderRadius={'20px'} padding={'0'}>
                 <AutoColumn gap="4px" justify={'center'}>
                   <TradePrice
@@ -446,6 +502,39 @@ export default function Swap({
                 {wrapInputError ??
                   (wrapType === WrapType.WRAP ? 'Wrap' : wrapType === WrapType.UNWRAP ? 'Unwrap' : null)}
               </ButtonPrimary>
+            ) : showMigrate ? (
+              showMigrateApproveFlow ? (
+                <RowBetween>
+                  <ButtonPrimary
+                    onClick={migrationApprovalCallback}
+                    disabled={migrationApproval !== ApprovalState.NOT_APPROVED || migrationApprovalSubmitted}
+                    width="48%"
+                    altDisbaledStyle={migrationApproval === ApprovalState.PENDING} // show solid button while waiting
+                  >
+                    {migrationApproval === ApprovalState.PENDING ? (
+                      <Dots>Approving</Dots>
+                    ) : migrationApprovalSubmitted && migrationApproval === ApprovalState.APPROVED ? (
+                      'Approved'
+                    ) : (
+                      'Approve ' + getTokenSymbol(currencies[Field.INPUT], chainId)
+                    )}
+                  </ButtonPrimary>
+                  <ButtonError
+                    onClick={onMigrate}
+                    width="48%"
+                    id="migrate-button"
+                    disabled={migrationApproval !== ApprovalState.APPROVED || Boolean(migrateInputError)}
+                  >
+                    <Text fontSize={16} fontWeight={500}>
+                      {migrateInputError ?? (migrateType === MigrateType.MIGRATE ? 'Migrate' : null)}
+                    </Text>
+                  </ButtonError>
+                </RowBetween>
+              ) : (
+                <ButtonPrimary disabled={Boolean(migrateInputError)} onClick={onMigrate}>
+                  {migrateInputError ?? (migrateType === MigrateType.MIGRATE ? 'Migrate' : null)}
+                </ButtonPrimary>
+              )
             ) : noRoute && userHasSpecifiedInputOutput ? (
               <GreyCard style={{ textAlign: 'center' }}>
                 <TYPE.main mb="4px">{t('insufficientLiquidityForThisTrade')}</TYPE.main>

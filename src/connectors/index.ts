@@ -42,14 +42,12 @@ export const walletconnect = new WalletConnectConnector({
   rpc: { [ChainId.MAINNET]: ETH_URL },
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true
-  // pollingInterval: 15000
 })
 
 export const walletconnectBSC = new WalletConnectConnector({
   rpc: { [ChainId.BSC_MAINNET]: BSC_URL },
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true
-  // pollingInterval: 15000
 })
 
 // mainnet only
