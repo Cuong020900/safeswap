@@ -6,11 +6,14 @@ import { ERC20_BYTES32_ABI } from '../constants/abis/erc20'
 import UNISOCKS_ABI from '../constants/abis/unisocks.json'
 import ERC20_ABI from '../constants/abis/erc20.json'
 import WETH_ABI from '../constants/abis/weth.json'
+import SFM_V2_ABI from '../constants/abis/safemoon.json'
+import MIGRATION_ABI from '../constants/abis/migration.json'
 import { MIGRATOR_ABI, MIGRATOR_ADDRESS } from '../constants/abis/migrator'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 import { V1_EXCHANGE_ABI, V1_FACTORY_ABI, V1_FACTORY_ADDRESSES } from '../constants/v1'
 import { getContract } from '../utils'
 import { useActiveWeb3React } from './index'
+import { consolidation } from '../constants'
 
 // returns null on errors
 export function useContract(address?: string, ABI?: any, withSignerIfPossible = true): Contract | null {
@@ -59,6 +62,16 @@ export function usePairContract(pairAddress?: string, withSignerIfPossible?: boo
 export function useMulticallContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && MULTICALL_NETWORKS[chainId], MULTICALL_ABI, false)
+}
+
+export function useSafemoonV2Contract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && consolidation.addresses.v2[chainId as ChainId], SFM_V2_ABI)
+}
+
+export function useMigrationContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && consolidation.addresses.migration[chainId as ChainId], MIGRATION_ABI)
 }
 
 export function useSocksController(): Contract | null {

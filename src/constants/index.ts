@@ -3,7 +3,7 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { ChainId, JSBI, Percent, Token, WETH } from '@safemoon/sdk'
 
-import { injected, binanceinjected, walletconnect, walletconnectBSC } from '../connectors'
+import { binanceinjected, injected, walletconnect, walletconnectBSC } from '../connectors'
 import { BigNumber } from '@ethersproject/bignumber'
 import { BigNumberish } from 'ethers'
 import mitt from 'mitt'
@@ -23,6 +23,16 @@ type ChainTokenList = {
 type ChainAddress = {
   [chainId in ChainId]: string
 }
+
+type Address = {
+  [chainId in ChainId]: string
+}
+
+type Tokens = {
+  [chainId in ChainId]: Token
+}
+
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export const ROUTER_ADDRESS: ChainAddress = {
   [ChainId.MAINNET]: '0xCf7d4B75b7bCcDb8B4F992Fe05970680E2EE1A02',
@@ -100,6 +110,68 @@ const WETH_ONLY: ChainTokenList = {
   [ChainId.KOVAN]: [WETH[ChainId.KOVAN]],
   [ChainId.BSC_MAINNET]: [WETH[ChainId.BSC_MAINNET]],
   [ChainId.BSC_TESTNET]: [WETH[ChainId.BSC_TESTNET]]
+}
+
+export const SFM_V1: Address = {
+  [ChainId.MAINNET]: ZERO_ADDRESS,
+  [ChainId.ROPSTEN]: ZERO_ADDRESS,
+  [ChainId.RINKEBY]: ZERO_ADDRESS,
+  [ChainId.GÖRLI]: ZERO_ADDRESS,
+  [ChainId.KOVAN]: ZERO_ADDRESS,
+  [ChainId.BSC_MAINNET]: process.env.REACT_APP_SAFEMOON_TOKEN || ZERO_ADDRESS,
+  [ChainId.BSC_TESTNET]: process.env.REACT_APP_SAFEMOON_TESTNET_TOKEN || ZERO_ADDRESS
+}
+
+export const SFM_V2: Address = {
+  [ChainId.MAINNET]: ZERO_ADDRESS,
+  [ChainId.ROPSTEN]: ZERO_ADDRESS,
+  [ChainId.RINKEBY]: ZERO_ADDRESS,
+  [ChainId.GÖRLI]: ZERO_ADDRESS,
+  [ChainId.KOVAN]: ZERO_ADDRESS,
+  [ChainId.BSC_MAINNET]: process.env.REACT_APP_SAFEMOONV2_TOKEN || ZERO_ADDRESS,
+  [ChainId.BSC_TESTNET]: process.env.REACT_APP_SAFEMOONV2_TESTNET_TOKEN || ZERO_ADDRESS
+}
+
+export const MIGRATION: Address = {
+  [ChainId.MAINNET]: ZERO_ADDRESS,
+  [ChainId.ROPSTEN]: ZERO_ADDRESS,
+  [ChainId.RINKEBY]: ZERO_ADDRESS,
+  [ChainId.GÖRLI]: ZERO_ADDRESS,
+  [ChainId.KOVAN]: ZERO_ADDRESS,
+  [ChainId.BSC_MAINNET]: process.env.REACT_APP_MIGRATION || ZERO_ADDRESS,
+  [ChainId.BSC_TESTNET]: process.env.REACT_APP_MIGRATION_TESTNET || ZERO_ADDRESS
+}
+
+export const SfmV1: Tokens = {
+  [ChainId.MAINNET]: new Token(ChainId.MAINNET, SFM_V1[ChainId.MAINNET], 9, 'SAFEMOON', 'Safemoon'),
+  [ChainId.ROPSTEN]: new Token(ChainId.ROPSTEN, SFM_V1[ChainId.ROPSTEN], 9, 'SAFEMOON', 'Safemoon'),
+  [ChainId.RINKEBY]: new Token(ChainId.RINKEBY, SFM_V1[ChainId.RINKEBY], 9, 'SAFEMOON', 'Safemoon'),
+  [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, SFM_V1[ChainId.GÖRLI], 9, 'SAFEMOON', 'Safemoon'),
+  [ChainId.KOVAN]: new Token(ChainId.KOVAN, SFM_V1[ChainId.KOVAN], 9, 'SAFEMOON', 'Safemoon'),
+  [ChainId.BSC_MAINNET]: new Token(ChainId.BSC_MAINNET, SFM_V1[ChainId.BSC_MAINNET], 9, 'SAFEMOON', 'Safemoon'),
+  [ChainId.BSC_TESTNET]: new Token(ChainId.BSC_TESTNET, SFM_V1[ChainId.BSC_TESTNET], 9, 'SAFEMOON', 'Safemoon')
+}
+
+export const SfmV2: Tokens = {
+  [ChainId.MAINNET]: new Token(ChainId.MAINNET, SFM_V1[ChainId.MAINNET], 9, 'SAFEMOON', 'Safemoon'),
+  [ChainId.ROPSTEN]: new Token(ChainId.ROPSTEN, SFM_V1[ChainId.ROPSTEN], 9, 'SAFEMOON', 'Safemoon'),
+  [ChainId.RINKEBY]: new Token(ChainId.RINKEBY, SFM_V1[ChainId.RINKEBY], 9, 'SAFEMOON', 'Safemoon'),
+  [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, SFM_V1[ChainId.GÖRLI], 9, 'SAFEMOON', 'Safemoon'),
+  [ChainId.KOVAN]: new Token(ChainId.KOVAN, SFM_V1[ChainId.KOVAN], 9, 'SAFEMOON', 'Safemoon'),
+  [ChainId.BSC_MAINNET]: new Token(ChainId.BSC_MAINNET, SFM_V2[ChainId.BSC_MAINNET], 9, 'SFM', 'Safemoon V2'),
+  [ChainId.BSC_TESTNET]: new Token(ChainId.BSC_TESTNET, SFM_V2[ChainId.BSC_TESTNET], 9, 'SFM', 'Safemoon V2')
+}
+
+export const consolidation = {
+  addresses: {
+    v1: SFM_V1,
+    v2: SFM_V2,
+    migration: MIGRATION
+  },
+  tokens: {
+    v1: SfmV1,
+    v2: SfmV2
+  }
 }
 
 // used to construct intermediary pairs for trading
@@ -250,7 +322,7 @@ export const PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN: Percent = new Percent(JSBI.Bi
 export const BLOCKED_PRICE_IMPACT_NON_EXPERT: Percent = new Percent(JSBI.BigInt(1500), BIPS_BASE) // 15%
 
 // used to ensure the user doesn't send so much ETH so they end up with <.01
-export const MIN_ETH: JSBI = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16)) // .01 ETH
+export const MIN_ETH: JSBI = JSBI.exponentiate(JSBI.BigInt(20), JSBI.BigInt(16)) // .01 ETH
 export const BETTER_TRADE_LINK_THRESHOLD = new Percent(JSBI.BigInt(75), JSBI.BigInt(10000))
 
 export const MAX_PRIORITY_FEE: BigNumberish = BigNumber.from(2).mul(10 ** 9)
