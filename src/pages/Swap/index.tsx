@@ -397,7 +397,7 @@ export default function Swap({
       />
       <div className="row">
         <a className={`btn ${disabledConsolidate ? 'disabed' : ''}`} onClick={handleConvertV1ToV2}>
-          <span>Consolidate to V2 SafeMoon</span>
+          <span>Consolidate to V2 SafeMoon!</span>
         </a>
         <a
           className="btnInfo"
