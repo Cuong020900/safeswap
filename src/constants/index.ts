@@ -259,7 +259,7 @@ export const ETHERSCAN_API_KEY: string = process.env.REACT_APP_ETHERSCAN_API_KEY
 
 // the Safemoon Default token list lives here
 export const DEFAULT_TOKEN_LIST_URL: string =
-  process.env.REACT_APP_DEFAULT_TOKEN_LIST_URL || 'https://marketdatadev.safemoon.net/api/swap/tokens'
+  process.env.REACT_APP_DEFAULT_TOKEN_LIST_URL || 'https://marketdata.safemoon.net/api/swap/tokens'
 
 export const DEFAULT_TOKEN_BLACK_LIST: string =
   process.env.REACT_APP_DEFAULT_TOKEN_BLACK_LIST_URL || 'https://marketdata.safemoon.net/api/swap/token-blacklist'
