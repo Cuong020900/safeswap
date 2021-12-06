@@ -414,7 +414,7 @@ export default function Swap({
           <img src={infoIcon} className="infoIcon" alt="info" />
         </a>
       </div>
-      <AppBody disabled={showWarning} overflow={'none'}>
+      <AppBody disabled={showWarning} overflow={showMigrateWarning ? 'none' : ''}>
         {showMigrateWarning && (
           <div className={'warning-swap'}>
             <a
@@ -459,6 +459,7 @@ export default function Swap({
               onClick={() => {
                 if (readed && onMigrate) {
                   onMigrate()
+                  setShowMigrateWarning(false)
                 }
               }}
             >
