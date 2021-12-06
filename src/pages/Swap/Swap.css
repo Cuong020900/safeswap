@@ -102,10 +102,11 @@
   text-align: center;
 }
 
-.link-wrapper {
+.link-wrapper .address-token {
   font-size: 14px;
   color: #008a81;
   text-align: center;
+  margin-right: 8px;
 }
 
 .copyIcon {

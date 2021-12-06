@@ -67,6 +67,7 @@ import ConsolidateV2Intro from './ConsolidateV2Intro'
 import { consolidation } from '../../constants'
 import useMigrationCallback, { MigrateType } from '../../hooks/useMigrationCallback'
 import BigNumber from 'bignumber.js'
+import Copy from './Copy'
 
 const SettingsWrapper = styled.div`
   display: flex;
@@ -438,10 +439,9 @@ export default function Swap({
             <p className={'warning-swap-text'}>SafeMoon V2 (SFM) contract:</p>
 
             <div className={'link-wrapper'}>
-              {consolidation.addresses.v2[chainId as ChainId]}
-              <a className="btn-copy">
-                <img src={copyIcon} alt="copy" className={'copyIcon'} />
-              </a>
+              <Copy toCopy={consolidation.addresses.v2[chainId as ChainId]}>
+                <span className="address-token">{consolidation.addresses.v2[chainId as ChainId]}</span>
+              </Copy>
             </div>
 
             <div
