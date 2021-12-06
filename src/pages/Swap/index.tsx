@@ -50,10 +50,7 @@ import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import AppBody from '../AppBody'
 // @ts-ignore
 import TradeIcon from '../../assets/icons/trade.svg'
-import copyIcon from '../../assets/images/copy.svg'
-import checkIcon from '../../assets/images/check.svg'
-import checkedIcon from '../../assets/images/checked.svg'
-import closeIcon from '../../assets/images/close-btn.png'
+
 import QuestionHelper from '../../components/QuestionHelper'
 // @ts-ignore
 import SettingsIcon from '../../assets/icons/candle-2.svg'
@@ -67,7 +64,7 @@ import ConsolidateV2Intro from './ConsolidateV2Intro'
 import { consolidation } from '../../constants'
 import useMigrationCallback, { MigrateType } from '../../hooks/useMigrationCallback'
 import BigNumber from 'bignumber.js'
-import Copy from './Copy'
+import WarningMigrate from './WarningMigrate'
 
 const SettingsWrapper = styled.div`
   display: flex;
@@ -402,70 +399,31 @@ export default function Swap({
         open={swapWarningCurrency !== null}
         token={swapWarningCurrency}
       />
-      <div className="row">
-        <a className={`btn ${disabledConsolidate ? 'disabed' : ''}`} onClick={handleConvertV1ToV2}>
-          <span>Consolidate to V2 SafeMoon!</span>
-        </a>
-        <a
-          className="btnInfo"
-          onClick={() => {
-            setShowConsolidateV2Intro(true)
-          }}
-        >
-          <img src={infoIcon} className="infoIcon" alt="info" />
-        </a>
-      </div>
+      {!showMigrateWarning && (
+        <div className="row">
+          <a className={`btn ${disabledConsolidate ? 'disabed' : ''}`} onClick={handleConvertV1ToV2}>
+            <span>Consolidate to V2 SafeMoon!</span>
+          </a>
+          <a
+            className="btnInfo"
+            onClick={() => {
+              setShowConsolidateV2Intro(true)
+            }}
+          >
+            <img src={infoIcon} className="infoIcon" alt="info" />
+          </a>
+        </div>
+      )}
+
       <AppBody disabled={showWarning} overflow={showMigrateWarning ? 'none' : ''}>
         {showMigrateWarning && (
-          <div className={'warning-swap'}>
-            <a
-              className="btn-close-swap"
-              onClick={() => {
-                setShowMigrateWarning(false)
-              }}
-            >
-              <img src={closeIcon} className="close-icon-swap" />
-            </a>
-            <h3 className={'warning-swap-title'}>Important!</h3>
-            <p className={'warning-swap-text'}>
-              Please note that after your SafeMoon has been consolidated into V2 SafeMoon, it will not show a price for
-              a period of time.
-            </p>
-            <h3 className={'warning-swap-title'}>Do not panic.</h3>
-            <p className={'warning-swap-text'}>
-              This is normal. Once a sizable amount of holders begin migrating, the market cap will eventually find a
-              stable price and then it will be displayed. Please be patient during this time.
-            </p>
-            <p className={'warning-swap-text'}>SafeMoon V2 (SFM) contract:</p>
-
-            <div className={'link-wrapper'}>
-              <Copy toCopy={consolidation.addresses.v2[chainId as ChainId]}>
-                <span className="address-token">{consolidation.addresses.v2[chainId as ChainId]}</span>
-              </Copy>
-            </div>
-
-            <div
-              className={'checkbox'}
-              onClick={() => {
-                setReaded(prev => !prev)
-              }}
-            >
-              <img src={readed ? checkedIcon : checkIcon} className={'checkIcon'} alt="check" />
-              <span>I have read and I understand</span>
-            </div>
-
-            <a
-              className={`btn ${!readed && 'disabled'}`}
-              onClick={() => {
-                if (readed && onMigrate) {
-                  onMigrate()
-                  setShowMigrateWarning(false)
-                }
-              }}
-            >
-              Continue
-            </a>
-          </div>
+          <WarningMigrate
+            setShowMigrateWarning={setShowMigrateWarning}
+            readed={readed}
+            setReaded={setReaded}
+            onMigrate={onMigrate}
+            chainId={chainId}
+          />
         )}
 
         <RowBetween>
