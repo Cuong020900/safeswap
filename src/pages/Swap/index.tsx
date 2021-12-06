@@ -50,6 +50,10 @@ import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import AppBody from '../AppBody'
 // @ts-ignore
 import TradeIcon from '../../assets/icons/trade.svg'
+import copyIcon from '../../assets/images/copy.svg'
+import checkIcon from '../../assets/images/check.svg'
+import checkedIcon from '../../assets/images/checked.svg'
+import closeIcon from '../../assets/images/close-btn.png'
 import QuestionHelper from '../../components/QuestionHelper'
 // @ts-ignore
 import SettingsIcon from '../../assets/icons/candle-2.svg'
@@ -100,6 +104,8 @@ export default function Swap({
   useDefaultsFromURLSearch()
   const { t } = useTranslation()
   const [showConsolidateV2Intro, setShowConsolidateV2Intro] = useState(false)
+  const [showMigrateWarning, setShowMigrateWarning] = useState(false)
+  const [readed, setReaded] = useState(false)
 
   const node = useRef<HTMLDivElement>()
   const open = useSettingsMenuOpen()
@@ -408,7 +414,59 @@ export default function Swap({
           <img src={infoIcon} className="infoIcon" alt="info" />
         </a>
       </div>
-      <AppBody disabled={showWarning}>
+      <AppBody disabled={showWarning} overflow={'none'}>
+        {showMigrateWarning && (
+          <div className={'warning-swap'}>
+            <a
+              className="btn-close-swap"
+              onClick={() => {
+                setShowMigrateWarning(false)
+              }}
+            >
+              <img src={closeIcon} className="close-icon-swap" />
+            </a>
+            <h3 className={'warning-swap-title'}>Important!</h3>
+            <p className={'warning-swap-text'}>
+              Please note that after your SafeMoon has been consolidated into V2 SafeMoon, it will not show a price for
+              a period of time.
+            </p>
+            <h3 className={'warning-swap-title'}>Do not panic.</h3>
+            <p className={'warning-swap-text'}>
+              This is normal. Once a sizable amount of holders begin migrating, the market cap will eventually find a
+              stable price and then it will be displayed. Please be patient during this time.
+            </p>
+            <p className={'warning-swap-text'}>SafeMoon V2 (SFM) contract:</p>
+
+            <div className={'link-wrapper'}>
+              {consolidation.addresses.v2[chainId as ChainId]}
+              <a className="btn-copy">
+                <img src={copyIcon} alt="copy" className={'copyIcon'} />
+              </a>
+            </div>
+
+            <div
+              className={'checkbox'}
+              onClick={() => {
+                setReaded(prev => !prev)
+              }}
+            >
+              <img src={readed ? checkedIcon : checkIcon} className={'checkIcon'} alt="check" />
+              <span>I have read and I understand</span>
+            </div>
+
+            <a
+              className={`btn ${!readed && 'disabled'}`}
+              onClick={() => {
+                if (readed && onMigrate) {
+                  onMigrate()
+                }
+              }}
+            >
+              Continue
+            </a>
+          </div>
+        )}
+
         <RowBetween>
           <SwapPoolTabs active={'swap'} />
           <HeaderWrapper>
@@ -520,7 +578,13 @@ export default function Swap({
                     )}
                   </ButtonPrimary>
                   <ButtonError
-                    onClick={onMigrate}
+                    onClick={() => {
+                      if (disabledConsolidate) {
+                        setShowMigrateWarning(true)
+                      } else if (onMigrate) {
+                        onMigrate()
+                      }
+                    }}
                     width="48%"
                     id="migrate-button"
                     disabled={migrationApproval !== ApprovalState.APPROVED || Boolean(migrateInputError)}
@@ -531,7 +595,16 @@ export default function Swap({
                   </ButtonError>
                 </RowBetween>
               ) : (
-                <ButtonPrimary disabled={Boolean(migrateInputError)} onClick={onMigrate}>
+                <ButtonPrimary
+                  disabled={Boolean(migrateInputError)}
+                  onClick={() => {
+                    if (disabledConsolidate) {
+                      setShowMigrateWarning(true)
+                    } else if (onMigrate) {
+                      onMigrate()
+                    }
+                  }}
+                >
                   {migrateInputError ?? (migrateType === MigrateType.MIGRATE ? 'Migrate' : null)}
                 </ButtonPrimary>
               )

@@ -74,3 +74,83 @@
 .disabed span {
   color: #6D7B7A;
 }
+
+.warning-swap {
+  background-color: rgba(2,2,2,0.8);
+  border-radius: 24px;
+  padding: 20px;
+  position: absolute;
+  top: -40px;
+  left: 10px;
+  right: 10px;
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+}
+
+.warning-swap-title {
+  text-align: center;
+  color: #E71455;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.warning-swap-text {
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.link-wrapper {
+  font-size: 14px;
+  color: #008a81;
+  text-align: center;
+}
+
+.copyIcon {
+  width: 16px;
+}
+
+.btn-copy {
+  padding: 0 10px;
+  vertical-align: middle;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+  cursor: pointer;
+  margin-bottom: 24px;
+}
+
+.checkbox span {
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.checkIcon {
+  width: 16px;
+}
+
+.disabled {
+  animation: none;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.btn-close-swap {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.close-icon-swap {
+  width: 16px;
+}
+
+.btn-close-swap:hover {
+  background-color: rgba(0,0,0);
+}
