@@ -11,6 +11,8 @@ const CopyIcon = styled(LinkStyledButton)`
   display: flex;
   text-decoration: none;
   font-size: 0.825rem;
+  justify-content: center;
+  width: 100%;
   :hover,
   :active,
   :focus {
