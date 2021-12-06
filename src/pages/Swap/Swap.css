@@ -76,7 +76,7 @@
 }
 
 .warning-swap {
-  background-color: rgba(2,2,2,0.9);
+  background-color: rgba(2,2,2,1);
   border-radius: 24px;
   padding: 20px;
   position: absolute;
@@ -85,6 +85,7 @@
   right: -10px;
   z-index: 9999;
   backdrop-filter: blur(20px);
+  border: 1px solid #202021;
 }
 
 .warning-swap-title {
