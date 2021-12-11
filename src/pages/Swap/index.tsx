@@ -150,7 +150,7 @@ export default function Swap({
   const showMigrate: boolean = migrateType !== MigrateType.NOT_APPLICABLE
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
   const { address: recipientAddress } = useENSAddress(recipient)
-  const trade = showWrap ? undefined : v2Trade
+  const trade = showWrap || showMigrate ? undefined : v2Trade
 
   const parsedAmounts = showWrap
     ? {
@@ -198,7 +198,9 @@ export default function Swap({
     [independentField]: typedValue,
     [dependentField]: showMigrate
       ? parsedAmounts[independentField]
-        ? new BigNumber(parsedAmounts[independentField]?.toExact() ?? 0)?.dividedBy(1000).toString(10)
+        ? independentField === Field.INPUT
+          ? new BigNumber(parsedAmounts[independentField]?.toExact() ?? 0)?.dividedBy(1000).toString(10)
+          : new BigNumber(parsedAmounts[independentField]?.toExact() ?? 0)?.times(1000).toString(10)
         : ''
       : showWrap
       ? parsedAmounts[independentField]?.toExact() ?? ''
@@ -225,11 +227,10 @@ export default function Swap({
   }, [approval, approvalSubmitted])
 
   const [migrationApproval, migrationApprovalCallback] = useApproveCallbackFromMigrate(
-    typedValue
-      ? new TokenAmount(
-          consolidation.tokens.v1[chainId as ChainId],
-          new BigNumber(typedValue).times(new BigNumber(10).pow(9)).toString()
-        )
+    typedValue && parsedAmount
+      ? independentField === Field.INPUT
+        ? parsedAmount
+        : new TokenAmount(consolidation.tokens.v1[chainId as ChainId], parsedAmount.multiply('1000').toSignificant(12))
       : new TokenAmount(consolidation.tokens.v1[chainId as ChainId], '0')
   )
 
