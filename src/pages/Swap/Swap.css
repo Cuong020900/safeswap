@@ -36,6 +36,17 @@
   cursor: pointer;
 }
 
+@media (max-width: 767px) {
+  .btnInfo {
+    margin-top: 29px;
+    margin-left: 10px;
+    width: 24px;
+    height: 24px;
+    position: static;
+    transform: none;
+  }
+}
+
 .infoIcon {
   width: 16px;
 }
