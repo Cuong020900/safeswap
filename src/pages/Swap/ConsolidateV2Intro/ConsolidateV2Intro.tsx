@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react'
 import Modal from 'react-modal'
 import closeIcon from '../../../assets/images/close.svg'
@@ -13,7 +14,6 @@ const ConsolidateV2Intro = ({ show, handleClose, handleConvertV1ToV2 }: Props) =
   return (
     <Modal isOpen={show} onRequestClose={handleClose} className="Modal">
       <a
-	href='#/'
         className={'btn-close'}
         onClick={() => {
           handleClose()
@@ -28,7 +28,7 @@ const ConsolidateV2Intro = ({ show, handleClose, handleConvertV1ToV2 }: Props) =
           Conversion to V2 will be required to hold the proper SafeMoon in order to obtain value from our ecosystem and
           smart contract moving forward.
         </p>
-        <h3 className="consolidate-intro-heading">What is V2 SafeMoon? <span role='img' aria-label='question'>❗️❓</span></h3>
+        <h3 className="consolidate-intro-heading">What is V2 SafeMoon? ❗️❓</h3>
         <p className="consolidate-intro-text">
           Simply put, SafeMoon V2 is version 2 of the SafeMoon Smart Contract. We have improved the flexibility,
           security and accessibility of the traditional SafeMoon token by adding mechanisms that allow SafeMoon to be
@@ -39,7 +39,7 @@ const ConsolidateV2Intro = ({ show, handleClose, handleConvertV1ToV2 }: Props) =
           <b>Note:</b> There is NO cost of SafeMoon to convert. Your full amount of SafeMoon V2 will be equal in value
           to your initial V1 SafeMoon after conversion.
         </p>
-        <h3 className="consolidate-intro-heading">What will I need to do? <span role='img' aria-label='thinking'>🤔</span></h3>
+        <h3 className="consolidate-intro-heading">What will I need to do? 🤔</h3>
         <p className="consolidate-intro-text">
           <b>Step 1:</b> Ensure you have enough BNB in your wallet set aside for the &ldquo;gas fee&ldquo;: Typically
           just a few dollars should be enough. Unfortunately, this is blockchain cost we control as token developers.
@@ -60,7 +60,6 @@ const ConsolidateV2Intro = ({ show, handleClose, handleConvertV1ToV2 }: Props) =
         <h3 className="consolidate-intro-heading">Get started!</h3>
 
         <a
-	  href='#/'
           className="btn"
           onClick={() => {
             handleConvertV1ToV2()

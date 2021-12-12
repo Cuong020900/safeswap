@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { ChainId, CurrencyAmount, JSBI, TokenAmount, Trade } from '@safemoon/sdk'
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import SVG from 'react-inlinesvg'
@@ -402,11 +403,10 @@ export default function Swap({
       />
       {!showMigrateWarning && (
         <div className="row">
-          <a href='#/' className={`btn ${disabledConsolidate ? 'disabed' : ''}`} onClick={handleConvertV1ToV2}>
+          <a className={`btn ${disabledConsolidate ? 'disabed' : ''}`} onClick={handleConvertV1ToV2}>
             <span>Consolidate to V2 SafeMoon!</span>
           </a>
           <a
-	    href='#/'
             className="btnInfo"
             onClick={() => {
               setShowConsolidateV2Intro(true)
