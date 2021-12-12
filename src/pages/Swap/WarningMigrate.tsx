@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react'
 import { ChainId } from '@safemoon/sdk'
 import checkIcon from '../../assets/images/check.svg'
@@ -18,7 +19,6 @@ const WarningMigrate = ({ setShowMigrateWarning, readed, setReaded, onMigrate, c
   return (
     <div className={'warning-swap'}>
       <a
-	href='#/'
         className="btn-close-swap"
         onClick={() => {
           setShowMigrateWarning(false)
@@ -55,7 +55,6 @@ const WarningMigrate = ({ setShowMigrateWarning, readed, setReaded, onMigrate, c
       </div>
 
       <a
-	href='#/'
         className={`btn ${!readed && 'disabled'}`}
         onClick={() => {
           if (readed && onMigrate) {
