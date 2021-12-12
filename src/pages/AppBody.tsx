@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import Noise from '../assets/images/noise.png';
+import Noise from '../assets/images/noise.png'
 
-export const BodyWrapper = styled.div<{ disabled?: boolean }>`
+export const BodyWrapper = styled.div<{ disabled?: boolean; overflow?: string }>`
   position: relative;
   max-width: 451px;
   width: 100%;
@@ -11,16 +11,16 @@ export const BodyWrapper = styled.div<{ disabled?: boolean }>`
   padding: 1.5rem;
   opacity: ${({ disabled }) => (disabled ? '0.4' : '1')};
   pointer-events: ${({ disabled }) => disabled && 'none'};
-  overflow: hidden;
+  overflow: ${({ overflow }) => overflow || 'hidden'};
 
   @supports ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
     background-color: rgba(255, 255, 255, 0.1);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
   }
-  
+
   &::before {
-    content: "";
+    content: '';
     z-index: -1;
     background-image: url(${Noise});
     background-repeat: repeat;
@@ -39,6 +39,18 @@ export const BodyWrapper = styled.div<{ disabled?: boolean }>`
 /**
  * The styled container element that wraps the content of most pages and the tabs.
  */
-export default function AppBody({ children, disabled }: { children: React.ReactNode; disabled?: boolean }) {
-  return <BodyWrapper disabled={disabled}>{children}</BodyWrapper>
+export default function AppBody({
+  children,
+  disabled,
+  overflow
+}: {
+  children: React.ReactNode
+  disabled?: boolean
+  overflow?: string
+}) {
+  return (
+    <BodyWrapper disabled={disabled} overflow={overflow}>
+      {children}
+    </BodyWrapper>
+  )
 }

@@ -1,0 +1,169 @@
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  position: relative;
+  width: 100%;
+  max-width: 451px;
+}
+
+@keyframes pulse-info {
+  0% {
+    box-shadow: 0 0 0 0 #008a81;
+  }
+  70% {
+    box-shadow: 0 0 0 13px #fb634000;
+  }
+  100% {
+    box-shadow: 0 0 0 0 #fb634000;
+  }
+}
+
+.btnInfo {
+  background-color: #008a81;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  .btnInfo {
+    margin-left: 10px;
+    width: 24px;
+    height: 24px;
+    position: static;
+    transform: none;
+  }
+}
+
+.infoIcon {
+  width: 16px;
+}
+
+
+.btn {
+  animation: pulse-info 2s infinite;
+  background-color: #008a81;
+  border-color: #008a81;
+  text-shadow: none!important;
+  border-radius: 6px;
+  text-decoration: none!important;
+  padding: 0 24px;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  border: 1px solid transparent;
+  cursor: pointer;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+.btn span {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.disabed {
+  pointer-events: none;
+  animation: none;
+  background-color: #012A27;
+}
+
+.disabed span {
+  color: #6D7B7A;
+}
+
+.warning-swap {
+  background-color: rgba(2,2,2,1);
+  border-radius: 24px;
+  padding: 20px;
+  position: absolute;
+  top: -40px;
+  left: -10px;
+  right: -10px;
+  z-index: 9999;
+  backdrop-filter: blur(20px);
+  border: 1px solid #202021;
+}
+
+.warning-swap-title {
+  text-align: center;
+  color: #E71455;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.warning-swap-text {
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.link-wrapper .address-token {
+  font-size: 14px;
+  color: #008a81;
+  text-align: center;
+  margin-right: 8px;
+}
+
+.copyIcon {
+  width: 16px;
+}
+
+.btn-copy {
+  padding: 0 10px;
+  vertical-align: middle;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+  cursor: pointer;
+  margin-bottom: 24px;
+}
+
+.checkbox span {
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.checkIcon {
+  width: 16px;
+}
+
+.disabled {
+  animation: none;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.btn-close-swap {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.close-icon-swap {
+  width: 16px;
+}
+
+.btn-close-swap:hover {
+  background-color: rgba(0,0,0);
+}

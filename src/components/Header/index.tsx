@@ -150,7 +150,7 @@ export default function Header() {
     <HeaderFrame>
       <StyledRowBetween style={{ alignItems: 'flex-start'}}>
         <HeaderElement>
-          <Title href=".">
+          <Title href="https://safemoon.net/" target="_blank">
             <SafeMoonIcon>
               <SafeMoonLogo src={Logo} alt="SafeMoon" />
               <SafeMoonType src={LogoType} alt="SafeMoon" />
