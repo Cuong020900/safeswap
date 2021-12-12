@@ -365,7 +365,7 @@ export default function Swap({
     if (currencyB) {
       handleOutputSelect(currencyB)
     }
-  }, [currencyA, currencyB])
+  }, [currencyA, currencyB, handleOutputSelect, handleInputSelect])
 
   const handleConvertV1ToV2 = useCallback(() => {
     if (!(chainId === ChainId.BSC_TESTNET || chainId === ChainId.BSC_MAINNET)) {
@@ -402,10 +402,11 @@ export default function Swap({
       />
       {!showMigrateWarning && (
         <div className="row">
-          <a className={`btn ${disabledConsolidate ? 'disabed' : ''}`} onClick={handleConvertV1ToV2}>
+          <a href='#' className={`btn ${disabledConsolidate ? 'disabed' : ''}`} onClick={handleConvertV1ToV2}>
             <span>Consolidate to V2 SafeMoon!</span>
           </a>
           <a
+	    href='#'
             className="btnInfo"
             onClick={() => {
               setShowConsolidateV2Intro(true)

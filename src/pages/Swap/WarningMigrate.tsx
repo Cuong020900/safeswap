@@ -18,12 +18,13 @@ const WarningMigrate = ({ setShowMigrateWarning, readed, setReaded, onMigrate, c
   return (
     <div className={'warning-swap'}>
       <a
+	href='#'
         className="btn-close-swap"
         onClick={() => {
           setShowMigrateWarning(false)
         }}
       >
-        <img src={closeIcon} className="close-icon-swap" />
+        <img src={closeIcon} className="close-icon-swap" alt='close' />
       </a>
       <h3 className={'warning-swap-title'}>Important!</h3>
       <p className={'warning-swap-text'}>
@@ -54,6 +55,7 @@ const WarningMigrate = ({ setShowMigrateWarning, readed, setReaded, onMigrate, c
       </div>
 
       <a
+	href='#'
         className={`btn ${!readed && 'disabled'}`}
         onClick={() => {
           if (readed && onMigrate) {
