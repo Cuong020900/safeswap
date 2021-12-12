@@ -402,11 +402,11 @@ export default function Swap({
       />
       {!showMigrateWarning && (
         <div className="row">
-          <a href='#' className={`btn ${disabledConsolidate ? 'disabed' : ''}`} onClick={handleConvertV1ToV2}>
+          <a href='#/' className={`btn ${disabledConsolidate ? 'disabed' : ''}`} onClick={handleConvertV1ToV2}>
             <span>Consolidate to V2 SafeMoon!</span>
           </a>
           <a
-	    href='#'
+	    href='#/'
             className="btnInfo"
             onClick={() => {
               setShowConsolidateV2Intro(true)
