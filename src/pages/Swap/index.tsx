@@ -412,7 +412,7 @@ export default function Swap({
               setShowConsolidateV2Intro(true)
             }}
           >
-            <img src={infoIcon} className="infoIcon" alt="info" />
+            <img src={infoIcon} className="infoIcon" alt="information" />
           </a>
         </div>
       )}
