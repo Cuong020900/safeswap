@@ -157,6 +157,7 @@ export default function App() {
               <Switch>
                 <Route exact strict path="/" render={() => (<Redirect to="/swap" />)} />
                 <Route exact strict path="/swap" component={Swap} />
+                <Route exact strict path="/swap/:currencyIdA/:currencyIdB" component={Swap} />
                 <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
                 <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
                 <Route exact strict path="/find" component={PoolFinder} />

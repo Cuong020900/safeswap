@@ -1,0 +1,102 @@
+.Modal {
+  background-color: hsla(0,0%,100%,.1);
+  width: 600px;
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 0;
+  outline: 0;
+  margin: 0 auto;
+  height: calc(100vh - 80px);
+  margin-top: 40px;
+  padding-top: 40px;
+  position: relative;
+}
+
+.consolidate-intro {
+  overflow-y: auto;
+  height: 100%;
+  padding: 0 20px 20px 20px;
+}
+
+.btn-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 16px;
+  top: 7px;
+  z-index: 9;
+}
+
+.btn-close:hover {
+  background-color: #f8f8f8;
+}
+
+.close-icon {
+  width: 18px;
+  height: 18px
+}
+
+.consolidate-intro::-webkit-scrollbar {
+  width: 10px;
+}
+
+.consolidate-intro::-webkit-scrollbar-thumb {
+  background-color: rgb(135, 141, 150);
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: 15px;
+}
+
+.consolidate-intro::-webkit-scrollbar-track-piece {
+  background-color: transparent;
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: 15px;
+}
+
+.ReactModal__Overlay--after-open {
+  background-color: rgba(0,0,0,0.5) !important;
+  z-index: 999999;
+}
+
+.consolidate-intro-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #008a81;
+  text-align: center;
+}
+
+.consolidate-intro-description {
+  font-size: 14px;
+  color: #ffffff;
+  line-height: 24px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.consolidate-intro-heading {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.consolidate-intro-text {
+  font-size: 14px;
+  color: #ffffff;
+  line-height: 24px;
+  margin-bottom: 16px;
+}
+
+.consolidate-intro-note {
+  font-size: 14px;
+  color: #ffffff;
+  font-style: italic;
+  line-height: 24px;
+  margin-bottom: 16px;
+}
