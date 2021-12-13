@@ -12,6 +12,12 @@
   position: relative;
 }
 
+@media (max-width: 767px) {
+  .Modal {
+    width: calc(100% - 20px);
+  }
+}
+
 .consolidate-intro {
   overflow-y: auto;
   height: 100%;

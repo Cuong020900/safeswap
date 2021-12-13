@@ -120,6 +120,16 @@
   margin-right: 8px;
 }
 
+@media (max-width: 767px) {
+  .warning-swap {
+    top: -2px;
+  }
+  .link-wrapper .address-token {
+    font-size: 13px;
+    margin-right: 6px;
+  }
+}
+
 .copyIcon {
   width: 16px;
 }
