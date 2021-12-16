@@ -66,6 +66,7 @@ import { consolidation } from '../../constants'
 import useMigrationCallback, { MigrateType } from '../../hooks/useMigrationCallback'
 import BigNumber from 'bignumber.js'
 import WarningMigrate from './WarningMigrate'
+import { WrappedTokenInfo } from '../../state/lists/hooks'
 
 const SettingsWrapper = styled.div`
   display: flex;
@@ -150,8 +151,13 @@ export default function Swap({
 
   const showMigrate: boolean = migrateType !== MigrateType.NOT_APPLICABLE
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
+  const showLegacyError: boolean =
+    // @ts-ignore
+    (currencies[Field.INPUT] instanceof WrappedTokenInfo && currencies[Field.INPUT]?.address?.toUpperCase() === consolidation.tokens.v1[chainId as ChainId]?.address?.toUpperCase() && currencies[Field.OUTPUT]?.address?.toUpperCase() !== consolidation.tokens.v2[chainId as ChainId]?.address?.toUpperCase())
+    // @ts-ignore
+    || (currencies[Field.INPUT] instanceof WrappedTokenInfo && currencies[Field.OUTPUT]?.address?.toUpperCase() === consolidation.tokens.v1[chainId as ChainId]?.address?.toUpperCase() && currencies[Field.INPUT]?.address?.toUpperCase() !== consolidation.tokens.v2[chainId as ChainId]?.address?.toUpperCase())
   const { address: recipientAddress } = useENSAddress(recipient)
-  const trade = showWrap || showMigrate ? undefined : v2Trade
+  const trade = showWrap || showMigrate || showLegacyError ? undefined : v2Trade
 
   const parsedAmounts = showWrap
     ? {
@@ -569,6 +575,10 @@ export default function Swap({
                   {migrateInputError ?? (migrateType === MigrateType.MIGRATE ? 'Migrate' : null)}
                 </ButtonPrimary>
               )
+            ) : showLegacyError ? (
+              <GreyCard style={{ textAlign: 'center' }}>
+                <TYPE.main mb="4px">Not Allowed Swapping v1</TYPE.main>
+              </GreyCard>
             ) : noRoute && userHasSpecifiedInputOutput ? (
               <GreyCard style={{ textAlign: 'center' }}>
                 <TYPE.main mb="4px">{t('insufficientLiquidityForThisTrade')}</TYPE.main>
