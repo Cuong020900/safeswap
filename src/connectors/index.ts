@@ -40,14 +40,14 @@ export const binanceinjected = new BinanceConnector({
 // mainnet only
 export const walletconnect = new WalletConnectConnector({
   rpc: { [ChainId.MAINNET]: ETH_URL },
-  bridge: 'https://bridge.walletconnect.org',
-  qrcode: true
+  qrcode: true,
+  chainId: ChainId.MAINNET
 })
 
 export const walletconnectBSC = new WalletConnectConnector({
   rpc: { [ChainId.BSC_MAINNET]: BSC_URL },
-  bridge: 'https://bridge.walletconnect.org',
-  qrcode: true
+  qrcode: true,
+  chainId: ChainId.BSC_MAINNET
 })
 
 // mainnet only
