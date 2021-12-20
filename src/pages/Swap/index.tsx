@@ -471,6 +471,7 @@ export default function Swap({
               currency={currencies[Field.INPUT]}
               onUserInput={handleTypeInput}
               onMax={() => {
+                console.log(maxAmountInput?.toExact())
                 maxAmountInput && onUserInput(Field.INPUT, maxAmountInput.toExact())
               }}
               onCurrencySelect={handleInputSelect}
