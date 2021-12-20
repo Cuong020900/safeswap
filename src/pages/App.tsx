@@ -133,6 +133,7 @@ export default function App() {
   }, [gasPrices, gasType, chainId, dispatch])
 
   useEffect(() => {
+    getEthGasPrice()
     gasPriceInterval = setInterval(getEthGasPrice, 30000)
 
     return () => {
