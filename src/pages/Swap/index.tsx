@@ -34,6 +34,7 @@ import useWrapCallback, { WrapType } from '../../hooks/useWrapCallback'
 import { useSettingsMenuOpen, useToggleSettingsMenu, useWalletModalToggle } from '../../state/application/hooks'
 import { Field } from '../../state/swap/actions'
 import {
+  tryParseAmount,
   useDefaultsFromURLSearch,
   useDerivedSwapInfo,
   useSwapActionHandlers,
@@ -235,9 +236,9 @@ export default function Swap({
 
   const [migrationApproval, migrationApprovalCallback] = useApproveCallbackFromMigrate(
     typedValue && parsedAmount
-      ? independentField === Field.INPUT
+      ? independentField === Field.INPUT || !showMigrate
         ? parsedAmount
-        : new TokenAmount(consolidation.tokens.v1[chainId as ChainId], parsedAmount.multiply('1000').toSignificant(12))
+        : tryParseAmount(parsedAmount.multiply('1000').toSignificant(12), consolidation.tokens.v1[chainId as ChainId])
       : new TokenAmount(consolidation.tokens.v1[chainId as ChainId], '0')
   )
 
@@ -471,7 +472,6 @@ export default function Swap({
               currency={currencies[Field.INPUT]}
               onUserInput={handleTypeInput}
               onMax={() => {
-                console.log(maxAmountInput?.toExact())
                 maxAmountInput && onUserInput(Field.INPUT, maxAmountInput.toExact())
               }}
               onCurrencySelect={handleInputSelect}
