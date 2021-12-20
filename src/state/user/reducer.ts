@@ -13,11 +13,13 @@ import {
   updateVersion,
   updateUserExpertMode,
   updateUserSlippageTolerance,
-  updateUserDeadline, updateGasPrice, updateGasPricesList
+  updateUserDeadline,
+  updateGasPrice,
+  updateGasPricesList
 } from './actions'
-import {GAS_PRICE, GAS_PRICE_GWEI} from "./hooks";
-import {ChainId} from "@safemoon/sdk";
-import {parseUnits} from "ethers/lib/utils";
+import { GAS_PRICE, GAS_PRICE_GWEI } from './hooks'
+import { ChainId } from '@safemoon/sdk'
+import { parseUnits } from 'ethers/lib/utils'
 
 const currentTimestamp = () => new Date().getTime()
 
@@ -57,8 +59,8 @@ export interface UserState {
   }
 
   timestamp: number
-  gasPrice: string,
-  gasPriceType: string,
+  gasPrice: string
+  gasPriceType: string
   gasPrices: any
 }
 
@@ -85,10 +87,10 @@ export const initialState: UserState = {
       ...GAS_PRICE_GWEI
     },
     [ChainId.MAINNET]: {
-      default: parseUnits("60", 'gwei').toString(),
-      fast: parseUnits("70", 'gwei').toString(),
-      instant: parseUnits("75", 'gwei').toString(),
-      testnet: parseUnits(GAS_PRICE.testnet, 'gwei').toString(),
+      default: parseUnits('60', 'gwei').toString(),
+      fast: parseUnits('70', 'gwei').toString(),
+      instant: parseUnits('75', 'gwei').toString(),
+      testnet: parseUnits(GAS_PRICE.testnet, 'gwei').toString()
     }
   }
 }
@@ -163,16 +165,17 @@ export default createReducer(initialState, builder =>
       state.timestamp = currentTimestamp()
     })
     .addCase(updateGasPrice, (state, action) => {
-      state.gasPrice = action.payload.gasPrice;
-      state.gasPriceType = action.payload.gasPriceType;
+      state.gasPrice = action.payload.gasPrice
+      state.gasPriceType = action.payload.gasPriceType
     })
     .addCase(updateGasPricesList, (state, action) => {
-      if(state.gasPrices) {
+      if (state.gasPrices) {
         state.gasPrices[action.payload.chainId] = action.payload.gasPrices
       } else {
-        state.gasPrices = initialState.gasPrices;
-        state.gasPrices[action.payload.chainId] = action.payload.gasPrices;
-
+        state.gasPrices = {
+          ...initialState.gasPrices
+        }
+        state.gasPrices[action.payload.chainId] = action.payload.gasPrices
       }
     })
 )
