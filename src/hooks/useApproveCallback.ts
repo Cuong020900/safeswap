@@ -109,7 +109,7 @@ export function useApproveCallbackFromTrade(trade?: Trade, allowedSlippage = 0) 
   return useApproveCallback(amountToApprove, tradeIsV1 ? v1ExchangeAddress : ROUTER_ADDRESS[chainId || ChainId.BSC_TESTNET])
 }
 
-export function useApproveCallbackFromMigrate(amountIn: CurrencyAmount) {
+export function useApproveCallbackFromMigrate(amountIn: CurrencyAmount | undefined) {
   const { chainId } = useActiveWeb3React()
   return useApproveCallback(amountIn, consolidation.addresses.migration[chainId as ChainId])
 }
