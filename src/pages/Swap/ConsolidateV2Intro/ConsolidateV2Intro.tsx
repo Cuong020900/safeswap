@@ -42,7 +42,7 @@ const ConsolidateV2Intro = ({ show, handleClose, handleConvertV1ToV2 }: Props) =
         <h3 className="consolidate-intro-heading">What will I need to do? 🤔</h3>
         <p className="consolidate-intro-text">
           <b>Step 1:</b> Ensure you have enough BNB in your wallet set aside for the &ldquo;gas fee&ldquo;: Typically
-          just a few dollars should be enough. Unfortunately, this is blockchain cost we control as token developers.
+          just a few dollars should be enough. You will first need to approve the new contract for trade, and then &ldquo;Swap&ldquo; your V1 SafeMoon to V2 SafeMoon. Unfortunately, this is a blockchain cost we do not control as token developers.
           <br /> <br />
           <b>Step 2 (optional):</b> Click the <b>&ldquo;Consolidate Now&ldquo;</b> button then add a small amount of V1
           SafeMoon to &ldquo;Swap&ldquo; for V2 SafeMoon as a test transaction.
