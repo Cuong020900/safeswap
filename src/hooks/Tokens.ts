@@ -8,7 +8,6 @@ import {isAddress} from '../utils'
 
 import {useActiveWeb3React} from './index'
 import {useBytes32TokenContract, useTokenContract} from './useContract'
-import { BLACKLIST_TOKENS_SAFEMOON_V1 } from '../constants'
 
 export function useAllTokens(): { [address: string]: Token } {
   const { chainId } = useActiveWeb3React()
