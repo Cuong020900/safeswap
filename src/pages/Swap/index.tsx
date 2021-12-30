@@ -63,7 +63,7 @@ import { SlippageWarning } from '../../components/SlippageWarning/SlippageWarnin
 import './Swap.css'
 import { useCurrency } from '../../hooks/Tokens'
 import ConsolidateV2Intro from './ConsolidateV2Intro'
-import { consolidation } from '../../constants'
+import { BLACKLIST_TOKENS_SAFEMOON_V1, consolidation, TOKENS_SAFEMOON_V2 } from '../../constants'
 import useMigrationCallback, { MigrateType } from '../../hooks/useMigrationCallback'
 import BigNumber from 'bignumber.js'
 import WarningMigrate from './WarningMigrate'
@@ -270,6 +270,29 @@ export default function Swap({
     if (!swapCallback) {
       return
     }
+
+
+    const outputAddress = (trade?.outputAmount?.currency as any)?.address
+    const inputAddress = (trade?.outputAmount?.currency as any)?.address
+
+    if ( (outputAddress && BLACKLIST_TOKENS_SAFEMOON_V1.indexOf(outputAddress.toUpperCase()) !== -1)
+      || (outputAddress
+        && inputAddress
+        && BLACKLIST_TOKENS_SAFEMOON_V1.indexOf(inputAddress.toUpperCase()) !== -1
+        && TOKENS_SAFEMOON_V2.indexOf(outputAddress.toUpperCase()) === -1)
+    ) {
+      setSwapState({
+        attemptingTxn: false,
+        tradeToConfirm,
+        showConfirm,
+        swapErrorMessage: 'SafeMoon V1 is no longer supported.',
+        txHash: undefined
+      })
+      return
+    }
+      
+    
+    
     setSwapState({ attemptingTxn: true, tradeToConfirm, showConfirm, swapErrorMessage: undefined, txHash: undefined })
     swapCallback()
       .then(hash => {
