@@ -27,7 +27,7 @@ export function SlippageWarning({
   token: Token | null
 }) {
   return (
-    <Modal isOpen={open} onDismiss={onDismiss}>
+    <Modal isOpen={open} onDismiss={onDismiss} maxHeight={60}>
       <ModalWrapper>
         <AutoColumn gap="lg">
           <AutoRow gap="6px">
@@ -42,16 +42,22 @@ export function SlippageWarning({
               • Click on the settings icon
             </TYPE.body>
             <TYPE.body color={'text2'} lineHeight={'1.6'} paddingLeft={'4px'}>
-              • Set your slippage tolerance to 12%+
+              • Set your slippage tolerance to 4%
             </TYPE.body>
             <TYPE.body color={'text2'} lineHeight={'1.6'} marginTop={'1.5rem'} marginBottom={'0.25rem'}>
-              This is because SafeMoon taxes a 10% fee on each transaction:
+              This is because SafeMoon taxes a 2% fee on each transaction:
             </TYPE.body>
             <TYPE.body color={'text2'} lineHeight={'1.6'} paddingLeft={'4px'}>
-              • 5% fee = redistributed to all existing holders
+              • 4% fee = Redistributed to all existing holders
             </TYPE.body>
             <TYPE.body color={'text2'} lineHeight={'1.6'} paddingLeft={'4px'}>
-              • 5% fee = used to add liquidity
+              • 3% fee = Added to liquidity
+            </TYPE.body>
+            <TYPE.body color={'text2'} lineHeight={'1.6'} paddingLeft={'4px'}>
+              • 2% fee = Tokens burned
+            </TYPE.body>
+            <TYPE.body color={'text2'} lineHeight={'1.6'} paddingLeft={'4px'}>
+              • 1% fee = Added to Ecosystem Growth Fund
             </TYPE.body>
           </AutoColumn>
           <RowBetween>
