@@ -45,7 +45,7 @@ export function SlippageWarning({
               • Set your slippage tolerance to 12%
             </TYPE.body>
             <TYPE.body color={'text2'} lineHeight={'1.6'} marginTop={'1.5rem'} marginBottom={'0.25rem'}>
-              This is because SafeMoon taxes a 2% fee on each transaction:
+              This is because SafeMoon taxes a 10% fee on each transaction:
             </TYPE.body>
             <TYPE.body color={'text2'} lineHeight={'1.6'} paddingLeft={'4px'}>
               • 4% fee = Redistributed to all existing holders
