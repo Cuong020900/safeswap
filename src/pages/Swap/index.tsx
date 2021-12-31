@@ -105,8 +105,6 @@ export default function Swap({
   useDefaultsFromURLSearch()
   const { t } = useTranslation()
   const [showConsolidateV2Intro, setShowConsolidateV2Intro] = useState(false)
-  const [showMigrateWarning, setShowMigrateWarning] = useState(false)
-  const [readed, setReaded] = useState(false)
 
   const node = useRef<HTMLDivElement>()
   const open = useSettingsMenuOpen()
@@ -431,7 +429,6 @@ export default function Swap({
         open={swapWarningCurrency !== null}
         token={swapWarningCurrency}
       />
-      {!showMigrateWarning && (
         <div className="row">
           <a className={`btn ${disabledConsolidate ? 'disabed' : ''}`} onClick={handleConvertV1ToV2}>
             <span>Consolidate to V2 SafeMoon!</span>
@@ -445,18 +442,8 @@ export default function Swap({
             <img src={infoIcon} className="infoIcon" alt="information" />
           </a>
         </div>
-      )}
 
-      <AppBody disabled={showWarning} overflow={showMigrateWarning ? 'none' : ''}>
-        {showMigrateWarning && (
-          <WarningMigrate
-            setShowMigrateWarning={setShowMigrateWarning}
-            readed={readed}
-            setReaded={setReaded}
-            onMigrate={onMigrate}
-            chainId={chainId}
-          />
-        )}
+      <AppBody disabled={showWarning}>
 
         <RowBetween>
           <SwapPoolTabs active={'swap'} />
@@ -570,11 +557,7 @@ export default function Swap({
                   </ButtonPrimary>
                   <ButtonError
                     onClick={() => {
-                      if (disabledConsolidate) {
-                        setShowMigrateWarning(true)
-                      } else if (onMigrate) {
-                        onMigrate()
-                      }
+                      onMigrate()
                     }}
                     width="48%"
                     id="migrate-button"
@@ -589,11 +572,7 @@ export default function Swap({
                 <ButtonPrimary
                   disabled={Boolean(migrateInputError)}
                   onClick={() => {
-                    if (disabledConsolidate) {
-                      setShowMigrateWarning(true)
-                    } else if (onMigrate) {
-                      onMigrate()
-                    }
+                    onMigrate()
                   }}
                 >
                   {migrateInputError ?? (migrateType === MigrateType.MIGRATE ? 'Migrate' : null)}
