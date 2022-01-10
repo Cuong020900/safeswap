@@ -176,6 +176,8 @@ export default function WalletModal({
 
   const [walletView, setWalletView] = useState(WALLET_VIEWS.ACCOUNT)
 
+  const [selectedWallet, setSelectedWallet] = useState<any>(null)
+
   const [pendingWallet, setPendingWallet] = useState()
 
   const [pendingError, setPendingError] = useState<boolean>()
@@ -219,7 +221,7 @@ export default function WalletModal({
     }
   }, [setWalletView, active, error, connector, walletModalOpen, activePrevious, connectorPrevious])
 
-  const tryActivation = async connector => {
+  const tryActivation = async (connector, key) => {
     // debugger
     let name = ''
     Object.keys(SUPPORTED_WALLETS).map(key => {
@@ -228,6 +230,7 @@ export default function WalletModal({
       }
       return true
     })
+    console.log(SUPPORTED_WALLETS, key)
     // log selected wallet
     ReactGA.event({
       category: 'Wallet',
@@ -235,6 +238,7 @@ export default function WalletModal({
       label: name
     })
     setPendingWallet(connector) // set wallet for pending view
+    setSelectedWallet(key)
     setWalletView(WALLET_VIEWS.PENDING)
 
     // if the connector is walletconnect and the user has already tried to connect, manually reset the connector
@@ -295,7 +299,7 @@ export default function WalletModal({
           return (
             <Option
               onClick={() => {
-                option.connector !== connector && !option.href && tryActivation(option.connector)
+                option.connector !== connector && !option.href && tryActivation(option.connector, key)
               }}
               id={`connect-${key}`}
               key={key}
@@ -394,10 +398,10 @@ export default function WalletModal({
           <Option
             id={`connect-${key}`}
             onClick={() => {
-              if(option.connector === connector) {
+              if (option.connector === connector) {
                 setWalletView(WALLET_VIEWS.ACCOUNT)
               } else {
-                !option.href && tryActivation(option.connector)
+                !option.href && tryActivation(option.connector, key)
               }
             }}
             key={key}
@@ -451,10 +455,10 @@ export default function WalletModal({
           <HeaderRow color="blue">
             <Row align={'center'}>
               <HistoryLinkButton
-                  onClick={() => {
-                    setPendingError(false)
-                    setWalletView(WALLET_VIEWS.ACCOUNT)
-                  }}
+                onClick={() => {
+                  setPendingError(false)
+                  setWalletView(WALLET_VIEWS.ACCOUNT)
+                }}
               >
                 <StyledArrowLeft />
               </HistoryLinkButton>
@@ -473,17 +477,25 @@ export default function WalletModal({
               error={pendingError}
               setPendingError={setPendingError}
               tryActivation={tryActivation}
+              selectedWallet={selectedWallet}
             />
           ) : (
             <AutoColumn gap={'sm'}>
-              <ConnectWalletTabs active={selectedNetwork} onChangeProviders={(newNetwork) => {setSelectedNetwork(newNetwork)}}/>
+              <ConnectWalletTabs
+                active={selectedNetwork}
+                onChangeProviders={newNetwork => {
+                  setSelectedNetwork(newNetwork)
+                }}
+              />
               <OptionGrid>{getOptions()}</OptionGrid>
             </AutoColumn>
           )}
           {walletView !== WALLET_VIEWS.PENDING && (
             <Blurb>
               <span>New to Binance Smart Chain? &nbsp;</span>{' '}
-              <ExternalLink href="https://docs.binance.org/smart-chain/wallet/metamask.html">Learn more about wallets</ExternalLink>
+              <ExternalLink href="https://docs.binance.org/smart-chain/wallet/metamask.html">
+                Learn more about wallets
+              </ExternalLink>
             </Blurb>
           )}
         </ContentWrapper>

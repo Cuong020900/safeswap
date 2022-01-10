@@ -270,6 +270,16 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     chainIds: [1],
     mobile: true
   },
+  WALLETCONNECT: {
+    connector: walletconnect,
+    name: 'WalletConnect',
+    iconName: 'walletConnectIcon.svg',
+    description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
+    href: null,
+    color: '#3375BB',
+    chainIds: [1],
+    mobile: true
+  },
   TRUSTWALLET_TESTNET: {
     connector: injected,
     name: 'TrustWallet',
@@ -284,6 +294,16 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     name: 'TrustWallet',
     iconName: 'trustwallet.svg',
     description: 'The most trusted & secure crypto wallet',
+    href: null,
+    color: '#3375BB',
+    chainIds: [56],
+    mobile: true
+  },
+  WALLETCONNECT_BSC: {
+    connector: walletconnectBSC,
+    name: 'WalletConnect',
+    iconName: 'walletConnectIcon.svg',
+    description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
     href: null,
     color: '#3375BB',
     chainIds: [56],

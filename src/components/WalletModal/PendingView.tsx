@@ -3,7 +3,6 @@ import React from 'react'
 import styled from 'styled-components'
 import Option from './Option'
 import { SUPPORTED_WALLETS } from '../../constants'
-import { injected } from '../../connectors'
 import { darken } from 'polished'
 import Loader from '../Loader'
 
@@ -67,15 +66,15 @@ export default function PendingView({
   connector,
   error = false,
   setPendingError,
-  tryActivation
+  tryActivation,
+  selectedWallet
 }: {
   connector?: AbstractConnector
   error?: boolean
   setPendingError: (error: boolean) => void
-  tryActivation: (connector: AbstractConnector) => void
+  tryActivation: (connector: AbstractConnector, key: any) => void
+  selectedWallet?: string | null
 }) {
-  const isMetamask = window?.ethereum?.isMetaMask
-
   return (
     <PendingSection>
       <LoadingMessage error={error}>
@@ -86,7 +85,7 @@ export default function PendingView({
               <ErrorButton
                 onClick={() => {
                   setPendingError(false)
-                  tryActivation(connector)
+                  tryActivation(connector, selectedWallet)
                 }}
               >
                 Try Again
@@ -103,14 +102,10 @@ export default function PendingView({
       {Object.keys(SUPPORTED_WALLETS).map(key => {
         const option = SUPPORTED_WALLETS[key]
         if (option.connector === connector) {
-          if (option.connector === injected) {
-            if (isMetamask && option.name !== 'MetaMask') {
-              return null
-            }
-            if (!isMetamask && option.name === 'MetaMask') {
-              return null
-            }
+          if (key !== selectedWallet) {
+            return null
           }
+
           return (
             <Option
               id={`connect-${key}`}
