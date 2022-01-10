@@ -309,6 +309,26 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     chainIds: [56],
     mobile: true
   },
+  SAFEMOON_WALLET_BSC: {
+    connector: walletconnectBSC,
+    name: 'SafeMoon Wallet',
+    iconName: 'SafeMoonWallet.svg',
+    description: 'A secure place to store and trade your SafeMoon.',
+    href: null,
+    color: '#008a81',
+    chainIds: [56],
+    mobile: true
+  },
+  SAFEMOON_WALLET: {
+    connector: walletconnect,
+    name: 'SafeMoon Wallet',
+    iconName: 'SafeMoonWallet.svg',
+    description: 'A secure place to store and trade your SafeMoon.',
+    href: null,
+    color: '#008a81',
+    chainIds: [1],
+    mobile: true
+  },
   MATHWALLET: {
     connector: injected,
     name: 'MathWallet',
