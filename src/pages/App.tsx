@@ -7,6 +7,7 @@ import Popups from '../components/Popups'
 import PageNotFound from './PageNotFound'
 import Web3ReactManager from '../components/Web3ReactManager'
 import DarkModeQueryParamReader from '../theme/DarkModeQueryParamReader'
+/*
 import AddLiquidity from './AddLiquidity'
 import {
   RedirectDuplicateTokenIds,
@@ -16,7 +17,7 @@ import {
 import Pool from './Pool'
 import PoolFinder from './PoolFinder'
 import RemoveLiquidity from './RemoveLiquidity'
-import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
+import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects' */
 import Swap from './Swap'
 import { RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
 import { ethers } from 'ethers'
