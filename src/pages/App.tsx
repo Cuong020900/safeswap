@@ -7,7 +7,7 @@ import Popups from '../components/Popups'
 import PageNotFound from './PageNotFound'
 import Web3ReactManager from '../components/Web3ReactManager'
 import DarkModeQueryParamReader from '../theme/DarkModeQueryParamReader'
-/*
+
 import AddLiquidity from './AddLiquidity'
 import {
   RedirectDuplicateTokenIds,
@@ -17,7 +17,7 @@ import {
 import Pool from './Pool'
 import PoolFinder from './PoolFinder'
 import RemoveLiquidity from './RemoveLiquidity'
-import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects' */
+import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
 import Swap from './Swap'
 import { RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
 import { ethers } from 'ethers'
@@ -162,14 +162,14 @@ export default function App() {
                 <Route exact strict path="/swap/:currencyIdA/:currencyIdB" component={Swap} />
                 <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
                 <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
-                {/* <Route exact strict path="/find" component={PoolFinder} /> */}
-                {/* <Route exact strict path="/pool" component={Pool} /> */}
-                {/* <Route exact strict path="/create" component={RedirectToAddLiquidity} /> */}
-                {/* <Route exact path="/add" component={AddLiquidity} /> */}
-                {/* <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} /> */}
-                {/* <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} /> */}
-                {/* <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} /> */}
-                {/* <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} /> */}
+                <Route exact strict path="/find" component={PoolFinder} />
+                <Route exact strict path="/pool" component={Pool} />
+                <Route exact strict path="/create" component={RedirectToAddLiquidity} />
+                <Route exact path="/add" component={AddLiquidity} />
+                <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
+                <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
+                <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
+                <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
                 <Route component={PageNotFound} />
               </Switch>
             </Web3ReactManager>
