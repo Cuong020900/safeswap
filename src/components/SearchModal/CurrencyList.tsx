@@ -27,7 +27,8 @@ export default function CurrencyList({
   selectedCurrency,
   onCurrencySelect,
   otherCurrency,
-  showSendWithSwap
+  showSendWithSwap,
+  height
 }: {
   currencies: Currency[]
   selectedCurrency: Currency
@@ -35,6 +36,7 @@ export default function CurrencyList({
   onCurrencySelect: (currency: Currency) => void
   otherCurrency: Currency
   showSendWithSwap?: boolean
+  height?: number
 }) {
   const { account, chainId } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
@@ -152,10 +154,10 @@ export default function CurrencyList({
   return (
     <FixedSizeList
       width="100%"
-      height={500}
+      height={height || 500}
       itemCount={currencies.length}
       itemSize={56}
-      style={{ flex: '1' }}
+      style={!height && { flex: '1' }}
       itemKey={index => currencyKey(currencies[index])}
     >
       {CurrencyRow}

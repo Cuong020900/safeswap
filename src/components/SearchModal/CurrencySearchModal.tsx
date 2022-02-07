@@ -57,7 +57,9 @@ export default function CurrencySearchModal({
   const allTokens = useAllTokens()
 
   // if the current input is an address, and we don't have the token in context, try to fetch it and import
-  const searchToken = useToken((searchQuery && BLACKLIST_TOKENS_SAFEMOON_V1.indexOf(searchQuery.toUpperCase()) === -1) ? searchQuery : '')
+  const searchToken = useToken(
+    searchQuery && BLACKLIST_TOKENS_SAFEMOON_V1.indexOf(searchQuery.toUpperCase()) === -1 ? searchQuery : ''
+  )
   const searchTokenBalance = useTokenBalance(account, searchToken)
   const allTokenBalances_ = useAllTokenBalances()
   const allTokenBalances = searchToken
@@ -68,9 +70,22 @@ export default function CurrencySearchModal({
 
   const tokenComparator = useTokenComparator(invertSearchOrder)
 
-  const filteredTokens: Token[] = useMemo(() => {
+  const { filteredTokens, fixedTokens }: any = useMemo(() => {
     if (searchToken) return [searchToken]
-    return filterTokens(Object.values(allTokens), searchQuery)
+    const tokens: Token[] = filterTokens(Object.values(allTokens), searchQuery)
+    const fixedTokens: Token[] = []
+    const resultFilteredTokens: Token[] = []
+    tokens.forEach((item: Token) => {
+      if (item.symbol === 'SFM') {
+        fixedTokens.push(item)
+      } else {
+        resultFilteredTokens.push(item)
+      }
+    })
+    return {
+      fixedTokens,
+      filteredTokens: resultFilteredTokens
+    }
   }, [searchToken, allTokens, searchQuery])
 
   const filteredSortedTokens: Token[] = useMemo(() => {
@@ -80,6 +95,7 @@ export default function CurrencySearchModal({
       .toLowerCase()
       .split(/\s+/)
       .filter(s => s.length > 0)
+
     if (symbolMatch.length > 1) return sorted
 
     return [
@@ -151,6 +167,7 @@ export default function CurrencySearchModal({
       maxHeight={70}
       initialFocusRef={isMobile ? undefined : inputRef}
       minHeight={70}
+      forceMaxHeight={'80vh'}
     >
       <Column style={{ width: '100%' }}>
         <PaddedColumn gap="24px">
@@ -172,6 +189,18 @@ export default function CurrencySearchModal({
             </InputContainer>
           </Tooltip>
         </PaddedColumn>
+        {fixedTokens && fixedTokens.length > 0 && (
+          <CurrencyList
+            currencies={fixedTokens}
+            allBalances={allTokenBalances}
+            onCurrencySelect={handleCurrencySelect}
+            otherCurrency={otherSelectedCurrency}
+            selectedCurrency={hiddenCurrency}
+            showSendWithSwap={showSendWithSwap}
+            height={56}
+          />
+        )}
+
         <CurrencyList
           currencies={currencies}
           allBalances={allTokenBalances}
