@@ -157,7 +157,7 @@ export default function SlippageTabs({
   }
 
   let deadlineError: DeadlineError
-  if (deadlineInput !== '' && !deadlineInputIsValid) {
+  if ((deadlineInput !== '' && !deadlineInputIsValid) || +deadlineInput > 60) {
     deadlineError = DeadlineError.InvalidInput
   }
 
@@ -329,8 +329,7 @@ export default function SlippageTabs({
               <Input
                 color={!!deadlineError ? 'red' : undefined}
                 onBlur={() => {
-                  console.log(deadline)
-                  parseCustomDeadline({ target: { value: (deadline / 60).toString() } })
+                  parseCustomDeadline({ target: { value: (deadline > 3600 ? 60 : deadline / 60).toString() } })
                 }}
                 placeholder={(deadline / 60).toString()}
                 value={deadlineInput}
@@ -342,6 +341,11 @@ export default function SlippageTabs({
             </RowBetween>
           </OptionCustom>
         </RowFixed>
+        { deadline > 3600
+          && <p style={{fontSize: '12px', color: 'red', marginBottom: 0, marginTop: '-4px'}}>
+            The limit maximum is 60 minutes
+          </p>
+        }
       </AutoColumn>
     </AutoColumn>
   )

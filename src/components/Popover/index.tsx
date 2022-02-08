@@ -2,6 +2,7 @@ import { Placement } from '@popperjs/core'
 import React, { useState } from 'react'
 import { usePopper } from 'react-popper'
 import styled from 'styled-components'
+import { isMobile } from 'react-device-detect'
 import useInterval from '../../hooks/useInterval'
 import Portal from '@reach/portal'
 
@@ -40,7 +41,7 @@ export default function Popover({ content, show, children, placement = 'right' }
   const [referenceElement, setReferenceElement] = useState<HTMLDivElement>(null)
   const [popperElement, setPopperElement] = useState<HTMLDivElement>(null)
   const { styles, update, attributes } = usePopper(referenceElement, popperElement, {
-    placement,
+    placement: isMobile ? 'auto' : placement,
     strategy: 'fixed',
     modifiers: [{ name: 'offset', options: { offset: [32, 32] } }]
   })
