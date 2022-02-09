@@ -119,3 +119,7 @@ export function isDefaultToken(defaultTokens: TokenAddressMap, currency?: Curren
   if (currency === ETHER) return true
   return Boolean(currency instanceof Token && defaultTokens[currency.chainId]?.[currency.address])
 }
+
+export function getExplore(chainId: number) {
+  return chainId === 97 || chainId === 56 ? 'BscScan' : 'Etherscan'
+}

@@ -10,6 +10,7 @@ import { AlertTriangle, ArrowUpCircle } from 'react-feather'
 import { ButtonPrimary } from '../Button'
 import { AutoColumn, ColumnCenter } from '../Column'
 import Circle from '../../assets/images/blue-loader.svg'
+import { getExplore } from '../../utils'
 
 import { getEtherscanLink } from '../../utils'
 import { useActiveWeb3React } from '../../hooks'
@@ -76,6 +77,8 @@ function TransactionSubmittedContent({
 }) {
   const theme = useContext(ThemeContext)
 
+  console.log('chainId ====>', chainId)
+
   return (
     <Wrapper>
       <Section>
@@ -93,7 +96,7 @@ function TransactionSubmittedContent({
 
           <ExternalLink href={getEtherscanLink(chainId, hash, 'transaction')}>
             <Text fontWeight={500} fontSize={14} color={theme.primary1}>
-              View on BscScan Explorer
+              View on {getExplore(chainId)} Explorer
             </Text>
           </ExternalLink>
           <ButtonPrimary onClick={onDismiss} style={{ margin: '20px 0 0 0' }}>
