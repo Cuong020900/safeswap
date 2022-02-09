@@ -4,7 +4,7 @@ import styled, { ThemeContext } from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
 import { TYPE } from '../../theme'
 import { ExternalLink } from '../../theme/components'
-import { getEtherscanLink } from '../../utils'
+import { getEtherscanLink, getExplore } from '../../utils'
 import { AutoColumn } from '../Column'
 import { AutoRow } from '../Row'
 
@@ -32,7 +32,7 @@ export default function TransactionPopup({
       </div>
       <AutoColumn gap="8px">
         <TYPE.body fontWeight={500}>{summary ?? 'Hash: ' + hash.slice(0, 8) + '...' + hash.slice(58, 65)}</TYPE.body>
-        <ExternalLink href={getEtherscanLink(chainId, hash, 'transaction')}>View on BscScan Explorer</ExternalLink>
+        <ExternalLink href={getEtherscanLink(chainId, hash, 'transaction')}>View on {getExplore(chainId)} Explorer</ExternalLink>
       </AutoColumn>
     </RowNoFlex>
   )
