@@ -159,6 +159,7 @@ export default function CurrencyList({
       itemSize={56}
       style={!height && { flex: '1' }}
       itemKey={index => currencyKey(currencies[index])}
+      className='scroll'
     >
       {CurrencyRow}
     </FixedSizeList>

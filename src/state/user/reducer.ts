@@ -15,7 +15,8 @@ import {
   updateUserSlippageTolerance,
   updateUserDeadline,
   updateGasPrice,
-  updateGasPricesList
+  updateGasPricesList,
+  hideShowSlippageWarning
 } from './actions'
 import { GAS_PRICE, GAS_PRICE_GWEI } from './hooks'
 import { ChainId } from '@safemoon/sdk'
@@ -37,6 +38,8 @@ export interface UserState {
 
   // deadline set by user in minutes, used in all txns
   userDeadline: number
+
+  hideSlippageWarning: boolean
 
   tokens: {
     [chainId: number]: {
@@ -79,6 +82,7 @@ export const initialState: UserState = {
   timestamp: currentTimestamp(),
   gasPrice: GAS_PRICE_GWEI.default,
   gasPriceType: 'default',
+  hideSlippageWarning: false,
   gasPrices: {
     [ChainId.BSC_MAINNET]: {
       ...GAS_PRICE_GWEI
@@ -128,6 +132,10 @@ export default createReducer(initialState, builder =>
     })
     .addCase(updateUserDeadline, (state, action) => {
       state.userDeadline = action.payload.userDeadline
+      state.timestamp = currentTimestamp()
+    })
+    .addCase(hideShowSlippageWarning, state => {
+      state.hideSlippageWarning = true
       state.timestamp = currentTimestamp()
     })
     .addCase(addSerializedToken, (state, { payload: { serializedToken } }) => {

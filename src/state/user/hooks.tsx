@@ -18,7 +18,8 @@ import {
   updateUserDarkMode,
   updateUserDeadline,
   updateUserExpertMode,
-  updateUserSlippageTolerance
+  updateUserSlippageTolerance,
+  hideShowSlippageWarning
 } from './actions'
 import { useDefaultTokenList } from '../lists/hooks'
 import { isDefaultToken } from '../../utils'
@@ -113,6 +114,19 @@ export function useUserSlippageTolerance(): [number, (slippage: number) => void]
   )
 
   return [userSlippageTolerance, setUserSlippageTolerance]
+}
+
+export function useHideSlippageWarning(): [boolean | undefined, () => void] {
+  const dispatch = useDispatch<AppDispatch>()
+  const hideSlippageWarning = useSelector<AppState, AppState['user']['hideSlippageWarning']>(state => {
+    return state.user.hideSlippageWarning
+  })
+
+  const handleHideSlippageWarning = useCallback(() => {
+    dispatch(hideShowSlippageWarning())
+  }, [dispatch])
+
+  return [hideSlippageWarning, handleHideSlippageWarning]
 }
 
 export function useUserDeadline(): [number, (slippage: number) => void] {

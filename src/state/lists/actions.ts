@@ -1,10 +1,10 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit'
 import { TokenList, Version } from '@uniswap/token-lists'
-import schema from '@uniswap/token-lists/src/tokenlist.schema.json'
-import Ajv from 'ajv'
+// import schema from '@uniswap/token-lists/src/tokenlist.schema.json'
+// import Ajv from 'ajv'
 import uriToHttp from '../../utils/uriToHttp'
 
-const tokenListValidator = new Ajv({ allErrors: true }).compile(schema)
+// const tokenListValidator = new Ajv({ allErrors: true }).compile(schema)
 
 /**
  * Contains the logic for resolving a URL to a valid token list
@@ -22,6 +22,8 @@ async function getTokenList(listUrl: string): Promise<TokenList> {
     }
 
     const json = await response.json()
+
+    /*
     if ('data' in json) {
       if (!tokenListValidator(json?.data)) {
         throw new Error(
@@ -40,7 +42,7 @@ async function getTokenList(listUrl: string): Promise<TokenList> {
           }, '') ?? 'Token list failed validation'
         )
       }
-    }
+    } */
     if ('data' in json) {
       return json?.data
     }
