@@ -385,9 +385,9 @@ export default function Swap({
         setSwapWarningCurrency(inputCurrency)
       } else {
         setSwapWarningCurrency(null)
+        handleChangeSlippage(inputCurrency, currencies[Field.OUTPUT])
       }
-
-      handleChangeSlippage(inputCurrency, currencies[Field.OUTPUT])
+      
     },
     [onCurrencySelection, currencies]
   )
@@ -400,8 +400,9 @@ export default function Swap({
         setSwapWarningCurrency(outputCurrency)
       } else {
         setSwapWarningCurrency(null)
+        handleChangeSlippage(currencies[Field.INPUT], outputCurrency)
       }
-      handleChangeSlippage(currencies[Field.INPUT], outputCurrency)
+      
     },
     [onCurrencySelection, currencies]
   )
@@ -444,7 +445,10 @@ export default function Swap({
       {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
       <TokenWarningCards currencies={currencies} open={showWarning} onDismiss={() => {}} />
       <SlippageWarning
-        onDismiss={() => setSwapWarningCurrency(null)}
+        onDismiss={() => {
+          setSwapWarningCurrency(null)
+          handleChangeSlippage(currencies[Field.OUTPUT], currencies[Field.INPUT])
+        }}
         open={swapWarningCurrency !== null}
         token={swapWarningCurrency}
       />
