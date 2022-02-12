@@ -367,9 +367,9 @@ export default function Swap({
   const [swapWarningCurrency, setSwapWarningCurrency] = useState(null)
 
   const handleChangeSlippage = (tokenA: any, tokenB: any) => {
-    if (tokenA?.tokenInfo?.sellSlippage && tokenB?.tokenInfo?.buySlippage) {
+    if (tokenA?.tokenInfo?.sellSlippage && tokenB?.tokenInfo?.buySlippage && tokenA.address !== tokenB.address) {
       setAllowedSlippage((+tokenA?.tokenInfo?.sellSlippage + +tokenB?.tokenInfo?.buySlippage + 1) * 100)
-      console.log('hideSlippageWarning ====>', hideSlippageWarning)
+      // console.log('hideSlippageWarning ====>', hideSlippageWarning)
       if (!hideSlippageWarning) {
         setShowSlippageWarning(true)
       }
