@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { ChainId, CurrencyAmount, JSBI, TokenAmount, Trade, Token } from '@safemoon/sdk'
+import { ChainId, CurrencyAmount, JSBI, TokenAmount, Trade } from '@safemoon/sdk'
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import SVG from 'react-inlinesvg'
 import ReactGA from 'react-ga'
