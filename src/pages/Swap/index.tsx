@@ -367,12 +367,15 @@ export default function Swap({
   const [swapWarningCurrency, setSwapWarningCurrency] = useState(null)
 
   const handleChangeSlippage = (tokenA: any, tokenB: any) => {
-    if (tokenA?.tokenInfo?.sellSlippage && tokenB?.tokenInfo?.buySlippage && tokenA.address !== tokenB.address) {
-      setAllowedSlippage((+tokenA?.tokenInfo?.sellSlippage + +tokenB?.tokenInfo?.buySlippage + 1) * 100)
+    // console.log(tokenA, tokenB)
+    if ((tokenA?.tokenInfo?.sellSlippage || tokenB?.tokenInfo?.buySlippage) && tokenA.address !== tokenB.address) {
+      setAllowedSlippage((+(tokenA?.tokenInfo?.sellSlippage || 0) + +(tokenB?.tokenInfo?.buySlippage || 0) + 1) * 100)
       // console.log('hideSlippageWarning ====>', hideSlippageWarning)
       if (!hideSlippageWarning) {
         setShowSlippageWarning(true)
       }
+    } else {
+      setAllowedSlippage(50)
     }
   }
 
@@ -380,13 +383,16 @@ export default function Swap({
     inputCurrency => {
       setApprovalSubmitted(false) // reset 2 step UI for approvals
       onCurrencySelection(Field.INPUT, inputCurrency)
+      /*
       const showSwapWarning = shouldShowSwapWarning(inputCurrency)
       if (showSwapWarning) {
         setSwapWarningCurrency(inputCurrency)
       } else {
         setSwapWarningCurrency(null)
-        handleChangeSlippage(inputCurrency, currencies[Field.OUTPUT])
-      }
+      } */
+
+
+      handleChangeSlippage(inputCurrency, currencies[Field.OUTPUT])
       
     },
     [onCurrencySelection, currencies]
@@ -395,13 +401,15 @@ export default function Swap({
   const handleOutputSelect = useCallback(
     outputCurrency => {
       onCurrencySelection(Field.OUTPUT, outputCurrency)
+      /*
       const showSwapWarning = shouldShowSwapWarning(outputCurrency)
       if (showSwapWarning) {
         setSwapWarningCurrency(outputCurrency)
       } else {
         setSwapWarningCurrency(null)
-        handleChangeSlippage(currencies[Field.INPUT], outputCurrency)
-      }
+      } */
+
+      handleChangeSlippage(currencies[Field.INPUT], outputCurrency)
       
     },
     [onCurrencySelection, currencies]
