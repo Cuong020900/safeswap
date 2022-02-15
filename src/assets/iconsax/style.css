@@ -29071,3 +29071,23 @@
 .isax-woman5:before {
   content: "\665";
 }
+
+
+
+.scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background-color: rgb(135, 141, 150);
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: 15px;
+}
+
+.scroll::-webkit-scrollbar-track-piece {
+  background-color: transparent;
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: 15px;
+}

@@ -1,0 +1,144 @@
+.ModalSlippage {
+  background-color: hsla(0,0%,100%,.1);
+  width: 600px;
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 0;
+  outline: 0;
+  margin: 0 auto;
+  max-height: calc(100vh - 80px);
+  margin-top: 40px;
+  padding-top: 40px;
+  position: relative;
+}
+
+@media (max-width: 767px) {
+  .ModalSlippage {
+    width: calc(100% - 20px);
+  }
+}
+
+.slippage-warning {
+  overflow-y: auto;
+  max-height: calc(100vh - 120px);
+  padding: 0 20px 20px 20px;
+}
+
+.btn-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 16px;
+  top: 7px;
+  z-index: 9;
+}
+
+.btn-close:hover {
+  background-color: #f8f8f8;
+}
+
+.close-icon {
+  width: 18px;
+  height: 18px
+}
+
+.slippage-warning::-webkit-scrollbar {
+  width: 10px;
+}
+
+.slippage-warning::-webkit-scrollbar-thumb {
+  background-color: rgb(135, 141, 150);
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: 15px;
+}
+
+.slippage-warning::-webkit-scrollbar-track-piece {
+  background-color: transparent;
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: 15px;
+}
+
+.ReactModal__Overlay--after-open {
+  background-color: rgba(0,0,0,0.5) !important;
+  z-index: 999999;
+}
+
+.slippage-warning-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #008a81;
+  text-align: center;
+}
+
+.slippage-warning-description {
+  font-size: 14px;
+  color: #ffffff;
+  line-height: 24px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.slippage-warning-heading {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.slippage-warning-text {
+  font-size: 14px;
+  color: #ffffff;
+  line-height: 24px;
+  margin-bottom: 16px;
+}
+
+.slippage-warning-note {
+  font-size: 14px;
+  color: #ffffff;
+  font-style: italic;
+  line-height: 24px;
+  margin-bottom: 16px;
+}
+
+.action-center {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.action-center .btn {
+  width: 250px;
+}
+
+.btn-link {
+  display: block;
+  padding: 16px 0;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 5px;
+  font-size: 14px;
+  color: #bbbbbb
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.slippage-value {
+    height: 40px;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    background-color: rgba(0,0,0,0.5);
+}

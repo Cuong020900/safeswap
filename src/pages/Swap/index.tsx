@@ -44,7 +44,8 @@ import {
   useExpertModeManager,
   useTokenWarningDismissal,
   useUserDeadline,
-  useUserSlippageTolerance
+  useUserSlippageTolerance,
+  useHideSlippageWarning
 } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
@@ -63,10 +64,11 @@ import { SlippageWarning } from '../../components/SlippageWarning/SlippageWarnin
 import './Swap.css'
 import { useCurrency } from '../../hooks/Tokens'
 import ConsolidateV2Intro from './ConsolidateV2Intro'
+import SlippageWarningPopup from './SlippageWarningPopup'
 import { BLACKLIST_TOKENS_SAFEMOON_V1, consolidation, TOKENS_SAFEMOON_V2 } from '../../constants'
 import useMigrationCallback, { MigrateType } from '../../hooks/useMigrationCallback'
 import BigNumber from 'bignumber.js'
-import WarningMigrate from './WarningMigrate'
+// import WarningMigrate from './WarningMigrate'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
 
 const SettingsWrapper = styled.div`
@@ -105,6 +107,7 @@ export default function Swap({
   useDefaultsFromURLSearch()
   const { t } = useTranslation()
   const [showConsolidateV2Intro, setShowConsolidateV2Intro] = useState(false)
+  const [showSlippageWarning, setShowSlippageWarning] = useState(false)
 
   const node = useRef<HTMLDivElement>()
   const open = useSettingsMenuOpen()
@@ -131,7 +134,10 @@ export default function Swap({
 
   // get custom setting values for user
   const [deadline] = useUserDeadline()
-  const [allowedSlippage] = useUserSlippageTolerance()
+  const [allowedSlippage, setAllowedSlippage] = useUserSlippageTolerance()
+
+  const [ hideSlippageWarning, handleHideSlippageWarning ] = useHideSlippageWarning()
+
 
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
@@ -261,6 +267,7 @@ export default function Swap({
 
   const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
 
+
   const handleSwap = useCallback(() => {
     if (priceImpactWithoutFee && !confirmPriceImpactWithoutFee(priceImpactWithoutFee)) {
       return
@@ -268,7 +275,6 @@ export default function Swap({
     if (!swapCallback) {
       return
     }
-
 
     const outputAddress = (trade?.outputAmount?.currency as any)?.address
     const inputAddress = (trade?.outputAmount?.currency as any)?.address
@@ -360,31 +366,54 @@ export default function Swap({
 
   const [swapWarningCurrency, setSwapWarningCurrency] = useState(null)
 
+  const handleChangeSlippage = (tokenA: any, tokenB: any) => {
+    // console.log(tokenA, tokenB)
+    if ((tokenA?.tokenInfo?.sellSlippage || tokenB?.tokenInfo?.buySlippage) && tokenA.address !== tokenB.address) {
+      const moreSlippage = (tokenA?.tokenInfo?.sellSlippage && tokenB?.tokenInfo?.buySlippage) ? 1 : 0
+      setAllowedSlippage((+(tokenA?.tokenInfo?.sellSlippage || 0) + +(tokenB?.tokenInfo?.buySlippage || 0) + moreSlippage) * 100)
+      // console.log('hideSlippageWarning ====>', hideSlippageWarning)
+      if (!hideSlippageWarning) {
+        setShowSlippageWarning(true)
+      }
+    } else {
+      setAllowedSlippage(50)
+    }
+  }
+
   const handleInputSelect = useCallback(
     inputCurrency => {
       setApprovalSubmitted(false) // reset 2 step UI for approvals
       onCurrencySelection(Field.INPUT, inputCurrency)
+      /*
       const showSwapWarning = shouldShowSwapWarning(inputCurrency)
       if (showSwapWarning) {
         setSwapWarningCurrency(inputCurrency)
       } else {
         setSwapWarningCurrency(null)
-      }
+      } */
+
+
+      handleChangeSlippage(inputCurrency, currencies[Field.OUTPUT])
+      
     },
-    [onCurrencySelection]
+    [onCurrencySelection, currencies]
   )
 
   const handleOutputSelect = useCallback(
     outputCurrency => {
       onCurrencySelection(Field.OUTPUT, outputCurrency)
+      /*
       const showSwapWarning = shouldShowSwapWarning(outputCurrency)
       if (showSwapWarning) {
         setSwapWarningCurrency(outputCurrency)
       } else {
         setSwapWarningCurrency(null)
-      }
+      } */
+
+      handleChangeSlippage(currencies[Field.INPUT], outputCurrency)
+      
     },
-    [onCurrencySelection]
+    [onCurrencySelection, currencies]
   )
 
   useEffect(() => {
@@ -425,7 +454,10 @@ export default function Swap({
       {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
       <TokenWarningCards currencies={currencies} open={showWarning} onDismiss={() => {}} />
       <SlippageWarning
-        onDismiss={() => setSwapWarningCurrency(null)}
+        onDismiss={() => {
+          setSwapWarningCurrency(null)
+          handleChangeSlippage(currencies[Field.OUTPUT], currencies[Field.INPUT])
+        }}
         open={swapWarningCurrency !== null}
         token={swapWarningCurrency}
       />
@@ -498,6 +530,7 @@ export default function Swap({
                     setApprovalSubmitted(false) // reset 2 step UI for approvals
                     setMigrationApprovalSubmitted(false)
                     onSwitchTokens()
+                    handleChangeSlippage(currencies[Field.OUTPUT], currencies[Field.INPUT])
                   }}
                 >
                   <SVG src={TradeIcon} width={32} height={32} stroke={theme.text1} />
@@ -670,6 +703,14 @@ export default function Swap({
           setShowConsolidateV2Intro(false)
         }}
         handleConvertV1ToV2={handleConvertV1ToV2}
+      />
+
+      <SlippageWarningPopup show={showSlippageWarning}
+        handleClose={() => {
+          setShowSlippageWarning(false)
+        }}
+        handleHideSlippageWarning={handleHideSlippageWarning}
+        slippage={allowedSlippage}
       />
     </>
   )
