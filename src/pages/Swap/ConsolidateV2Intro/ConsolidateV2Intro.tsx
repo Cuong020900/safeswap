@@ -49,7 +49,7 @@ const ConsolidateV2Intro = ({ show, handleClose, handleConvertV1ToV2 }: Props) =
           <br /> <br />
           <b>Step 3:</b> After you are comfortable, you can now swap all of your V1 SafeMoon for V2 SafeMoon by clicking
           <b>&ldquo;Max&ldquo;</b> on the swap. This will fill in the max amount of V1 SafeMoon you have in your balance
-          to &ldquo;swap&ldquo; for the upgraded V2 SafeMoon.Then just click <b>&ldquo;Swap&ldquo;</b> to initiate the
+          to &ldquo;swap&ldquo; for the upgraded V2 SafeMoon. Then just click <b>&ldquo;Swap&ldquo;</b> to initiate the
           transaction.
         </p>
         <h3 className="consolidate-intro-heading">You&apos;re all set</h3>
