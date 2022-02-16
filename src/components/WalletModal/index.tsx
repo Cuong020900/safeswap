@@ -109,6 +109,8 @@ const Blurb = styled.div`
 const OptionGrid = styled.div`
   display: grid;
   grid-gap: 16px;
+  max-height: calc(100vh - 288px);
+  overflow: auto;
   ${({ theme }) => theme.mediaWidth.upToMedium`
     grid-template-columns: 1fr;
     grid-gap: 16px;
