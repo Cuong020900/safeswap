@@ -296,8 +296,8 @@ export default function WalletModal({
         if (option.connector === portis) {
           return null
         }
-
-        if (!window.web3 && !window.ethereum && !window.BinanceChain && option.mobile) {
+          // !window.web3 && !window.ethereum && !window.BinanceChain && 
+        if (option.mobile) {
           return (
             <Option
               onClick={() => {
@@ -494,10 +494,13 @@ export default function WalletModal({
           )}
           {walletView !== WALLET_VIEWS.PENDING && (
             <Blurb>
-              <span>New to Binance Smart Chain? &nbsp;</span>{' '}
-              <ExternalLink href="https://docs.binance.org/smart-chain/wallet/metamask.html">
-                Learn more about wallets
-              </ExternalLink>
+              <a href="https://safemoon.net/"
+                target='_blank'
+                rel="noreferrer"
+                className='link'
+              >
+                Download the SafeMoon Wallet
+              </a>
             </Blurb>
           )}
         </ContentWrapper>

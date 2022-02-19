@@ -232,6 +232,26 @@ export interface WalletInfo {
 }
 
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
+  SAFEMOON_WALLET_BSC: {
+    connector: walletconnectBSC,
+    name: 'SafeMoon Wallet',
+    iconName: 'SafeMoonWallet.svg',
+    description: 'A secure place to store and trade your SafeMoon.',
+    href: null,
+    color: '#008a81',
+    chainIds: [56],
+    mobile: true
+  },
+  SAFEMOON_WALLET: {
+    connector: walletconnect,
+    name: 'SafeMoon Wallet',
+    iconName: 'SafeMoonWallet.svg',
+    description: 'A secure place to store and trade your SafeMoon.',
+    href: null,
+    color: '#008a81',
+    chainIds: [1],
+    mobile: true
+  },
   INJECTED: {
     connector: injected,
     name: 'Injected',
@@ -242,14 +262,25 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     primary: true,
     chainIds: [1, 3, 56, 97]
   },
-  BINANCE: {
-    connector: binanceinjected,
-    name: 'Binance Chain Wallet',
-    iconName: 'bnb.svg',
-    description: 'A Crypto Wallet for Binance Smart Chain',
+  WALLETCONNECT: {
+    connector: walletconnect,
+    name: 'WalletConnect',
+    iconName: 'walletConnectIcon.svg',
+    description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
     href: null,
-    color: '#F9A825',
-    chainIds: [56, 97]
+    color: '#3375BB',
+    chainIds: [1],
+    mobile: true
+  },
+  WALLETCONNECT_BSC: {
+    connector: walletconnectBSC,
+    name: 'WalletConnect',
+    iconName: 'walletConnectIcon.svg',
+    description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
+    href: null,
+    color: '#3375BB',
+    chainIds: [56],
+    mobile: true
   },
   METAMASK: {
     connector: injected,
@@ -265,16 +296,6 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     name: 'TrustWallet',
     iconName: 'trustwallet.svg',
     description: 'The most trusted & secure crypto wallet',
-    href: null,
-    color: '#3375BB',
-    chainIds: [1],
-    mobile: true
-  },
-  WALLETCONNECT: {
-    connector: walletconnect,
-    name: 'WalletConnect',
-    iconName: 'walletConnectIcon.svg',
-    description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
     href: null,
     color: '#3375BB',
     chainIds: [1],
@@ -299,35 +320,14 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     chainIds: [56],
     mobile: true
   },
-  WALLETCONNECT_BSC: {
-    connector: walletconnectBSC,
-    name: 'WalletConnect',
-    iconName: 'walletConnectIcon.svg',
-    description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
+  BINANCE: {
+    connector: binanceinjected,
+    name: 'Binance Chain Wallet',
+    iconName: 'bnb.svg',
+    description: 'A Crypto Wallet for Binance Smart Chain',
     href: null,
-    color: '#3375BB',
-    chainIds: [56],
-    mobile: true
-  },
-  SAFEMOON_WALLET_BSC: {
-    connector: walletconnectBSC,
-    name: 'SafeMoon Wallet',
-    iconName: 'SafeMoonWallet.svg',
-    description: 'A secure place to store and trade your SafeMoon.',
-    href: null,
-    color: '#008a81',
-    chainIds: [56],
-    mobile: true
-  },
-  SAFEMOON_WALLET: {
-    connector: walletconnect,
-    name: 'SafeMoon Wallet',
-    iconName: 'SafeMoonWallet.svg',
-    description: 'A secure place to store and trade your SafeMoon.',
-    href: null,
-    color: '#008a81',
-    chainIds: [1],
-    mobile: true
+    color: '#F9A825',
+    chainIds: [56, 97]
   },
   MATHWALLET: {
     connector: injected,
