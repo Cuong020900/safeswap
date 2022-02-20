@@ -11,7 +11,7 @@ import AccountDetails from '../AccountDetails'
 import PendingView from './PendingView'
 import Option from './Option'
 import { appEnv, SUPPORTED_WALLETS } from '../../constants'
-import { ExternalLink } from '../../theme'
+// import { ExternalLink } from '../../theme'
 import MetamaskIcon from '../../assets/images/metamask.png'
 import TrustWalletIcon from '../../assets/images/trustwallet.svg'
 import MathWalletIcon from '../../assets/images/mathwallet.svg'
@@ -496,7 +496,7 @@ export default function WalletModal({
             <Blurb>
               <a href="https://safemoon.net/"
                 target='_blank'
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className='link'
               >
                 Download the SafeMoon Wallet
