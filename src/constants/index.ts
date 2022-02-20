@@ -289,7 +289,8 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     description: 'Easy-to-use browser extension.',
     href: null,
     color: '#E8831D',
-    chainIds: [1, 3, 56, 97]
+    chainIds: [1, 3, 56, 97],
+    mobile: true
   },
   TRUSTWALLET: {
     connector: walletconnect,
