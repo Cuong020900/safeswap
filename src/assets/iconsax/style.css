@@ -29091,3 +29091,14 @@
   border: 3px solid transparent;
   border-radius: 15px;
 }
+
+.link {
+  cursor: pointer;
+  color: rgb(0, 157, 154) !important;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
