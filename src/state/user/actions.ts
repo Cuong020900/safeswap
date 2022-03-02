@@ -16,6 +16,8 @@ export interface SerializedPair {
 
 export const updateVersion = createAction<void>('updateVersion')
 export const hideShowSlippageWarning = createAction<void>('hideShowSlippageWarning')
+export const setCurrentAccount = createAction<{ currentAccount: string }>('setCurrentAccount')
+export const setCurrentConnector = createAction<{ currentConnector: string }>('setCurrentConnector')
 export const updateMatchesDarkMode = createAction<{ matchesDarkMode: boolean }>('updateMatchesDarkMode')
 export const updateUserDarkMode = createAction<{ userDarkMode: boolean }>('updateUserDarkMode')
 export const updateUserExpertMode = createAction<{ userExpertMode: boolean }>('updateUserExpertMode')

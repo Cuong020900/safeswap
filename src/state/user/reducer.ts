@@ -16,7 +16,9 @@ import {
   updateUserDeadline,
   updateGasPrice,
   updateGasPricesList,
-  hideShowSlippageWarning
+  hideShowSlippageWarning,
+  setCurrentAccount,
+  setCurrentConnector
 } from './actions'
 import { GAS_PRICE, GAS_PRICE_GWEI } from './hooks'
 import { ChainId } from '@safemoon/sdk'
@@ -65,6 +67,8 @@ export interface UserState {
   gasPrice: string
   gasPriceType: string
   gasPrices: any
+  currentAccount: string
+  currentConnector: string
 }
 
 function pairKey(token0Address: string, token1Address: string) {
@@ -83,6 +87,8 @@ export const initialState: UserState = {
   gasPrice: GAS_PRICE_GWEI.default,
   gasPriceType: 'default',
   hideSlippageWarning: false,
+  currentAccount: '',
+  currentConnector: '',
   gasPrices: {
     [ChainId.BSC_MAINNET]: {
       ...GAS_PRICE_GWEI
@@ -137,6 +143,12 @@ export default createReducer(initialState, builder =>
     .addCase(hideShowSlippageWarning, state => {
       state.hideSlippageWarning = true
       state.timestamp = currentTimestamp()
+    })
+    .addCase(setCurrentAccount, (state, action) => {
+      state.currentAccount = action.payload.currentAccount
+    })
+    .addCase(setCurrentConnector, (state, action) => {
+      state.currentConnector = action.payload.currentConnector
     })
     .addCase(addSerializedToken, (state, { payload: { serializedToken } }) => {
       state.tokens[serializedToken.chainId] = state.tokens[serializedToken.chainId] || {}

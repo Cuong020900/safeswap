@@ -311,7 +311,7 @@ export default function AccountDetails({
               <AccountGroupingRow>
                 {formatConnectorName()}
                 <div>
-                  {connector !== injected && connector !== walletlink && (
+                  {connector !== injected && connector !== walletlink && connector !== binanceinjected && (
                     <WalletAction
                       style={{ fontSize: '.825rem', fontWeight: 400, marginRight: '8px' }}
                       onClick={() => {
@@ -321,11 +321,14 @@ export default function AccountDetails({
                       Disconnect
                     </WalletAction>
                   )}
-                  {(connector === injected || connector === walletlink) && (
+                  {(connector === injected || connector === walletlink || connector === binanceinjected) && (
                     <WalletAction
                       style={{ fontSize: '.825rem', fontWeight: 400, marginRight: '8px' }}
                       onClick={() => {
                         deactivate()
+                        if ((connector as any).handleClose) {
+                          ;(connector as any).handleClose()
+                        }
                       }}
                     >
                       Disconnect
