@@ -246,7 +246,7 @@ export function useSwapCallback(
               throw new Error('Transaction rejected.')
             } else {
               // otherwise, the error was unexpected and we need to convey that
-              throw new Error(`Swap failed: ${error.message}`)
+              throw new Error(`Swap failed: ${error.message || 'Transaction canceled by user'}`)
             }
           })
       },
