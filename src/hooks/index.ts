@@ -40,7 +40,7 @@ export function useEagerConnect() {
     } else {
       setCurrentConnector('')
     }
-  }, [connector])
+  }, [connector, setCurrentConnector])
 
   useEffect(() => {
     if (account) {
@@ -66,7 +66,7 @@ export function useEagerConnect() {
         }
       }
     })
-  }, []) // intentionally only running on mount (make sure it's only mounted once :))
+  }, [activate, currentAccount, currentConnector]) // intentionally only running on mount (make sure it's only mounted once :))
 
   useEffect(() => {
     if (currentConnector === 'BINANCE') {
@@ -86,7 +86,7 @@ export function useEagerConnect() {
         }
       })
     }
-  }, [currentConnector]) // intentionally only running on mount (make sure it's only mounted once :))
+  }, [currentAccount, currentConnector, activate]) // intentionally only running on mount (make sure it's only mounted once :))
 
   // if the connection worked, wait until we get confirmation of that to flip the flag
   useEffect(() => {
