@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Web3Provider } from '@ethersproject/providers'
 import { ChainId } from '@safemoon/sdk'
 import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
@@ -40,7 +41,7 @@ export function useEagerConnect() {
     } else {
       setCurrentConnector('')
     }
-  }, [connector, setCurrentConnector])
+  }, [connector])
 
   useEffect(() => {
     if (account) {
@@ -66,7 +67,7 @@ export function useEagerConnect() {
         }
       }
     })
-  }, [activate, currentAccount, currentConnector]) // intentionally only running on mount (make sure it's only mounted once :))
+  }, []) // intentionally only running on mount (make sure it's only mounted once :))
 
   useEffect(() => {
     if (currentConnector === 'BINANCE') {
@@ -86,7 +87,7 @@ export function useEagerConnect() {
         }
       })
     }
-  }, [currentAccount, currentConnector, activate]) // intentionally only running on mount (make sure it's only mounted once :))
+  }, [currentConnector]) // intentionally only running on mount (make sure it's only mounted once :))
 
   // if the connection worked, wait until we get confirmation of that to flip the flag
   useEffect(() => {
