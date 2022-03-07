@@ -318,7 +318,6 @@ export default function Swap({
         })
       })
       .catch(error => {
-        console.log('error', error, error?.code)
         setSwapState({
           attemptingTxn: false,
           tradeToConfirm,
