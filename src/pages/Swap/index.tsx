@@ -370,9 +370,10 @@ export default function Swap({
     // console.log(tokenA, tokenB)
     if ((tokenA?.tokenInfo?.sellSlippage || tokenB?.tokenInfo?.buySlippage) && tokenA && tokenB && tokenA?.address !== tokenB?.address) {
       const moreSlippage = (tokenA?.tokenInfo?.sellSlippage && tokenB?.tokenInfo?.buySlippage) ? 1 : 0
-      setAllowedSlippage((+(tokenA?.tokenInfo?.sellSlippage || 0) + +(tokenB?.tokenInfo?.buySlippage || 0) + moreSlippage) * 100)
-      // console.log('hideSlippageWarning ====>', hideSlippageWarning)
-      if (!hideSlippageWarning) {
+      const allowedSlippage = (+(tokenA?.tokenInfo?.sellSlippage || 0) + +(tokenB?.tokenInfo?.buySlippage || 0) + moreSlippage) * 100
+      setAllowedSlippage(allowedSlippage)
+      // console.log('allowedSlippage ====>', allowedSlippage)
+      if (!hideSlippageWarning && allowedSlippage > 50) {
         setShowSlippageWarning(true)
       }
     } else {

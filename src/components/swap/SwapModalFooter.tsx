@@ -101,9 +101,9 @@ export default function SwapModalFooter({
         <RowBetween>
           <RowFixed>
             <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
-              Liquidity Provider Fee
+              SafeMoon Swap Fee
             </TYPE.black>
-            <QuestionHelper size={'sm'} text="A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive." />
+            <QuestionHelper size={'sm'} text="A portion of each trade (0.25%) goes towards supporting the ecosystem." />
           </RowFixed>
           <TYPE.black fontSize={14}>
             {realizedLPFee ? realizedLPFee?.toSignificant(6) + ' ' + getTokenSymbol(trade.inputAmount.currency, chainId) : '-'}

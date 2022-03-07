@@ -19,7 +19,9 @@ import {
   updateUserDeadline,
   updateUserExpertMode,
   updateUserSlippageTolerance,
-  hideShowSlippageWarning
+  hideShowSlippageWarning,
+  setCurrentAccount,
+  setCurrentConnector
 } from './actions'
 import { useDefaultTokenList } from '../lists/hooks'
 import { isDefaultToken } from '../../utils'
@@ -127,6 +129,38 @@ export function useHideSlippageWarning(): [boolean | undefined, () => void] {
   }, [dispatch])
 
   return [hideSlippageWarning, handleHideSlippageWarning]
+}
+
+export function useGetCurrentAccount(): [string, (account: string) => void] {
+  const dispatch = useDispatch<AppDispatch>()
+  const currentAccount = useSelector<AppState, AppState['user']['currentAccount']>(state => {
+    return state.user.currentAccount
+  })
+
+  const handleSetCurrentAccount = useCallback(
+    (account: string) => {
+      dispatch(setCurrentAccount({ currentAccount: account }))
+    },
+    [dispatch]
+  )
+
+  return [currentAccount, handleSetCurrentAccount]
+}
+
+export function useGetCurrentConnector(): [string, (connector: string) => void] {
+  const dispatch = useDispatch<AppDispatch>()
+  const currentConnector = useSelector<AppState, AppState['user']['currentConnector']>(state => {
+    return state.user.currentConnector
+  })
+
+  const handleSetCurrentConnector = useCallback(
+    (connector: string) => {
+      dispatch(setCurrentConnector({ currentConnector: connector }))
+    },
+    [dispatch]
+  )
+
+  return [currentConnector, handleSetCurrentConnector]
 }
 
 export function useUserDeadline(): [number, (slippage: number) => void] {

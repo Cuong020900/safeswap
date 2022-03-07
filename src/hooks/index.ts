@@ -8,18 +8,22 @@ import { injected, binanceinjected } from '../connectors'
 import { NetworkContextName, popupEmitter, PopupTypes } from '../constants'
 import { useSelector } from 'react-redux'
 import { AppState } from '../state'
+import { useGetCurrentAccount, useGetCurrentConnector } from '../state/user/hooks'
 
 export function useActiveWeb3React(): Web3ReactContextInterface<Web3Provider> & { chainId?: ChainId } {
   const context = useWeb3ReactCore<Web3Provider>()
   const contextNetwork = useWeb3ReactCore<Web3Provider>(NetworkContextName)
+  // console.log('context', context)
+  // console.log('contextNetwork', contextNetwork)
   return context.active ? context : contextNetwork
 }
 
 export function useEagerConnect() {
-  const { activate, active, account, deactivate } = useWeb3ReactCore() // specifically using useWeb3ReactCore because of what this hook does
+  const { activate, active, account, deactivate, connector } = useWeb3ReactCore() // specifically using useWeb3ReactCore because of what this hook does
   const [tried, setTried] = useState(false)
   const blacklistWallets: string[] = useSelector((state: AppState) => state.blacklists.walletAddresses)
-
+  const [currentAccount, setCurrentAccount] = useGetCurrentAccount()
+  const [currentConnector, setCurrentConnector] = useGetCurrentConnector()
   useEffect(() => {
     if (typeof account === 'string' && blacklistWallets) {
       const isBadAccount = blacklistWallets?.includes(account)
@@ -31,8 +35,24 @@ export function useEagerConnect() {
   }, [account, blacklistWallets, deactivate])
 
   useEffect(() => {
+    if (connector === binanceinjected) {
+      setCurrentConnector('BINANCE')
+    } else {
+      setCurrentConnector('')
+    }
+  }, [connector])
+
+  useEffect(() => {
+    if (account) {
+      setCurrentAccount(account)
+    } else {
+      setCurrentAccount('')
+    }
+  }, [account, setCurrentAccount])
+
+  useEffect(() => {
     injected.isAuthorized().then(isAuthorized => {
-      if (isAuthorized) {
+      if (isAuthorized && currentAccount && currentConnector !== 'BINANCE') {
         activate(injected, undefined, true).catch(() => {
           setTried(true)
         })
@@ -46,32 +66,34 @@ export function useEagerConnect() {
         }
       }
     })
-  }, [activate]) // intentionally only running on mount (make sure it's only mounted once :))
+  }, []) // intentionally only running on mount (make sure it's only mounted once :))
 
   useEffect(() => {
-    binanceinjected.isAuthorized().then(isAuthorized => {
-      if (isAuthorized) {
-        activate(binanceinjected, undefined, true).catch(() => {
-          setTried(true)
-        })
-      } else {
-        if (isMobile && window.BinanceChain) {
+    if (currentConnector === 'BINANCE') {
+      binanceinjected.isAuthorized().then(isAuthorized => {
+        if (isAuthorized && currentAccount && currentConnector === 'BINANCE') {
           activate(binanceinjected, undefined, true).catch(() => {
             setTried(true)
           })
         } else {
-          setTried(true)
+          if (isMobile && window.BinanceChain) {
+            activate(binanceinjected, undefined, true).catch(() => {
+              setTried(true)
+            })
+          } else {
+            setTried(true)
+          }
         }
-      }
-    })
-  }, [activate]) // intentionally only running on mount (make sure it's only mounted once :))
+      })
+    }
+  }, [currentConnector]) // intentionally only running on mount (make sure it's only mounted once :))
 
   // if the connection worked, wait until we get confirmation of that to flip the flag
   useEffect(() => {
-    if (active) {
+    if (active && !tried) {
       setTried(true)
     }
-  }, [active])
+  }, [active, tried])
 
   return tried
 }

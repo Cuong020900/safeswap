@@ -374,7 +374,7 @@ export default function WalletModal({
       // overwrite injected when needed
       if (option.connector === binanceinjected) {
         // don't show injected if there's no injected provider
-        if (!(window.web3 || window.BinanceChain)) {
+        if (!window.BinanceChain) {
           if (option.name === 'Binance Chain Wallet') {
             return (
               <Option
@@ -489,7 +489,7 @@ export default function WalletModal({
                   setSelectedNetwork(newNetwork)
                 }}
               />
-              <OptionGrid>{getOptions()}</OptionGrid>
+              <OptionGrid className={'scroll'}>{getOptions()}</OptionGrid>
             </AutoColumn>
           )}
           {walletView !== WALLET_VIEWS.PENDING && (
