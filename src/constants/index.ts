@@ -229,6 +229,7 @@ export interface WalletInfo {
   mobile?: true
   mobileOnly?: true
   chainIds: number[]
+  hrefIos?: string
 }
 
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
@@ -240,7 +241,8 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     href: null,
     color: '#008a81',
     chainIds: [56],
-    mobile: true
+    mobile: true,
+    hrefIos: 'https://safemoon.com/wc?uri=wc%3A465fdefd-c2f9-47ca-98b2-007b2b26ded1%401%3Fbridge%3Dhttps%253A%252F%252Fj.bridge.walletconnect.org%26key%3D458380949414c0a8e6467aec9cdfe4fbd29dd7bbf0ff0b334d6dc15b43299847'
   },
   SAFEMOON_WALLET: {
     connector: walletconnect,
@@ -250,7 +252,8 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     href: null,
     color: '#008a81',
     chainIds: [1],
-    mobile: true
+    mobile: true,
+    hrefIos: 'https://safemoon.com/wc?uri=wc%3A465fdefd-c2f9-47ca-98b2-007b2b26ded1%401%3Fbridge%3Dhttps%253A%252F%252Fj.bridge.walletconnect.org%26key%3D458380949414c0a8e6467aec9cdfe4fbd29dd7bbf0ff0b334d6dc15b43299847'
   },
   INJECTED: {
     connector: injected,

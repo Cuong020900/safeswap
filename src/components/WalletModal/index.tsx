@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import ReactGA from 'react-ga'
 import styled from 'styled-components'
-import { isMobile } from 'react-device-detect'
+import { isMobile, isAndroid } from 'react-device-detect'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
 import usePrevious from '../../hooks/usePrevious'
 import { useWalletModalOpen, useWalletModalToggle } from '../../state/application/hooks'
@@ -307,7 +307,7 @@ export default function WalletModal({
               key={key}
               active={option.connector && option.connector === connector}
               color={option.color}
-              link={option.href}
+              link={isAndroid ? option.href : option.hrefIos}
               header={option.name}
               subheader={null}
               icon={require('../../assets/images/' + option.iconName)}
