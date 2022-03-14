@@ -1,0 +1,24 @@
+name: Safemoon Swap Frontend CICD For DevENV
+
+on:
+  push:
+    branches: [ swapv2 ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+        
+    - name: Adding Known Hosts
+      run: |
+        mkdir ~/.ssh
+        ssh-keyscan -H ${{ secrets.SSH_REMOTE_HOST_DEV }} >> ~/.ssh/known_hosts
+        echo "${{ secrets.SSH_PRIVATE_KEY_DEV }}" >> ~/.ssh/private.key
+        chmod 400 ~/.ssh/private.key
+    - name: DEPLOY TO SERVER
+      run: |
+        ssh -i ~/.ssh/private.key ${{ secrets.SSH_REMOTE_USERNAME_DEV }}@${{ secrets.SSH_REMOTE_HOST_DEV }} "/home/ec2-user/buildwebswapv2.sh"
+        echo "DONE!"
