@@ -41,7 +41,7 @@ export const ROUTER_ADDRESS: ChainAddress = {
   [ChainId.KOVAN]: '',
   [ChainId.BSC_MAINNET]: '0xE804f3C3E6DdA8159055428848fE6f2a91c2b9AF',
   [ChainId.ROPSTEN]: '0x713702D3fb45BC9765d3A00e0B37c33f9CE9Ec91',
-  [ChainId.BSC_TESTNET]: '0xD41AEAe342E4403c8dE997db07cE6cc2D2b47618'
+  [ChainId.BSC_TESTNET]: '0xF93611d33c1CC2E5fd50F6b75f97Dd5E1776316E'
 }
 
 export const DAI = new Token(ChainId.MAINNET, '0x6B175474E89094C44Da98b954EedeAC495271d0F', 18, 'DAI', 'Dai Stablecoin')
@@ -49,7 +49,7 @@ export const USDC = new Token(ChainId.MAINNET, '0xA0b86991c6218b36c1d19D4a2e9Eb0
 export const USDT = new Token(ChainId.MAINNET, '0xdAC17F958D2ee523a2206206994597C13D831ec7', 6, 'USDT', 'Tether USD')
 export const COMP = new Token(ChainId.MAINNET, '0xc00e94Cb662C3520282E6f5717214004A7f26888', 18, 'COMP', 'Compound')
 export const MKR = new Token(ChainId.MAINNET, '0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2', 18, 'MKR', 'Maker')
-export const AMPL = new Token(ChainId.MAINNET, '0xD46bA6D942050d489DBd938a2C909A5d5039A161', 9, 'AMPL', 'Ampleforth')
+export const AMPL = new Token(ChainId.MAINNET, '0x6F46200B1fe80D118492E577B3c2c9Fc06A868D2', 9, 'AMPL', 'Ampleforth')
 
 export const BAI = new Token(
   ChainId.BSC_MAINNET,
