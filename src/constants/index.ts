@@ -39,9 +39,9 @@ export const ROUTER_ADDRESS: ChainAddress = {
   [ChainId.RINKEBY]: '',
   [ChainId.GÖRLI]: '',
   [ChainId.KOVAN]: '',
-  [ChainId.BSC_MAINNET]: '0xE804f3C3E6DdA8159055428848fE6f2a91c2b9AF',
+  [ChainId.BSC_MAINNET]: '0x47a305498284577F065D0098fC0A37D8Ba1eD9d0',
   [ChainId.ROPSTEN]: '0x713702D3fb45BC9765d3A00e0B37c33f9CE9Ec91',
-  [ChainId.BSC_TESTNET]: '0xF93611d33c1CC2E5fd50F6b75f97Dd5E1776316E'
+  [ChainId.BSC_TESTNET]: '0x36c4D6d43295c70b1a6636DBb21c90addBa90d06'
 }
 
 export const DAI = new Token(ChainId.MAINNET, '0x6B175474E89094C44Da98b954EedeAC495271d0F', 18, 'DAI', 'Dai Stablecoin')
@@ -242,7 +242,8 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     color: '#008a81',
     chainIds: [56],
     mobile: true,
-    hrefIos: 'https://safemoon.com/wc?uri=wc%3A465fdefd-c2f9-47ca-98b2-007b2b26ded1%401%3Fbridge%3Dhttps%253A%252F%252Fj.bridge.walletconnect.org%26key%3D458380949414c0a8e6467aec9cdfe4fbd29dd7bbf0ff0b334d6dc15b43299847'
+    hrefIos:
+      'https://safemoon.com/wc?uri=wc%3A465fdefd-c2f9-47ca-98b2-007b2b26ded1%401%3Fbridge%3Dhttps%253A%252F%252Fj.bridge.walletconnect.org%26key%3D458380949414c0a8e6467aec9cdfe4fbd29dd7bbf0ff0b334d6dc15b43299847'
   },
   SAFEMOON_WALLET: {
     connector: walletconnect,
@@ -253,7 +254,8 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     color: '#008a81',
     chainIds: [1],
     mobile: true,
-    hrefIos: 'https://safemoon.com/wc?uri=wc%3A465fdefd-c2f9-47ca-98b2-007b2b26ded1%401%3Fbridge%3Dhttps%253A%252F%252Fj.bridge.walletconnect.org%26key%3D458380949414c0a8e6467aec9cdfe4fbd29dd7bbf0ff0b334d6dc15b43299847'
+    hrefIos:
+      'https://safemoon.com/wc?uri=wc%3A465fdefd-c2f9-47ca-98b2-007b2b26ded1%401%3Fbridge%3Dhttps%253A%252F%252Fj.bridge.walletconnect.org%26key%3D458380949414c0a8e6467aec9cdfe4fbd29dd7bbf0ff0b334d6dc15b43299847'
   },
   INJECTED: {
     connector: injected,
