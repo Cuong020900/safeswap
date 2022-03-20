@@ -149,6 +149,8 @@ export function useSwapCallback(
             } = call
             const options = !value || isZero(value) ? {} : { value }
 
+            console.log('methodName ====>', methodName, args, value)
+
             return contract.estimateGas[methodName](...args, options)
               .then(gasEstimate => {
                 return {
@@ -198,6 +200,8 @@ export function useSwapCallback(
           },
           gasEstimate
         } = successfulEstimation
+
+        console.log('tétt= ====>', methodName, args, value)
 
         return (chainId === ChainId.BSC_MAINNET || chainId === ChainId.BSC_TESTNET
           ? contract[methodName](...args, {
