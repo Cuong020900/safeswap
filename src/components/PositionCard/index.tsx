@@ -257,9 +257,10 @@ export default function FullPositionCard({ pair, border }: PositionCardProps) {
               </Text>
             </FixedHeightRow>
             <RowBetween marginTop="10px">
-              <ButtonPrimaryStyled as={Link} to={`/add/${currencyId(currency0)}/${currencyId(currency1)}`} width="48%">
+              {/* <ButtonPrimaryStyled as={Link} to={`/add/${currencyId(currency0)}/${currencyId(currency1)}`} width="48%">
                 {t('add')}
-              </ButtonPrimaryStyled>
+              </ButtonPrimaryStyled> */}
+              <div />
               <ButtonDanger as={Link} width="48%" to={`/remove/${currencyId(currency0)}/${currencyId(currency1)}`}>
                 {t('remove')}
               </ButtonDanger>

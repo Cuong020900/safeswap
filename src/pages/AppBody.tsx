@@ -12,7 +12,6 @@ export const BodyWrapper = styled.div<{ disabled?: boolean; overflow?: string }>
   opacity: ${({ disabled }) => (disabled ? '0.4' : '1')};
   pointer-events: ${({ disabled }) => disabled && 'none'};
   overflow: ${({ overflow }) => overflow || 'hidden'};
-  pointer-events: none;
   @supports ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
     background-color: rgba(255, 255, 255, 0.1);
     -webkit-backdrop-filter: blur(10px);
