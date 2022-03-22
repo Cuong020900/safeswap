@@ -177,3 +177,27 @@
 .btn-close-swap:hover {
   background-color: rgba(0,0,0);
 }
+
+.warning {
+  display: flex;
+  align-items: flex-start;
+  background-color: #602c27;
+  padding: 10px 16px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: flex-start;
+  font-size: 13px;
+  color: #fff;
+  margin-bottom: 0;
+  text-shadow: none;
+  text-align: justify;
+  max-width: 460px;
+  margin: 0 auto 24px auto;
+  line-height: 20px;
+}
+
+.warningIcon {
+  width: 20px;
+  margin-right: 12px;
+  margin-top: 4px;
+}

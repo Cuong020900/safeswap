@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import styled, { ThemeContext } from 'styled-components'
 import { RouteComponentProps } from 'react-router-dom'
 import infoIcon from '../../assets/images/info.svg'
+import warningIcon from '../../assets/images/warning.svg'
 import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button'
 import Card, { GreyCard } from '../../components/Card'
 import { AutoColumn } from '../../components/Column'
@@ -269,6 +270,7 @@ export default function Swap({
 
 
   const handleSwap = useCallback(() => {
+    return
     if (priceImpactWithoutFee && !confirmPriceImpactWithoutFee(priceImpactWithoutFee)) {
       return
     }
@@ -453,6 +455,10 @@ export default function Swap({
   return (
     <>
       {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
+      <div className='warning'>
+        <img src={warningIcon} className='warningIcon'/>
+        We have suspended swapping for a minimum of 48 hours due to an exciting new swap upgrade. Thank you for your patience as we improve your swapping experience
+      </div>
       <TokenWarningCards currencies={currencies} open={showWarning} onDismiss={() => {}} />
       <SlippageWarning
         onDismiss={() => {
