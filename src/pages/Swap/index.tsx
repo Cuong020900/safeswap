@@ -97,6 +97,7 @@ const HeaderWrapper = styled.div`
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
+  pointer-events: none;
 `
 
 export default function Swap({
@@ -527,6 +528,7 @@ export default function Swap({
               onCurrencySelect={handleInputSelect}
               otherCurrency={currencies[Field.OUTPUT]}
               id="swap-currency-input"
+              disableCurrencySelect
             />
 
             <AutoColumn justify="space-between">
@@ -555,6 +557,7 @@ export default function Swap({
               onCurrencySelect={handleOutputSelect}
               otherCurrency={currencies[Field.INPUT]}
               id="swap-currency-output"
+              disableCurrencySelect
             />
 
             {showWrap || showMigrate ? null : (

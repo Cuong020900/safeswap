@@ -119,6 +119,7 @@ const StyledBalanceMax = styled.button`
   font-size: 0.875rem;
   padding: .5rem 1.5rem;
   font-weight: 500;
+  pointer-events: none;
 
   cursor: pointer;
   margin-left: .5rem;
