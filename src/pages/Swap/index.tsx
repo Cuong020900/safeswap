@@ -457,7 +457,7 @@ export default function Swap({
       {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
       <div className='warning'>
         <img src={warningIcon} className='warningIcon'/>
-        We have suspended swapping for a minimum of 48 hours due to an exciting new swap upgrade. Thank you for your patience as we improve your swapping experience
+        We have suspended swapping for a minimum of 48 hours due to an exciting new swap upgrade. Thank you for your patience as we improve your swapping experience.
       </div>
       <TokenWarningCards currencies={currencies} open={showWarning} onDismiss={() => {}} />
       <SlippageWarning
@@ -469,7 +469,7 @@ export default function Swap({
         token={swapWarningCurrency}
       />
         <div className="row">
-          <a className={`btn ${disabledConsolidate ? 'disabed' : ''}`} onClick={handleConvertV1ToV2}>
+          <a className={`btn ${true ? 'disabed' : ''}`} onClick={handleConvertV1ToV2}>
             <span>Consolidate to V2 SafeMoon!</span>
           </a>
           <a
