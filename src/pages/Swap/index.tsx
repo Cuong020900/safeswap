@@ -473,7 +473,7 @@ export default function Swap({
             <span>Consolidate to V2 SafeMoon!</span>
           </a>
           <a
-            className="btnInfo"
+            className="btnInfo disabled"
             onClick={() => {
               setShowConsolidateV2Intro(true)
             }}
