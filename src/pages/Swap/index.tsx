@@ -486,8 +486,9 @@ export default function Swap({
       <AppBody disabled={showWarning}>
 
         <RowBetween>
-          <SwapPoolTabs active={'swap'} />
-          {/* <div /> */}
+          {/* <SwapPoolTabs active={'swap'} /> */}
+          {/* <h2 className='swapTitle'>Swap</h2> */}
+          <div />
           <HeaderWrapper>
             <SettingsWrapper onClick={toggle}>
               <SVG src={SettingsIcon} width={24} height={24} color={theme.text1} />
