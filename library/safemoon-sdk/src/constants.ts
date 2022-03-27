@@ -33,7 +33,7 @@ export const FACTORY_ADDRESS: ChainAddress = {
   [ChainId.RINKEBY]: "",
   [ChainId.GÖRLI]: "",
   [ChainId.KOVAN]: "",
-  [ChainId.BSC_MAINNET]: "0xD82A68F681AAaF8bbb4510004414Fc6ad8B59f43",
+  [ChainId.BSC_MAINNET]: "0x4d05D0045df5562D6D52937e93De6Ec1FECDAd21",
   [ChainId.BSC_TESTNET]: "0xB8554a2d68D052698b5EA538B0f3e1919a56e871"
 }
 
@@ -43,7 +43,7 @@ export const INIT_CODE_HASH: ChainAddress = {
   [ChainId.RINKEBY]: "",
   [ChainId.GÖRLI]: "",
   [ChainId.KOVAN]: "",
-  [ChainId.BSC_MAINNET]: "0xf517ab64379ffb90f6f9d00e62165e5c0fe7a7003b0a292fde5cc0d81b4a0ee4",
+  [ChainId.BSC_MAINNET]: "0x8bc8f8336dcfcba44096a139671d89637695b1be1cf88aad5d7de56ae35b8bfd",
   [ChainId.BSC_TESTNET]: '0x8bc8f8336dcfcba44096a139671d89637695b1be1cf88aad5d7de56ae35b8bfd'
 }
 
