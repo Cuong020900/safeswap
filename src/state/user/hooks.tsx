@@ -23,9 +23,10 @@ import {
   setCurrentAccount,
   setCurrentConnector
 } from './actions'
-import { useDefaultTokenList, useUpdateListPairs } from '../lists/hooks'
+import { useDefaultTokenList, useUpdateListPairs, WrappedTokenInfo } from '../lists/hooks'
 import { isDefaultToken } from '../../utils'
 import { parseUnits } from 'ethers/lib/utils'
+import { TokenInfo } from '@uniswap/token-lists'
 
 function serializeToken(token: Token): SerializedToken {
   return {
@@ -283,9 +284,13 @@ export function useTrackedTokenPairs(): [Token, Token][] {
   const { pairs } = useUpdateListPairs()
 
   let listPairs = []
-  if (chainId && pairs[chainId]) {
-    listPairs = pairs[chainId]
+  if (chainId && pairs?.pairs[chainId] && tokens) {
+    listPairs = pairs?.pairs[chainId].map(([token0, token1]: [any, any]) => [
+      new WrappedTokenInfo({ ...token0, logoURI: (tokens[token0.address] as any)?.tokenInfo?.logoURI }),
+      new WrappedTokenInfo({ ...token1, logoURI: (tokens[token1.address] as any)?.tokenInfo?.logoURI })
+    ])
   }
+
 
   // pinned pairs
   const pinnedPairs = useMemo(() => (chainId ? PINNED_PAIRS[chainId] ?? [] : []), [chainId])

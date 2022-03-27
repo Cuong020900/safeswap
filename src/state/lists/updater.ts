@@ -28,19 +28,23 @@ export default function Updater(): null {
         let pairs: any = {}
 
         result?.data?.data.forEach((item: any) => {
-          const pairTokens = [
-            new Token(item.chainId, item.token0.contractAddress, item.token0.decimals, item.token0.symbol, item.token0.name),
-            new Token(item.chainId, item.token1.contractAddress, item.token1.decimals, item.token1.symbol, item.token1.name)
-          ]
-          if (pairs[item.chainId]) {
-            pairs = {
-              ...pairs,
-              [item.chainId]: [...pairs[item.chainId], pairTokens]
-            }
-          } else {
-            pairs = {
-              ...pairs,
-              [item.chainId]: [pairTokens]
+          if ((item.chainId === 56 && item?.token0.symbol !== 'WBNB' && item.token1.symbol !== 'WBNB')
+            || (item.chainId === 1 && item?.token0.symbol !== 'WETH' && item.token1.symbol !== 'WETH')
+          ) {
+            const pairTokens = [
+              new Token(item.chainId, item.token0.contractAddress, item.token0.decimals, item.token0.symbol, item.token0.name),
+              new Token(item.chainId, item.token1.contractAddress, item.token1.decimals, item.token1.symbol, item.token1.name)
+            ]
+            if (pairs[item.chainId]) {
+              pairs = {
+                ...pairs,
+                [item.chainId]: [...pairs[item.chainId], pairTokens]
+              }
+            } else {
+              pairs = {
+                ...pairs,
+                [item.chainId]: [pairTokens]
+              }
             }
           }
         })
