@@ -27,7 +27,9 @@ const store = configureStore({
     lists,
     blacklists
   },
-  middleware: [...getDefaultMiddleware(), save({ states: PERSISTED_KEYS }), checkStorage({ states: PERSISTED_KEYS })],
+  middleware: [...getDefaultMiddleware({
+    serializableCheck: false
+  }), save({ states: PERSISTED_KEYS }), checkStorage({ states: PERSISTED_KEYS })],
   preloadedState: load({ states: PERSISTED_KEYS })
 })
 

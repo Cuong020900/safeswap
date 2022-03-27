@@ -1,9 +1,10 @@
 import { ChainId, Token } from '@safemoon/sdk'
 import { TokenInfo, TokenList } from '@uniswap/token-lists'
-import { useMemo } from 'react'
-import { useSelector } from 'react-redux'
+import { useMemo, useCallback } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { DEFAULT_TOKEN_LIST_URL } from '../../constants'
-import { AppState } from '../index'
+import { AppState, AppDispatch } from '../index'
+import { updateListPairs } from './actions'
 
 /**
  * Token instances created from token info.
@@ -57,6 +58,22 @@ export function listToTokenMap(list: TokenList): TokenAddressMap {
   )
   listCache?.set(list, map)
   return map
+}
+
+export function useUpdateListPairs(): { pairs: any; setPairs: (pairs: any) => void } {
+  const dispatch = useDispatch<AppDispatch>()
+  const pairs = useSelector<AppState, AppState['lists']['pairs']>(state => {
+    return state.lists.pairs
+  })
+
+  const setPairs = useCallback(
+    (pairs: any) => {
+      dispatch(updateListPairs({ pairs }))
+    },
+    [dispatch]
+  )
+
+  return { pairs, setPairs }
 }
 
 export function useTokenList(url: string): TokenAddressMap {

@@ -2,7 +2,7 @@ import { createReducer } from '@reduxjs/toolkit'
 import { getVersionUpgrade, VersionUpgrade } from '@uniswap/token-lists'
 import { TokenList } from '@uniswap/token-lists/dist/types'
 import { updateVersion } from '../user/actions'
-import { acceptListUpdate, addList, fetchTokenList } from './actions'
+import { acceptListUpdate, addList, fetchTokenList, updateListPairs } from './actions'
 
 export interface ListsState {
   readonly byUrl: {
@@ -13,10 +13,12 @@ export interface ListsState {
       readonly error: string | null
     }
   }
+  pairs: {}
 }
 
 const initialState: ListsState = {
-  byUrl: {}
+  byUrl: {},
+  pairs: {}
 }
 
 export default createReducer(initialState, builder =>
@@ -77,6 +79,9 @@ export default createReducer(initialState, builder =>
           error: null
         }
       }
+    })
+    .addCase(updateListPairs, (state, { payload: pairs }) => {
+      state.pairs = pairs
     })
     .addCase(acceptListUpdate, (state, { payload: url }) => {
       if (!state.byUrl[url]?.pendingUpdate) {

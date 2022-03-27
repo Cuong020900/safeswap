@@ -67,3 +67,5 @@ export const fetchTokenList = createAsyncThunk<TokenList, string>(
 export const acceptListUpdate = createAction<string>('lists/acceptListUpdate')
 export const addList = createAction<string>('lists/addList')
 export const rejectVersionUpdate = createAction<Version>('lists/rejectVersionUpdate')
+
+export const updateListPairs = createAction<any>('lists/updateListPairs')
