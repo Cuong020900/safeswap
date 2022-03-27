@@ -285,12 +285,11 @@ export function useTrackedTokenPairs(): [Token, Token][] {
 
   let listPairs = []
   if (chainId && pairs?.pairs[chainId] && tokens) {
-    listPairs = pairs?.pairs[chainId].map(([token0, token1]: [any, any]) => [
+    listPairs = pairs?.pairs[chainId].map(([token0, token1]: [TokenInfo, TokenInfo]) => [
       new WrappedTokenInfo({ ...token0, logoURI: (tokens[token0.address] as any)?.tokenInfo?.logoURI }),
       new WrappedTokenInfo({ ...token1, logoURI: (tokens[token1.address] as any)?.tokenInfo?.logoURI })
     ])
   }
-
 
   // pinned pairs
   const pinnedPairs = useMemo(() => (chainId ? PINNED_PAIRS[chainId] ?? [] : []), [chainId])

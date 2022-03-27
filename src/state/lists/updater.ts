@@ -58,7 +58,7 @@ export default function Updater(): null {
     }
 
     getPairs()
-  }, [])
+  }, [setPairs])
 
   // on initial mount, refetch all the lists in storage
   useEffect(() => {
