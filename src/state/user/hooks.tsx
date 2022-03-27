@@ -23,7 +23,7 @@ import {
   setCurrentAccount,
   setCurrentConnector
 } from './actions'
-import { useDefaultTokenList } from '../lists/hooks'
+import { useDefaultTokenList, useUpdateListPairs } from '../lists/hooks'
 import { isDefaultToken } from '../../utils'
 import { parseUnits } from 'ethers/lib/utils'
 
@@ -280,11 +280,18 @@ export function useTrackedTokenPairs(): [Token, Token][] {
   const { chainId } = useActiveWeb3React()
   const tokens = useAllTokens()
 
+  const { pairs } = useUpdateListPairs()
+
+  let listPairs = []
+  if (chainId && pairs[chainId]) {
+    listPairs = pairs[chainId]
+  }
+
   // pinned pairs
   const pinnedPairs = useMemo(() => (chainId ? PINNED_PAIRS[chainId] ?? [] : []), [chainId])
 
   // pairs for every token against every base
-  const generatedPairs: [Token, Token][] = useMemo(
+  let generatedPairs: [Token, Token][] = useMemo(
     () =>
       chainId
         ? flatMap(Object.keys(tokens), tokenAddress => {
@@ -307,6 +314,8 @@ export function useTrackedTokenPairs(): [Token, Token][] {
         : [],
     [tokens, chainId]
   )
+
+  generatedPairs = [...generatedPairs, ...listPairs]
 
   // pairs saved by users
   const savedSerializedPairs = useSelector<AppState, AppState['user']['pairs']>(({ user: { pairs } }) => pairs)
