@@ -35,7 +35,7 @@ type Tokens = {
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export const ROUTER_ADDRESS: ChainAddress = {
-  [ChainId.MAINNET]: '0xEB70D821aab9171AC02f676C2e3C6fD2df16DA09',
+  [ChainId.MAINNET]: '0x1fdD76e18dD21046b7e7D54C8254Bf08B239e4D9',
   [ChainId.RINKEBY]: '',
   [ChainId.GÖRLI]: '',
   [ChainId.KOVAN]: '',
