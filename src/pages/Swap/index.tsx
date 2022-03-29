@@ -97,7 +97,6 @@ const HeaderWrapper = styled.div`
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  pointer-events: none;
 `
 
 export default function Swap({
@@ -271,7 +270,6 @@ export default function Swap({
 
 
   const handleSwap = useCallback(() => {
-    return
     if (priceImpactWithoutFee && !confirmPriceImpactWithoutFee(priceImpactWithoutFee)) {
       return
     }
@@ -456,10 +454,6 @@ export default function Swap({
   return (
     <>
       {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-      <div className='warning'>
-        <img src={warningIcon} className='warningIcon'/>
-        We have suspended swapping for a minimum of 48 hours due to an exciting new swap upgrade. Thank you for your patience as we improve your swapping experience.
-      </div>
       <TokenWarningCards currencies={currencies} open={showWarning} onDismiss={() => {}} />
       <SlippageWarning
         onDismiss={() => {
@@ -470,11 +464,11 @@ export default function Swap({
         token={swapWarningCurrency}
       />
         <div className="row">
-          <a className={`btn ${true ? 'disabed' : ''}`} onClick={handleConvertV1ToV2}>
+          <a className={`btn ${disabledConsolidate ? 'disabed' : ''}`} onClick={handleConvertV1ToV2}>
             <span>Consolidate to V2 SafeMoon!</span>
           </a>
           <a
-            className="btnInfo disabled"
+            className="btnInfo"
             onClick={() => {
               setShowConsolidateV2Intro(true)
             }}
@@ -529,7 +523,7 @@ export default function Swap({
               onCurrencySelect={handleInputSelect}
               otherCurrency={currencies[Field.OUTPUT]}
               id="swap-currency-input"
-              disableCurrencySelect
+              
             />
 
             <AutoColumn justify="space-between">
@@ -558,7 +552,6 @@ export default function Swap({
               onCurrencySelect={handleOutputSelect}
               otherCurrency={currencies[Field.INPUT]}
               id="swap-currency-output"
-              disableCurrencySelect
             />
 
             {showWrap || showMigrate ? null : (

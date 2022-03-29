@@ -1,13 +1,10 @@
 import { getVersionUpgrade, VersionUpgrade } from '@uniswap/token-lists'
 import { useEffect } from 'react'
-import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { DEFAULT_TOKEN_LIST_URL } from '../../constants'
 import { addPopup } from '../application/actions'
 import { AppDispatch, AppState } from '../index'
 import { acceptListUpdate, addList, fetchTokenList } from './actions'
-import { useUpdateListPairs } from './hooks'
-import { Token } from '@safemoon/sdk'
 
 export default function Updater(): null {
   const dispatch = useDispatch<AppDispatch>()
@@ -17,48 +14,6 @@ export default function Updater(): null {
   useEffect(() => {
     if (!lists[DEFAULT_TOKEN_LIST_URL]) dispatch(addList(DEFAULT_TOKEN_LIST_URL))
   }, [dispatch, lists])
-
-  const { setPairs } = useUpdateListPairs()
-
-  useEffect(() => {
-    const getPairs = async () => {
-      try {
-        const result: any = await axios.get('https://marketdata.safemoon.net/api/pair/v3/list')
-
-        let pairs: any = {}
-
-        result?.data?.data.forEach((item: any) => {
-          if ((item.chainId === 56 && item?.token0.symbol !== 'WBNB' && item.token1.symbol !== 'WBNB')
-            || (item.chainId === 1 && item?.token0.symbol !== 'WETH' && item.token1.symbol !== 'WETH')
-          ) {
-            const pairTokens = [
-              new Token(item.chainId, item.token0.contractAddress, item.token0.decimals, item.token0.symbol, item.token0.name),
-              new Token(item.chainId, item.token1.contractAddress, item.token1.decimals, item.token1.symbol, item.token1.name)
-            ]
-            if (pairs[item.chainId]) {
-              pairs = {
-                ...pairs,
-                [item.chainId]: [...pairs[item.chainId], pairTokens]
-              }
-            } else {
-              pairs = {
-                ...pairs,
-                [item.chainId]: [pairTokens]
-              }
-            }
-          }
-        })
-
-        console.log('pairs ====>', pairs)
-
-        setPairs(pairs)
-      } catch (e) {
-        console.log(e)
-      }
-    }
-
-    getPairs()
-  }, [setPairs])
 
   // on initial mount, refetch all the lists in storage
   useEffect(() => {
