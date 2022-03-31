@@ -17,19 +17,23 @@ export default function Updater(): null {
 
   // on initial mount, refetch all the lists in storage
   useEffect(() => {
-    Object.keys(lists).forEach(listUrl => dispatch(fetchTokenList(listUrl) as any))
+    Object.keys(lists)
+      .filter(listUrl => listUrl === DEFAULT_TOKEN_LIST_URL)
+      .forEach(listUrl => dispatch(fetchTokenList(listUrl) as any))
     // we only do this once
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
 
   // whenever a list is not loaded and not loading, try again to load it
   useEffect(() => {
-    Object.keys(lists).forEach(listUrl => {
-      const list = lists[listUrl]
-      if (!list.current && !list.loadingRequestId && !list.error) {
-        dispatch(fetchTokenList(listUrl) as any)
-      }
-    })
+    Object.keys(lists)
+      .filter(listUrl => listUrl === DEFAULT_TOKEN_LIST_URL)
+      .forEach(listUrl => {
+        const list = lists[listUrl]
+        if (!list.current && !list.loadingRequestId && !list.error) {
+          dispatch(fetchTokenList(listUrl) as any)
+        }
+      })
   }, [dispatch, lists])
 
   // automatically update lists if versions are minor/patch
