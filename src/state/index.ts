@@ -1,6 +1,6 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { save, load } from 'redux-localstorage-simple'
-import { checkStorage } from '../utils/localStorageProtection';
+import { checkStorage } from '../utils/localStorageProtection'
 
 import application from './application/reducer'
 import user from './user/reducer'
@@ -27,11 +27,13 @@ const store = configureStore({
     lists,
     blacklists
   },
-  middleware: [...getDefaultMiddleware(), save({ states: PERSISTED_KEYS }), checkStorage({ states: PERSISTED_KEYS })],
-  preloadedState: load({ states: PERSISTED_KEYS }),
-});
+  middleware: [...getDefaultMiddleware({
+    serializableCheck: false
+  }), save({ states: PERSISTED_KEYS }), checkStorage({ states: PERSISTED_KEYS })],
+  preloadedState: load({ states: PERSISTED_KEYS })
+})
 
-store.dispatch(updateVersion());
+store.dispatch(updateVersion())
 
 export default store
 

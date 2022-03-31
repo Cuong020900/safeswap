@@ -35,13 +35,13 @@ type Tokens = {
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export const ROUTER_ADDRESS: ChainAddress = {
-  [ChainId.MAINNET]: '0xCf7d4B75b7bCcDb8B4F992Fe05970680E2EE1A02',
+  [ChainId.MAINNET]: '0x1fdD76e18dD21046b7e7D54C8254Bf08B239e4D9',
   [ChainId.RINKEBY]: '',
   [ChainId.GÖRLI]: '',
   [ChainId.KOVAN]: '',
-  [ChainId.BSC_MAINNET]: '0xE804f3C3E6DdA8159055428848fE6f2a91c2b9AF',
+  [ChainId.BSC_MAINNET]: '0x37da632c6436137BD4D0CA30c98d3c615974120b',
   [ChainId.ROPSTEN]: '0x713702D3fb45BC9765d3A00e0B37c33f9CE9Ec91',
-  [ChainId.BSC_TESTNET]: '0x303BD61Fb70E563BbE833fA698D3ADa22Fd2DACa'
+  [ChainId.BSC_TESTNET]: '0x03657f265c09f51Bcd5De3143430Ce25038A1c20'
 }
 
 export const DAI = new Token(ChainId.MAINNET, '0x6B175474E89094C44Da98b954EedeAC495271d0F', 18, 'DAI', 'Dai Stablecoin')
@@ -229,6 +229,7 @@ export interface WalletInfo {
   mobile?: true
   mobileOnly?: true
   chainIds: number[]
+  hrefIos?: string
 }
 
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
@@ -240,7 +241,9 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     href: null,
     color: '#008a81',
     chainIds: [56],
-    mobile: true
+    mobile: true,
+    hrefIos:
+      'https://safemoon.com/wc?uri=wc%3A465fdefd-c2f9-47ca-98b2-007b2b26ded1%401%3Fbridge%3Dhttps%253A%252F%252Fj.bridge.walletconnect.org%26key%3D458380949414c0a8e6467aec9cdfe4fbd29dd7bbf0ff0b334d6dc15b43299847'
   },
   SAFEMOON_WALLET: {
     connector: walletconnect,
@@ -250,7 +253,9 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     href: null,
     color: '#008a81',
     chainIds: [1],
-    mobile: true
+    mobile: true,
+    hrefIos:
+      'https://safemoon.com/wc?uri=wc%3A465fdefd-c2f9-47ca-98b2-007b2b26ded1%401%3Fbridge%3Dhttps%253A%252F%252Fj.bridge.walletconnect.org%26key%3D458380949414c0a8e6467aec9cdfe4fbd29dd7bbf0ff0b334d6dc15b43299847'
   },
   INJECTED: {
     connector: injected,
@@ -372,7 +377,7 @@ export const ETHERSCAN_API_KEY: string = process.env.REACT_APP_ETHERSCAN_API_KEY
 
 // the Safemoon Default token list lives here
 export const DEFAULT_TOKEN_LIST_URL: string =
-  process.env.REACT_APP_DEFAULT_TOKEN_LIST_URL || 'https://marketdata.safemoon.net/api/swap/v5/tokens'
+  process.env.REACT_APP_DEFAULT_TOKEN_LIST_URL || 'https://marketdata.safemoon.net/api/swap/v4/tokens'
 
 export const DEFAULT_TOKEN_BLACK_LIST: string =
   process.env.REACT_APP_DEFAULT_TOKEN_BLACK_LIST_URL || 'https://marketdata.safemoon.net/api/swap/token-blacklist'

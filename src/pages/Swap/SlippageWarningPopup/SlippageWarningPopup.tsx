@@ -13,7 +13,7 @@ interface Props {
 
 const SlippageWarningPopup = ({ show, handleClose, handleHideSlippageWarning, slippage }: Props) => {
   return (
-    <Modal isOpen={show} onRequestClose={handleClose} className="ModalSlippage">
+    <Modal isOpen={show} onRequestClose={handleClose} className="ModalSlippage" ariaHideApp={false}>
       <a
         className={'btn-close'}
         onClick={() => {
