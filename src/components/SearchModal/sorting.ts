@@ -23,6 +23,14 @@ function getTokenComparator(
     // -1 = a is first
     // 1 = b is first
 
+    //sortEGC first
+    if (tokenA.symbol === 'EGC') {
+      return -1
+    }
+    if (tokenB.symbol === 'EGC') {
+      return 1
+    }
+
     // sort ETH first
     if (weth) {
       if (tokenA.equals(weth)) return -1
