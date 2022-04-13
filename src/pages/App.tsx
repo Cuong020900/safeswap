@@ -23,7 +23,7 @@ import { RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
 import { ethers } from 'ethers'
 import { useGasPrices, useGasType } from '../state/user/hooks'
 import { useDispatch } from 'react-redux'
-import { updateGasPrice, updateGasPricesList } from '../state/user/actions'
+import { updateGasPrice, updateGasPricesList, updateVersion } from '../state/user/actions'
 import axios from 'axios'
 import { useActiveWeb3React } from '../hooks'
 import { BigNumber } from '@ethersproject/bignumber'
@@ -117,6 +117,10 @@ export default function App() {
       popupEmitter.off(PopupTypes.BLACKLIST_TOKEN, showBlacklistTokenPopup)
     }
   }, [setShowBlacklistWallet, setShowBlacklistToken])
+
+  useEffect(() => {
+    dispatch(updateVersion())
+  }, [dispatch])
 
   useEffect(() => {
     if (window.ethereum) {
