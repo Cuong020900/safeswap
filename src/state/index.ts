@@ -12,7 +12,6 @@ import burn from './burn/reducer'
 import multicall from './multicall/reducer'
 import blacklists from './blacklists/reducer'
 
-import { updateVersion } from './user/actions'
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists', 'blacklists']
 
 const store = configureStore({
@@ -33,7 +32,7 @@ const store = configureStore({
   preloadedState: load({ states: PERSISTED_KEYS })
 })
 
-store.dispatch(updateVersion())
+// store.dispatch(updateVersion())
 
 export default store
 
