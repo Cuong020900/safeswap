@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { ChainId, CurrencyAmount, JSBI, TokenAmount, Trade } from '@safemoon/sdk'
+import { ChainId, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade } from '@safemoon/sdk'
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import SVG from 'react-inlinesvg'
 import ReactGA from 'react-ga'
@@ -164,6 +164,7 @@ export default function Swap({
     if ( (outputAddress && !allTokens[outputAddress])
       || (inputAddress && !allTokens[inputAddress] )
     ) {
+      onClearCurrency()
       setSwapState({
         attemptingTxn: false,
         tradeToConfirm,
@@ -195,7 +196,7 @@ export default function Swap({
         [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount
       }
 
-  const { onSwitchTokens, onCurrencySelection, onUserInput } = useSwapActionHandlers()
+  const { onSwitchTokens, onCurrencySelection, onUserInput, onClearCurrency } = useSwapActionHandlers()
   const isValid = !swapInputError
   const dependentField: Field = independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT
 
@@ -319,6 +320,7 @@ export default function Swap({
     if ( (outputAddress && !allTokens[outputAddress])
       || (inputAddress && !allTokens[inputAddress] )
     ) {
+      
       setSwapState({
         attemptingTxn: false,
         tradeToConfirm,

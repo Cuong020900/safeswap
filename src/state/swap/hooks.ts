@@ -13,7 +13,7 @@ import useParsedQueryString from '../../hooks/useParsedQueryString'
 import {isAddress} from '../../utils'
 import {AppDispatch, AppState} from '../index'
 import {useCurrencyBalances} from '../wallet/hooks'
-import {Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput} from './actions'
+import {Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput, clearCurrency} from './actions'
 import {SwapState} from './reducer'
 import {useUserSlippageTolerance} from '../user/hooks'
 import {computeSlippageAdjustedAmounts} from '../../utils/prices'
@@ -29,6 +29,7 @@ export function useSwapActionHandlers(): {
   onSwitchTokens: () => void
   onUserInput: (field: Field, typedValue: string) => void
   onChangeRecipient: (recipient: string | null) => void
+  onClearCurrency: () => void
 } {
   const dispatch = useDispatch<AppDispatch>()
   const onCurrencySelection = useCallback(
@@ -42,6 +43,10 @@ export function useSwapActionHandlers(): {
     },
     [dispatch]
   )
+
+  const onClearCurrency = useCallback(() => {
+    dispatch(clearCurrency({}))
+  }, [dispatch])
 
   const onSwitchTokens = useCallback(() => {
     dispatch(switchCurrencies())
@@ -65,7 +70,8 @@ export function useSwapActionHandlers(): {
     onSwitchTokens,
     onCurrencySelection,
     onUserInput,
-    onChangeRecipient
+    onChangeRecipient,
+    onClearCurrency
   }
 }
 
@@ -95,7 +101,7 @@ export function useDerivedSwapInfo(): {
   parsedAmount: CurrencyAmount | undefined
   v2Trade: Trade | undefined
   inputError?: string
-  v1Trade: Trade | undefined
+  v1Trade: Trade | undefined,
 } {
   const { account, chainId } = useActiveWeb3React()
 
