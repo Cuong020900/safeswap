@@ -157,6 +157,24 @@ export default function Swap({
     typedValue
   )
 
+
+  useEffect(() => {
+    const outputAddress = (currencies[Field.OUTPUT] as any)?.address
+    const inputAddress = (currencies[Field.INPUT] as any)?.address
+    if ( (outputAddress && !allTokens[outputAddress])
+      || (inputAddress && !allTokens[inputAddress] )
+    ) {
+      setSwapState({
+        attemptingTxn: false,
+        tradeToConfirm,
+        showConfirm: true,
+        swapErrorMessage: 'Token is not supported.',
+        txHash: undefined
+      })
+    }
+    
+  }, [currencies[Field.INPUT], currencies[Field.OUTPUT], allTokens])
+
   const showMigrate: boolean = migrateType !== MigrateType.NOT_APPLICABLE
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
   const showLegacyError: boolean =
@@ -363,8 +381,8 @@ export default function Swap({
     (migrationApprovalSubmitted && migrationApproval === ApprovalState.APPROVED)
   const [dismissedToken0] = useTokenWarningDismissal(chainId, currencies[Field.INPUT])
   const [dismissedToken1] = useTokenWarningDismissal(chainId, currencies[Field.OUTPUT])
-  const showWarning =
-    (!dismissedToken0 && !!currencies[Field.INPUT]) || (!dismissedToken1 && !!currencies[Field.OUTPUT])
+  // console.log(dismissedToken0, dismissedToken1)
+  const showWarning = false // (!dismissedToken0 && !!currencies[Field.INPUT]) || (!dismissedToken1 && !!currencies[Field.OUTPUT])
 
   const handleConfirmDismiss = useCallback(() => {
     setSwapState({ showConfirm: false, tradeToConfirm, attemptingTxn, swapErrorMessage, txHash })
