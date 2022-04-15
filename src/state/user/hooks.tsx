@@ -186,7 +186,7 @@ export function useAddUserToken(): (token: Token) => void {
 
   return useCallback(
     (token: Token) => {
-      const isBadToken = blacklistTokens?.includes(token.address)
+      const isBadToken = blacklistTokens?.includes(token?.address?.toLowerCase())
       if (isBadToken) {
         popupEmitter.emit(PopupTypes.BLACKLIST_TOKEN)
       } else {
@@ -195,6 +195,12 @@ export function useAddUserToken(): (token: Token) => void {
     },
     [dispatch, blacklistTokens]
   )
+}
+
+export function useGetBlacklistTokens(): string[] {
+  const blacklistTokens: string[] = useSelector((state: AppState) => state.blacklists.tokenAddresses)
+
+  return blacklistTokens
 }
 
 export function useRemoveUserAddedToken(): (chainId: number, address: string) => void {

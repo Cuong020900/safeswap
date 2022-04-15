@@ -90,7 +90,7 @@
   "forAtLeast": "for at least ",
   "brokenToken": "The selected token is not compatible with SafeMoonSwap. Adding liquidity will result in locked funds.",
   "toleranceExplanation": "Lowering this limit decreases your risk of frontrunning. However, this makes more likely that your transaction will fail due to normal price movements.",
-  "tokenSearchPlaceholder": "Search name or paste address",
+  "tokenSearchPlaceholder": "Search token name",
   "yourLiquidity": "Your Liquidity",
   "loading": "Loading",
   "connectToViewLiquidity": "Connect to a wallet to view your liquidity.",

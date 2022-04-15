@@ -4,7 +4,7 @@ import { isMobile } from 'react-device-detect'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
-import { useAllTokens, useToken } from '../../hooks/Tokens'
+import { useAllTokens } from '../../hooks/Tokens'
 import useInterval from '../../hooks/useInterval'
 import { useAllTokenBalances, useTokenBalance } from '../../state/wallet/hooks'
 import { isAddress } from '../../utils'
@@ -18,7 +18,7 @@ import CurrencyList from './CurrencyList'
 import { SelectToken } from '../NavigationTabs'
 import SVG from 'react-inlinesvg'
 import SearchIcon from '../../assets/icons/search-normal.svg'
-import { BLACKLIST_TOKENS_SAFEMOON_V1 } from '../../constants'
+// import { BLACKLIST_TOKENS_SAFEMOON_V1 } from '../../constants'
 
 const SearchBarIcon = styled(SVG).attrs(props => ({
   ...props,
@@ -57,9 +57,11 @@ export default function CurrencySearchModal({
   const allTokens = useAllTokens()
 
   // if the current input is an address, and we don't have the token in context, try to fetch it and import
-  const searchToken = useToken(
-    searchQuery && BLACKLIST_TOKENS_SAFEMOON_V1.indexOf(searchQuery.toUpperCase()) === -1 ? searchQuery : ''
-  )
+  // const searchToken = useToken(
+  //   (searchQuery && BLACKLIST_TOKENS_SAFEMOON_V1.indexOf(searchQuery.toUpperCase()) === -1 && allTokens[searchQuery]) ? searchQuery
+  //   : ''
+  // )
+  const searchToken = null
   const searchTokenBalance = useTokenBalance(account, searchToken)
   const allTokenBalances_ = useAllTokenBalances()
   const allTokenBalances = searchToken

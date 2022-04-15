@@ -12,15 +12,16 @@ export default function Updater() {
 
     const blacklists = await Promise.all(promises)
 
+
     blacklistUpdater(
       {
-        walletAddresses: blacklists[0]
+        tokenAddresses: blacklists[0]
       },
       'token'
     )
     blacklistUpdater(
       {
-        tokenAddresses: blacklists[1]
+        walletAddresses: blacklists[1]
       },
       'wallet'
     )

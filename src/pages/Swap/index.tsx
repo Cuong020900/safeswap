@@ -46,7 +46,7 @@ import {
   useTokenWarningDismissal,
   useUserDeadline,
   useUserSlippageTolerance,
-  useHideSlippageWarning
+  useHideSlippageWarning,
 } from '../../state/user/hooks'
 import { TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
@@ -63,7 +63,7 @@ import getTokenSymbol from '../../utils/getTokenSymbol'
 import { shouldShowSwapWarning } from '../../utils/shouldShowSwapWarning'
 import { SlippageWarning } from '../../components/SlippageWarning/SlippageWarning'
 import './Swap.css'
-import { useCurrency } from '../../hooks/Tokens'
+import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import ConsolidateV2Intro from './ConsolidateV2Intro'
 import SlippageWarningPopup from './SlippageWarningPopup'
 import { BLACKLIST_TOKENS_SAFEMOON_V1, consolidation, TOKENS_SAFEMOON_V2 } from '../../constants'
@@ -109,6 +109,8 @@ export default function Swap({
   const { t } = useTranslation()
   const [showConsolidateV2Intro, setShowConsolidateV2Intro] = useState(false)
   const [showSlippageWarning, setShowSlippageWarning] = useState(false)
+
+  const allTokens = useAllTokens()
 
   const node = useRef<HTMLDivElement>()
   const open = useSettingsMenuOpen()
@@ -295,8 +297,19 @@ export default function Swap({
       })
       return
     }
-      
-    
+
+    if ( (outputAddress && !allTokens[outputAddress])
+      || (inputAddress && !allTokens[inputAddress] )
+    ) {
+      setSwapState({
+        attemptingTxn: false,
+        tradeToConfirm,
+        showConfirm,
+        swapErrorMessage: 'Token is not supported.',
+        txHash: undefined
+      })
+      return
+    }
     
     setSwapState({ attemptingTxn: true, tradeToConfirm, showConfirm, swapErrorMessage: undefined, txHash: undefined })
     swapCallback()
@@ -327,7 +340,7 @@ export default function Swap({
           txHash: undefined
         })
       })
-  }, [tradeToConfirm, account, priceImpactWithoutFee, recipient, recipientAddress, showConfirm, swapCallback, trade])
+  }, [tradeToConfirm, account, priceImpactWithoutFee, recipient, recipientAddress, showConfirm, swapCallback, trade, allTokens])
 
   // errors
   const [showInverted, setShowInverted] = useState<boolean>(false)
