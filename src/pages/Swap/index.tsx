@@ -162,7 +162,7 @@ export default function Swap({
     const outputAddress = (currencies[Field.OUTPUT] as any)?.address
     const inputAddress = (currencies[Field.INPUT] as any)?.address
     if ( (outputAddress && !allTokens[outputAddress])
-      || (inputAddress && !allTokens[inputAddress] )
+      || (inputAddress && !allTokens[inputAddress] && BLACKLIST_TOKENS_SAFEMOON_V1.indexOf(inputAddress.toUpperCase()) === -1 )
     ) {
       onClearCurrency()
       setSwapState({
@@ -318,7 +318,8 @@ export default function Swap({
     }
 
     if ( (outputAddress && !allTokens[outputAddress])
-      || (inputAddress && !allTokens[inputAddress] )
+      || (inputAddress && !allTokens[inputAddress]
+        && BLACKLIST_TOKENS_SAFEMOON_V1.indexOf(inputAddress.toUpperCase()) === -1 )
     ) {
       
       setSwapState({
