@@ -49,7 +49,7 @@ export default function CurrencySearchModal({
   otherSelectedCurrency
 }: CurrencySearchModalProps) {
   const { t } = useTranslation()
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false)
@@ -109,12 +109,14 @@ export default function CurrencySearchModal({
   }, [filteredTokens, searchQuery, searchToken, tokenComparator])
 
   const currencies: Currency[] = useMemo(() => {
-    if ('eth'.includes(searchQuery.toLowerCase()) || 'ethereum'.includes(searchQuery.toLowerCase())) {
+    if (((chainId === 1 || chainId === 3) && ('eth'.includes(searchQuery.toLowerCase()) || 'ethereum'.includes(searchQuery.toLowerCase())))
+      || ((chainId === 56 || chainId === 97) && ('bnb'.includes(searchQuery.toLowerCase()) || 'bnb'.includes(searchQuery.toLowerCase())))
+    ) {
       return [ETHER, ...filteredSortedTokens]
     }
 
     return filteredSortedTokens
-  }, [searchQuery, filteredSortedTokens])
+  }, [searchQuery, filteredSortedTokens, chainId])
 
   const handleCurrencySelect = useCallback(
     (currency: Currency) => {
