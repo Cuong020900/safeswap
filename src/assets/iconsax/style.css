@@ -29104,3 +29104,18 @@
 .link:hover {
   text-decoration: underline;
 }
+
+.flex {
+  display: flex
+}
+
+.items-center {
+  align-items: center;
+}
+
+.label {
+  margin-right: 10px;
+  font-weight: 400;
+  color: #878D96;
+  font-size: 14px;
+}

@@ -20,6 +20,7 @@ import {
   updateUserExpertMode,
   updateUserSlippageTolerance,
   hideShowSlippageWarning,
+  handleShowSlippageWarning,
   setCurrentAccount,
   setCurrentConnector
 } from './actions'
@@ -119,7 +120,7 @@ export function useUserSlippageTolerance(): [number, (slippage: number) => void]
   return [userSlippageTolerance, setUserSlippageTolerance]
 }
 
-export function useHideSlippageWarning(): [boolean | undefined, () => void] {
+export function useHideSlippageWarning(): [boolean | undefined, () => void, () => void] {
   const dispatch = useDispatch<AppDispatch>()
   const hideSlippageWarning = useSelector<AppState, AppState['user']['hideSlippageWarning']>(state => {
     return state.user.hideSlippageWarning
@@ -129,7 +130,11 @@ export function useHideSlippageWarning(): [boolean | undefined, () => void] {
     dispatch(hideShowSlippageWarning())
   }, [dispatch])
 
-  return [hideSlippageWarning, handleHideSlippageWarning]
+  const showSlippageWarning = useCallback(() => {
+    dispatch(handleShowSlippageWarning())
+  }, [dispatch])
+
+  return [hideSlippageWarning, handleHideSlippageWarning, showSlippageWarning]
 }
 
 export function useGetCurrentAccount(): [string, (account: string) => void] {

@@ -8,8 +8,9 @@ import { AutoColumn } from '../Column'
 import { RowBetween, RowFixed } from '../Row'
 
 import { darken } from 'polished'
-import { useGasPrices, useGasType } from '../../state/user/hooks'
+import { useGasPrices, useGasType, useHideSlippageWarning } from '../../state/user/hooks'
 import { BigNumber } from 'ethers'
+import SwitchField from '../SwitchField/SwitchField'
 
 enum SlippageError {
   InvalidInput = 'InvalidInput',
@@ -137,6 +138,8 @@ export default function SlippageTabs({
   const { t } = useTranslation()
   const gasPrices = useGasPrices()
   const gasType = useGasType()
+
+  const [hideSlippageWarning, handleHideSlippageWarning, handleShowSlippageWarning] = useHideSlippageWarning()
 
   const inputRef = useRef<HTMLInputElement>()
 
@@ -316,6 +319,20 @@ export default function SlippageTabs({
         )}
       </AutoColumn>
 
+      <div className={'flex items-center'}>
+        <p className="label">Slippage Popup:</p>
+        <SwitchField
+          value={!hideSlippageWarning}
+          onChange={val => {
+            if (val) {
+              handleShowSlippageWarning()
+            } else {
+              handleHideSlippageWarning()
+            }
+          }}
+        />
+      </div>
+
       <AutoColumn gap="sm">
         <RowBetween>
           <TYPE.black fontSize={14} fontWeight={400} color={theme.text2}>
@@ -341,11 +358,11 @@ export default function SlippageTabs({
             </RowBetween>
           </OptionCustom>
         </RowFixed>
-        { deadline > 3600
-          && <p style={{fontSize: '12px', color: 'red', marginBottom: 0, marginTop: '-4px'}}>
+        {deadline > 3600 && (
+          <p style={{ fontSize: '12px', color: 'red', marginBottom: 0, marginTop: '-4px' }}>
             The limit maximum is 60 minutes
           </p>
-        }
+        )}
       </AutoColumn>
     </AutoColumn>
   )
