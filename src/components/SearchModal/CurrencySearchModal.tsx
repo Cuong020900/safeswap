@@ -171,7 +171,7 @@ export default function CurrencySearchModal({
       maxHeight={70}
       initialFocusRef={isMobile ? undefined : inputRef}
       minHeight={70}
-      forceMaxHeight={'80vh'}
+      forceMaxHeight={'75vh'}
     >
       <Column style={{ width: '100%' }}>
         <PaddedColumn gap="24px">
