@@ -17,6 +17,7 @@ import {
   updateGasPrice,
   updateGasPricesList,
   hideShowSlippageWarning,
+  handleShowSlippageWarning,
   setCurrentAccount,
   setCurrentConnector
 } from './actions'
@@ -142,6 +143,10 @@ export default createReducer(initialState, builder =>
     })
     .addCase(hideShowSlippageWarning, state => {
       state.hideSlippageWarning = true
+      state.timestamp = currentTimestamp()
+    })
+    .addCase(handleShowSlippageWarning, state => {
+      state.hideSlippageWarning = false
       state.timestamp = currentTimestamp()
     })
     .addCase(setCurrentAccount, (state, action) => {

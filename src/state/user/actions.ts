@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit'
-import {ChainId} from "@safemoon/sdk";
+import { ChainId } from '@safemoon/sdk'
 
 export interface SerializedToken {
   chainId: number
@@ -16,6 +16,7 @@ export interface SerializedPair {
 
 export const updateVersion = createAction<void>('updateVersion')
 export const hideShowSlippageWarning = createAction<void>('hideShowSlippageWarning')
+export const handleShowSlippageWarning = createAction<void>('handleShowSlippageWarning')
 export const setCurrentAccount = createAction<{ currentAccount: string }>('setCurrentAccount')
 export const setCurrentConnector = createAction<{ currentConnector: string }>('setCurrentConnector')
 export const updateMatchesDarkMode = createAction<{ matchesDarkMode: boolean }>('updateMatchesDarkMode')
@@ -33,5 +34,5 @@ export const removeSerializedPair = createAction<{ chainId: number; tokenAAddres
 )
 export const dismissTokenWarning = createAction<{ chainId: number; tokenAddress: string }>('dismissTokenWarning')
 
-export const updateGasPrice = createAction<{ gasPrice: string, gasPriceType: string }>('updateGasPrice')
-export const updateGasPricesList = createAction<{ gasPrices: any, chainId: ChainId }>("updateGasPricesList")
+export const updateGasPrice = createAction<{ gasPrice: string; gasPriceType: string }>('updateGasPrice')
+export const updateGasPricesList = createAction<{ gasPrices: any; chainId: ChainId }>('updateGasPricesList')
