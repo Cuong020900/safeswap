@@ -494,7 +494,7 @@ export default function WalletModal({
           )}
           {walletView !== WALLET_VIEWS.PENDING && (
             <Blurb>
-              <a href="https://safemoon.net/"
+              <a href="https://safemoon.com/"
                 target='_blank'
                 rel="noopener noreferrer"
                 className='link'

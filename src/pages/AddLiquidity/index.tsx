@@ -345,7 +345,7 @@ export default function AddLiquidity({
                       {t('onceYouAreHappy')}
                     </TYPE.link>
                     <TYPE.link fontWeight={400} color={'text3'}>
-                      To list your BEP20 token as a default token on SafeSwap, kindly visit https://safemoon.net.
+                      To list your BEP20 token as a default token on SafeSwap, kindly visit https://safemoon.com.
                     </TYPE.link>
                   </AutoColumn>
                 </LightCard>
