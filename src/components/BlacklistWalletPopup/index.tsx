@@ -35,7 +35,7 @@ export function BlacklistWalletPopup({ open, onDismiss }: { open: boolean; onDis
           </AutoRow>
           <TYPE.body color={'text3'} lineHeight={'1.6'}>
             Oops, this {`isn't`} a good look. Seems like something went wrong. Please contact{' '}
-            <Mailto href="mailto:errorreporting@safemoonwallet.ltd">errorreporting@safemoonwallet.ltd</Mailto>
+            <Mailto href="mailto:support@safemoon.ltd">support@safemoon.ltd</Mailto>
           </TYPE.body>
           <RowBetween>
             <div />
