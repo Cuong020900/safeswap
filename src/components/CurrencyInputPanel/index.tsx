@@ -1,5 +1,5 @@
 import {Currency, Pair} from '@safemoon/sdk'
-import React, { useState, useContext, useCallback } from 'react'
+import React, { useState, useContext, useCallback, useMemo } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import { darken } from 'polished'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
@@ -155,7 +155,8 @@ interface CurrencyInputPanelProps {
     hideInput?: boolean
     showSendWithSwap?: boolean
     otherCurrency?: Currency | null
-    id: string
+    id: string,
+    priceUsd?: any
 }
 
 export default function CurrencyInputPanel({
@@ -172,7 +173,8 @@ export default function CurrencyInputPanel({
     hideInput = false,
     showSendWithSwap = false,
     otherCurrency = null,
-    id
+    id,
+    priceUsd={}
 }: CurrencyInputPanelProps) {
     const {t} = useTranslation()
     const { chainId } = useActiveWeb3React();
@@ -184,6 +186,19 @@ export default function CurrencyInputPanel({
     const handleDismissSearch = useCallback(() => {
         setModalOpen(false)
     }, [setModalOpen])
+
+    const tokenPriceUsd = useMemo(() => {
+      const tokenCurrency: any = currency
+      let address = tokenCurrency?.address
+      if (tokenCurrency?.symbol === 'ETH') {
+        if (chainId === 56) {
+          address = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
+        } else if (chainId === 1) {
+          address = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+        }
+      }
+      return priceUsd[address]
+    }, [priceUsd, (currency as any)?.address, chainId])
 
     return (
         <InputPanel id={id}>
@@ -259,6 +274,12 @@ export default function CurrencyInputPanel({
                         </InputContainer>
                     )}
                 </InputRow>
+                { tokenPriceUsd && selectedCurrencyBalance
+                    && <p className='price-usd'>
+                    Price: ${ tokenPriceUsd * +(selectedCurrencyBalance?.toSignificant(13))}
+                  </p>
+                }
+                
             </Container>
             {!disableCurrencySelect && (
                 <CurrencySearchModal
