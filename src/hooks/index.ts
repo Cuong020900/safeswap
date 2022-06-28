@@ -27,7 +27,9 @@ export function useEagerConnect() {
   const [currentConnector, setCurrentConnector] = useGetCurrentConnector()
   useEffect(() => {
     if (typeof account === 'string' && blacklistWallets) {
-      const isBadAccount = blacklistWallets?.includes(account)
+      // console.log('blacklistWallets ===>', blacklistWallets)
+      // console.log('account ===>', account)
+      const isBadAccount = blacklistWallets?.includes(account?.toLowerCase())
       if (isBadAccount) {
         popupEmitter.emit(PopupTypes.BLACKLIST_WALLET)
         deactivate()
@@ -120,7 +122,7 @@ export function useInactiveListener(suppress = false) {
       const handleAccountsChanged = (accounts: string[]) => {
         if (accounts.length > 0) {
           const badAccountIndex = accounts.findIndex(account => {
-            return blacklistWallets && blacklistWallets?.includes(account)
+            return blacklistWallets && blacklistWallets?.includes(account?.toLowerCase())
           })
 
           if (badAccountIndex > -1) {
