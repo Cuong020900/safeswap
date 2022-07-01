@@ -274,9 +274,9 @@ export default function CurrencyInputPanel({
                         </InputContainer>
                     )}
                 </InputRow>
-                { tokenPriceUsd && selectedCurrencyBalance
+                { tokenPriceUsd
                     && <p className='price-usd'>
-                    Price: ${ tokenPriceUsd * +(selectedCurrencyBalance?.toSignificant(13))}
+                    Price: ${tokenPriceUsd}
                   </p>
                 }
                 
