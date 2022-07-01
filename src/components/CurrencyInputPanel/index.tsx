@@ -200,6 +200,8 @@ export default function CurrencyInputPanel({
       return priceUsd[address]
     }, [priceUsd, (currency as any)?.address, chainId])
 
+    // console.log(tokenPriceUsd?.toFixed(20).replace(/0*$/, ''))
+
     return (
         <InputPanel id={id}>
             <Container hideInput={hideInput}>
@@ -276,7 +278,7 @@ export default function CurrencyInputPanel({
                 </InputRow>
                 { tokenPriceUsd
                     && <p className='price-usd'>
-                    Price: ${tokenPriceUsd}
+                    Price: ${ tokenPriceUsd > 1 ? tokenPriceUsd : (+tokenPriceUsd).toFixed(13).replace(/0*$/, '')}
                   </p>
                 }
                 
