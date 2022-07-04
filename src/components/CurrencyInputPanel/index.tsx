@@ -14,6 +14,7 @@ import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
 import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import getTokenSymbol from "../../utils/getTokenSymbol";
+import { routingNumber } from '../../utils'
 
 const InputRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -194,10 +195,11 @@ export default function CurrencyInputPanel({
         if (chainId === 56) {
           address = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
         } else if (chainId === 1) {
-          address = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+          address = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
         }
       }
-      return priceUsd[address]
+
+      return priceUsd[address?.toLowerCase()]
     }, [priceUsd, (currency as any)?.address, chainId])
 
     // console.log(tokenPriceUsd?.toFixed(20).replace(/0*$/, ''))
@@ -278,7 +280,7 @@ export default function CurrencyInputPanel({
                 </InputRow>
                 { tokenPriceUsd
                     && <p className='price-usd'>
-                    Price: ${ tokenPriceUsd > 1 ? tokenPriceUsd : (+tokenPriceUsd).toFixed(13).replace(/0*$/, '')}
+                    Price: ${ tokenPriceUsd > 1 ? tokenPriceUsd : routingNumber(tokenPriceUsd, 20)}
                   </p>
                 }
                 

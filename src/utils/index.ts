@@ -124,3 +124,15 @@ export function isDefaultToken(defaultTokens: TokenAddressMap, currency?: Curren
 export function getExplore(chainId: number) {
   return chainId === 97 || chainId === 56 ? 'BscScan' : 'Etherscan'
 }
+
+export function routingNumber(value: any, maximumFractionDigits: number) {
+  if (!value && value !== 0) {
+    return '-'
+  }
+  const formatter = new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: maximumFractionDigits || 2
+  })
+
+  return formatter.format(value).replace(/,/g, ',')
+}

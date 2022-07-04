@@ -421,11 +421,10 @@ export default function Swap({
   useEffect(() => {
     const getPriceUsd = async () => {
       try {
-        console.log('currencies ====>', currencies)
         const addresses: any = []
 
         const WBNBAddress = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
-        const WETHAddress = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+        const WETHAddress = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
 
         let currencyInput: any;
         let currencyOutput: any;
@@ -462,8 +461,35 @@ export default function Swap({
 
           // console.log('hello ==>', result.data.data)
           result.data.data.forEach((item: any) => {
-            priceUsd[item?.baseToken?.address] = +item.priceUsd
+            priceUsd[item?.baseToken?.address?.toLowerCase()] = +item.priceUsd
           })
+
+          const slugs: any = []
+
+          if (currencyInput?.symbol !== 'ETH'
+            && currencyInput?.tokenInfo?.slug
+            && !priceUsd[currencyInput?.address?.toLowerCase()]) {
+            slugs.push(currencyInput?.tokenInfo?.slug)
+          }
+
+          if (currencyOutput?.symbol !== 'ETH'
+            && currencyOutput?.tokenInfo?.slug
+            && !priceUsd[currencyOutput?.address?.toLowerCase()]) {
+            slugs.push(currencyOutput?.tokenInfo?.slug)
+          }
+
+          if (slugs.length > 0) {
+            const data = await axios.get('https://marketdata.safemoon.net/api/cryptocurrency/v7/quotes/latest', {
+              params: {
+                slugs: slugs.join(',')
+              }
+            })
+
+            Object.values(data.data).forEach((item:any) => {
+              priceUsd[item?.platform?.token_address?.toLowerCase()] = item?.quote?.USD?.price
+            })
+
+          }
 
 
 
