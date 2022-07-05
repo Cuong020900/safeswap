@@ -486,7 +486,16 @@ export default function Swap({
             })
 
             Object.values(data.data).forEach((item:any) => {
-              priceUsd[item?.platform?.token_address?.toLowerCase()] = item?.quote?.USD?.price
+              let address = item?.platform?.token_address
+              if (item.symbol === 'BUSD') {
+                if(currencyInput?.symbol === 'BUSD') {
+                  address = currencyInput?.address
+                } else if(currencyOutput?.symbol === 'BUSD') {
+                  address = currencyOutput?.address
+                }
+
+              }
+              priceUsd[address?.toLowerCase()] = item?.quote?.USD?.price
             })
 
           }
@@ -503,6 +512,14 @@ export default function Swap({
     }
 
     getPriceUsd()
+
+    const id = setInterval(() => {
+      console.log('aaaaaaa==>>>')
+      getPriceUsd()
+    }, 10000)
+    return () => clearInterval(id)
+
+    
   }, [(currencies[Field.INPUT] as any)?.symbol, (currencies[Field.OUTPUT] as any)?.symbol])
 
   const handleInputSelect = useCallback(
