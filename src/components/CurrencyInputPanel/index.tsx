@@ -200,9 +200,10 @@ export default function CurrencyInputPanel({
       }
 
       return priceUsd[address?.toLowerCase()]
-    }, [priceUsd, (currency as any)?.address, chainId, currency])
+    }, [priceUsd, chainId, currency])
 
-    // console.log(tokenPriceUsd?.toFixed(20).replace(/0*$/, ''))
+
+      // console.log('test')
 
     return (
         <InputPanel id={id}>
