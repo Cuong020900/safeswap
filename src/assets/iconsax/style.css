@@ -29119,3 +29119,9 @@
   color: #878D96;
   font-size: 14px;
 }
+
+.price-usd {
+  font-weight: 400;
+  font-size: 14px;
+  color: #878D96;
+}

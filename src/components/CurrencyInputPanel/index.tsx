@@ -1,5 +1,5 @@
 import {Currency, Pair} from '@safemoon/sdk'
-import React, { useState, useContext, useCallback } from 'react'
+import React, { useState, useContext, useCallback, useMemo } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 import { darken } from 'polished'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
@@ -14,6 +14,7 @@ import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
 import { useActiveWeb3React } from '../../hooks'
 import { useTranslation } from 'react-i18next'
 import getTokenSymbol from "../../utils/getTokenSymbol";
+import { routingNumber } from '../../utils'
 
 const InputRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
@@ -155,7 +156,8 @@ interface CurrencyInputPanelProps {
     hideInput?: boolean
     showSendWithSwap?: boolean
     otherCurrency?: Currency | null
-    id: string
+    id: string,
+    priceUsd?: any
 }
 
 export default function CurrencyInputPanel({
@@ -172,7 +174,8 @@ export default function CurrencyInputPanel({
     hideInput = false,
     showSendWithSwap = false,
     otherCurrency = null,
-    id
+    id,
+    priceUsd={}
 }: CurrencyInputPanelProps) {
     const {t} = useTranslation()
     const { chainId } = useActiveWeb3React();
@@ -184,6 +187,22 @@ export default function CurrencyInputPanel({
     const handleDismissSearch = useCallback(() => {
         setModalOpen(false)
     }, [setModalOpen])
+
+    const tokenPriceUsd = useMemo(() => {
+      const tokenCurrency: any = currency
+      let address = tokenCurrency?.address
+      if (tokenCurrency?.symbol === 'ETH') {
+        if (chainId === 56) {
+          address = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
+        } else if (chainId === 1) {
+          address = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+        }
+      }
+
+      return priceUsd[address?.toLowerCase()]
+    }, [priceUsd, (currency as any)?.address, chainId])
+
+    // console.log(tokenPriceUsd?.toFixed(20).replace(/0*$/, ''))
 
     return (
         <InputPanel id={id}>
@@ -259,6 +278,12 @@ export default function CurrencyInputPanel({
                         </InputContainer>
                     )}
                 </InputRow>
+                { tokenPriceUsd
+                    && <p className='price-usd'>
+                    Price: ${ tokenPriceUsd > 1 ? tokenPriceUsd : routingNumber(tokenPriceUsd, 20)}
+                  </p>
+                }
+                
             </Container>
             {!disableCurrencySelect && (
                 <CurrencySearchModal

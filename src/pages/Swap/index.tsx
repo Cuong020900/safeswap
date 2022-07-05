@@ -7,6 +7,7 @@ import { Text } from 'rebass'
 import { useTranslation } from 'react-i18next'
 import styled, { ThemeContext } from 'styled-components'
 import { RouteComponentProps } from 'react-router-dom'
+import axios from 'axios'
 import infoIcon from '../../assets/images/info.svg'
 import warningIcon from '../../assets/images/warning.svg'
 import { ButtonError, ButtonLight, ButtonPrimary } from '../../components/Button'
@@ -109,6 +110,7 @@ export default function Swap({
   const { t } = useTranslation()
   const [showConsolidateV2Intro, setShowConsolidateV2Intro] = useState(false)
   const [showSlippageWarning, setShowSlippageWarning] = useState(false)
+  const [priceUsd, setPriceUsd] = useState<any>({})
 
   const allTokens = useAllTokens()
 
@@ -416,6 +418,110 @@ export default function Swap({
     }
   }
 
+  useEffect(() => {
+    const getPriceUsd = async () => {
+      try {
+        const addresses: any = []
+
+        const WBNBAddress = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
+        const WETHAddress = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+
+        let currencyInput: any;
+        let currencyOutput: any;
+        
+        if (currencies && currencies[Field.INPUT]) {
+          currencyInput = currencies[Field.INPUT]
+          if (currencyInput?.address) {
+            addresses.push(currencyInput.address)
+          }
+          
+        }
+        if (currencies && currencies[Field.OUTPUT]) {
+          currencyOutput = currencies[Field.OUTPUT]
+          if (currencyOutput?.address) {
+            addresses.push(currencyOutput.address)
+          }
+        }
+
+        
+        if(currencyInput?.symbol === 'ETH' || currencyOutput?.symbol === 'ETH') {
+          if (chainId === 56) {
+            addresses.push(WBNBAddress)
+          } else if (chainId === 1) {
+            addresses.push(WETHAddress)
+          }
+        }
+
+        if (addresses?.length > 0) {
+          const result = await axios.post('https://marketdata.safemoon.net/api/cryptocurrency/tokens-info', {
+            tokenAddresses: addresses
+          })
+
+          const priceUsd: any = {}
+
+          // console.log('hello ==>', result.data.data)
+          result.data.data.forEach((item: any) => {
+            priceUsd[item?.baseToken?.address?.toLowerCase()] = +item.priceUsd
+          })
+
+          const slugs: any = []
+
+          if (currencyInput?.symbol !== 'ETH'
+            && currencyInput?.tokenInfo?.slug
+            && !priceUsd[currencyInput?.address?.toLowerCase()]) {
+            slugs.push(currencyInput?.tokenInfo?.slug)
+          }
+
+          if (currencyOutput?.symbol !== 'ETH'
+            && currencyOutput?.tokenInfo?.slug
+            && !priceUsd[currencyOutput?.address?.toLowerCase()]) {
+            slugs.push(currencyOutput?.tokenInfo?.slug)
+          }
+
+          if (slugs.length > 0) {
+            const data = await axios.get('https://marketdata.safemoon.net/api/cryptocurrency/v7/quotes/latest', {
+              params: {
+                slugs: slugs.join(',')
+              }
+            })
+
+            Object.values(data.data).forEach((item:any) => {
+              let address = item?.platform?.token_address
+              if (item.symbol === 'BUSD') {
+                if(currencyInput?.symbol === 'BUSD') {
+                  address = currencyInput?.address
+                } else if(currencyOutput?.symbol === 'BUSD') {
+                  address = currencyOutput?.address
+                }
+
+              }
+              priceUsd[address?.toLowerCase()] = item?.quote?.USD?.price
+            })
+
+          }
+
+
+
+          setPriceUsd(priceUsd)
+        }
+
+
+      } catch(e) {
+        console.log(e)
+      }
+    }
+
+    getPriceUsd()
+
+    const id = setInterval(() => {
+      console.log('aaaaaaa==>>>')
+      getPriceUsd()
+    }, 10000)
+    return () => clearInterval(id)
+
+    
+  }, [(currencies[Field.INPUT] as any)?.symbol, (currencies[Field.OUTPUT] as any)?.symbol])
+
   const handleInputSelect = useCallback(
     inputCurrency => {
       setApprovalSubmitted(false) // reset 2 step UI for approvals
@@ -557,6 +663,7 @@ export default function Swap({
               onCurrencySelect={handleInputSelect}
               otherCurrency={currencies[Field.OUTPUT]}
               id="swap-currency-input"
+              priceUsd={priceUsd}
               
             />
 
@@ -586,6 +693,7 @@ export default function Swap({
               onCurrencySelect={handleOutputSelect}
               otherCurrency={currencies[Field.INPUT]}
               id="swap-currency-output"
+              priceUsd={priceUsd}
             />
 
             {showWrap || showMigrate ? null : (
