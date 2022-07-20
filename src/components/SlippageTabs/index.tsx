@@ -149,7 +149,6 @@ export default function SlippageTabs({
   const slippageInputIsValid =
     slippageInput === '' || (rawSlippage / 100).toFixed(2) === Number.parseFloat(slippageInput).toFixed(2)
   const deadlineInputIsValid = deadlineInput === '' || (deadline / 60).toString() === deadlineInput
-
   let slippageError: SlippageError
   if (slippageInput !== '' && !slippageInputIsValid) {
     slippageError = SlippageError.InvalidInput
@@ -169,7 +168,7 @@ export default function SlippageTabs({
 
     let valueAsIntFromRoundedFloat: number
     try {
-      valueAsIntFromRoundedFloat = Number.parseInt((Number.parseFloat(event.target.value) * 100).toString())
+      valueAsIntFromRoundedFloat = Number.parseInt((Number.parseFloat(event.target.value) * 100).toFixed(2).toString())
     } catch {}
 
     if (
