@@ -139,7 +139,7 @@ const NETWORK_LABELS: { [chainId in ChainId]: string | null } = {
   [ChainId.ROPSTEN]: 'Ropsten',
   [ChainId.GÖRLI]: 'Wrong Network',
   [ChainId.KOVAN]: 'Wrong Network',
-  [ChainId.BSC_MAINNET]: "BSC Mainnet",
+  [ChainId.BSC_MAINNET]: 'BSC Mainnet',
   [ChainId.BSC_TESTNET]: 'BSC Testnet'
 }
 

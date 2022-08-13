@@ -39,8 +39,8 @@ var Rounding;
   Rounding[Rounding["ROUND_UP"] = 2] = "ROUND_UP";
 })(Rounding || (Rounding = {}));
 
-var FACTORY_ADDRESS = (_FACTORY_ADDRESS = {}, _FACTORY_ADDRESS[ChainId.MAINNET] = "0x9Cf2f35E3656D4C68474525d67D9459Da3A000CD", _FACTORY_ADDRESS[ChainId.ROPSTEN] = "0xDfD8bbA37423950bD8050C65E698610C57E55cea", _FACTORY_ADDRESS[ChainId.RINKEBY] = "", _FACTORY_ADDRESS[ChainId.GÖRLI] = "", _FACTORY_ADDRESS[ChainId.KOVAN] = "", _FACTORY_ADDRESS[ChainId.BSC_MAINNET] = "0x4d05D0045df5562D6D52937e93De6Ec1FECDAd21", _FACTORY_ADDRESS[ChainId.BSC_TESTNET] = "0xB8554a2d68D052698b5EA538B0f3e1919a56e871", _FACTORY_ADDRESS);
-var INIT_CODE_HASH = (_INIT_CODE_HASH = {}, _INIT_CODE_HASH[ChainId.MAINNET] = "0x8bc8f8336dcfcba44096a139671d89637695b1be1cf88aad5d7de56ae35b8bfd", _INIT_CODE_HASH[ChainId.ROPSTEN] = '0x8bc8f8336dcfcba44096a139671d89637695b1be1cf88aad5d7de56ae35b8bfd', _INIT_CODE_HASH[ChainId.RINKEBY] = "", _INIT_CODE_HASH[ChainId.GÖRLI] = "", _INIT_CODE_HASH[ChainId.KOVAN] = "", _INIT_CODE_HASH[ChainId.BSC_MAINNET] = "0x8bc8f8336dcfcba44096a139671d89637695b1be1cf88aad5d7de56ae35b8bfd", _INIT_CODE_HASH[ChainId.BSC_TESTNET] = '0x8bc8f8336dcfcba44096a139671d89637695b1be1cf88aad5d7de56ae35b8bfd', _INIT_CODE_HASH);
+var FACTORY_ADDRESS = (_FACTORY_ADDRESS = {}, _FACTORY_ADDRESS[ChainId.MAINNET] = "0x84d02E4EF772a3915dEF2d0C3F5d9452f1376795", _FACTORY_ADDRESS[ChainId.ROPSTEN] = "0xDfD8bbA37423950bD8050C65E698610C57E55cea", _FACTORY_ADDRESS[ChainId.RINKEBY] = "", _FACTORY_ADDRESS[ChainId.GÖRLI] = "", _FACTORY_ADDRESS[ChainId.KOVAN] = "", _FACTORY_ADDRESS[ChainId.BSC_MAINNET] = "0xD82A68F681AAaF8bbb4510004414Fc6ad8B59f43", _FACTORY_ADDRESS[ChainId.BSC_TESTNET] = "0x6ae0BFD0B613f9d5F878192A60C133E47b4955b2", _FACTORY_ADDRESS);
+var INIT_CODE_HASH = (_INIT_CODE_HASH = {}, _INIT_CODE_HASH[ChainId.MAINNET] = "0xf517ab64379ffb90f6f9d00e62165e5c0fe7a7003b0a292fde5cc0d81b4a0ee4", _INIT_CODE_HASH[ChainId.ROPSTEN] = '0x8bc8f8336dcfcba44096a139671d89637695b1be1cf88aad5d7de56ae35b8bfd', _INIT_CODE_HASH[ChainId.RINKEBY] = "", _INIT_CODE_HASH[ChainId.GÖRLI] = "", _INIT_CODE_HASH[ChainId.KOVAN] = "", _INIT_CODE_HASH[ChainId.BSC_MAINNET] = "0xf517ab64379ffb90f6f9d00e62165e5c0fe7a7003b0a292fde5cc0d81b4a0ee4", _INIT_CODE_HASH[ChainId.BSC_TESTNET] = '0x8bc8f8336dcfcba44096a139671d89637695b1be1cf88aad5d7de56ae35b8bfd', _INIT_CODE_HASH);
 var MINIMUM_LIQUIDITY = /*#__PURE__*/JSBI.BigInt(1000); // exports for internal consumption
 
 var ZERO = /*#__PURE__*/JSBI.BigInt(0);
@@ -74,9 +74,6 @@ function _defineProperties(target, props) {
 function _createClass(Constructor, protoProps, staticProps) {
   if (protoProps) _defineProperties(Constructor.prototype, protoProps);
   if (staticProps) _defineProperties(Constructor, staticProps);
-  Object.defineProperty(Constructor, "prototype", {
-    writable: false
-  });
   return Constructor;
 }
 
@@ -101,8 +98,7 @@ function _extends() {
 function _inheritsLoose(subClass, superClass) {
   subClass.prototype = Object.create(superClass.prototype);
   subClass.prototype.constructor = subClass;
-
-  _setPrototypeOf(subClass, superClass);
+  subClass.__proto__ = superClass;
 }
 
 function _getPrototypeOf(o) {
@@ -127,7 +123,7 @@ function _isNativeReflectConstruct() {
   if (typeof Proxy === "function") return true;
 
   try {
-    Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
     return true;
   } catch (e) {
     return false;
@@ -215,24 +211,28 @@ function _arrayLikeToArray(arr, len) {
 }
 
 function _createForOfIteratorHelperLoose(o, allowArrayLike) {
-  var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
-  if (it) return (it = it.call(o)).next.bind(it);
+  var it;
 
-  if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
-    if (it) o = it;
-    var i = 0;
-    return function () {
-      if (i >= o.length) return {
-        done: true
+  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (it) o = it;
+      var i = 0;
+      return function () {
+        if (i >= o.length) return {
+          done: true
+        };
+        return {
+          done: false,
+          value: o[i++]
+        };
       };
-      return {
-        done: false,
-        value: o[i++]
-      };
-    };
+    }
+
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
-  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  it = o[Symbol.iterator]();
+  return it.next.bind(it);
 }
 
 // see https://stackoverflow.com/a/41102306
@@ -439,7 +439,7 @@ function currencyEquals(currencyA, currencyB) {
     return currencyA === currencyB;
   }
 }
-var WETH = (_WETH = {}, _WETH[ChainId.MAINNET] = /*#__PURE__*/new Token(ChainId.MAINNET, '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', 18, 'WETH', 'Wrapped Ether'), _WETH[ChainId.ROPSTEN] = /*#__PURE__*/new Token(ChainId.ROPSTEN, '0xf70949Bc9B52DEFfCda63B0D15608d601e3a7C49', 18, 'WETH', 'Wrapped Ether'), _WETH[ChainId.RINKEBY] = /*#__PURE__*/new Token(ChainId.RINKEBY, '0xc778417E063141139Fce010982780140Aa0cD5Ab', 18, 'WETH', 'Wrapped Ether'), _WETH[ChainId.GÖRLI] = /*#__PURE__*/new Token(ChainId.GÖRLI, '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6', 18, 'WETH', 'Wrapped Ether'), _WETH[ChainId.KOVAN] = /*#__PURE__*/new Token(ChainId.KOVAN, '0xd0A1E359811322d97991E03f863a0C30C2cF029C', 18, 'WETH', 'Wrapped Ether'), _WETH[ChainId.BSC_MAINNET] = /*#__PURE__*/new Token(ChainId.BSC_MAINNET, '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', 18, 'WBNB', 'Wrapped BNB'), _WETH[ChainId.BSC_TESTNET] = /*#__PURE__*/new Token(ChainId.BSC_TESTNET, '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd', 18, 'WBNB', 'Wrapped BNB'), _WETH);
+var WETH = (_WETH = {}, _WETH[ChainId.MAINNET] = /*#__PURE__*/new Token(ChainId.MAINNET, '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', 18, 'WETH', 'Wrapped Ether'), _WETH[ChainId.ROPSTEN] = /*#__PURE__*/new Token(ChainId.ROPSTEN, '0xf70949Bc9B52DEFfCda63B0D15608d601e3a7C49', 18, 'WETH', 'Wrapped Ether'), _WETH[ChainId.RINKEBY] = /*#__PURE__*/new Token(ChainId.RINKEBY, '0xc778417E063141139Fce010982780140Aa0cD5Ab', 18, 'WETH', 'Wrapped Ether'), _WETH[ChainId.GÖRLI] = /*#__PURE__*/new Token(ChainId.GÖRLI, '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6', 18, 'WETH', 'Wrapped Ether'), _WETH[ChainId.KOVAN] = /*#__PURE__*/new Token(ChainId.KOVAN, '0xd0A1E359811322d97991E03f863a0C30C2cF029C', 18, 'WETH', 'Wrapped Ether'), _WETH[ChainId.BSC_MAINNET] = /*#__PURE__*/new Token(ChainId.BSC_MAINNET, '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', 18, 'WBNB', 'Wrapped BNB'), _WETH[ChainId.BSC_TESTNET] = /*#__PURE__*/new Token(ChainId.BSC_TESTNET, '0x1EB5B78b29B0f6975dF9cF8D5b77c74DBEDD1d6C', 18, 'WBNB', 'Wrapped BNB'), _WETH);
 
 var _toSignificantRoundin, _toFixedRounding;
 var Decimal = /*#__PURE__*/toFormat(_Decimal);

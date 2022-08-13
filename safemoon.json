@@ -7,7 +7,7 @@
 		"patch": 2
 	},
 	"tags": {},
-	"logoURI": "http://swap.safemoon.agencywolfe.com/images/0xae13d989dac2f0debff460ac112a837c89baa7cd.svg",
+	"logoURI": "http://swap.safemoon.agencywolfe.com/images/0x1EB5B78b29B0f6975dF9cF8D5b77c74DBEDD1d6C.svg",
 	"keywords": ["safemoon", "default"],
 	"tokens": [
 		{
@@ -85,7 +85,7 @@
 		{
 			"name": "WBNB Token",
 			"symbol": "WBNB",
-			"address": "0xae13d989dac2f0debff460ac112a837c89baa7cd",
+			"address": "0x1EB5B78b29B0f6975dF9cF8D5b77c74DBEDD1d6C",
 			"chainId": 97,
 			"decimals": 18
 		},
