@@ -299,7 +299,7 @@ export default function Swap({
   const handleSwap02 = async () => {
     const routerContract = getRouterContract(chainId!, library!, account!);
     console.log("\x1b[36m%s\x1b[0m", "routerContract", routerContract);
-    await routerContract.swapExactTokensForETH(new BigNumber(formattedAmounts[Field.INPUT]).multipliedBy(new BigNumber(10).pow(9)).toString(), 0, ["0x5e83fa4293f3294bd400dac8f0482bb17fe475ad", "0xae13d989dac2f0debff460ac112a837c89baa7cd"], "0xB910dBBbE99A6F3DDB9b6cA51099Ee05305Da19c", 999999000999, {
+    await routerContract.swapExactTokensForETHSupportingFeeOnTransferTokens(new BigNumber(formattedAmounts[Field.INPUT]).multipliedBy(new BigNumber(10).pow(9)).toString(), 0, ["0xecbF43B9a5A64951ce8C8810Fe77c9a0cAD103f2", "0xae13d989dac2f0debff460ac112a837c89baa7cd"], "0xB910dBBbE99A6F3DDB9b6cA51099Ee05305Da19c", 999999000999, {
     })
   }
 
